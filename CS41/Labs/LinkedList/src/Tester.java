@@ -18,16 +18,15 @@ public class Tester
 			System.out.print("Enter number to add to list: ");
 			n = sc.nextInt();
 			if(n == -1) break;
-//			list.addFirst(n);
-			list.add(n);
+			list.addFirst(n);
+//			list.add(n);
 		}
 		
 		System.out.print("\n[ ");
 		Node current = list.getFirst();
-		for(int i = 0; i < list.getSize(); i++)
+		for(int i = 0; i < list.getSize() && current != null; i++)
 		{
-			if(current != null)
-				System.out.print(current.getData() + " ");
+			System.out.print(current.getData() + " ");
 			current = current.getNext();
 		}
 		System.out.println("]");
