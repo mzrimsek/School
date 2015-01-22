@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.21.2015
+ * @version 01.22.2015
  */
 
 public class LinkedList
@@ -10,53 +10,40 @@ public class LinkedList
 	
 	public LinkedList()
 	{
-		head = new Node(null);
+		head = null;
 		size = 0;
 	}
 	
+	//add to end of list
 	public void add(Object data)
 	{
-		Node temp = new Node(data);
-		Node current = head;
-		
-		//navigate to end of list
-		while(current.getNext() != null)
-			current = current.getNext();
-		
-		current.setNext(temp);
+		if(head == null)
+			addFirst(data);
+		else
+		{
+			Node current = head;
+			//navigate to end of list
+			while(current.getNext() != null)
+				current = current.getNext();
+			current.setNext(new Node(data));
+		}
 		size++;
+	}
+	
+	//add to end of list
+	public void addFirst(Object data)
+	{
+		head = new Node(data, head);
+		size++;
+	}
+	
+	public Node getFirst()
+	{
+		return head;
 	}
 	
 	public int getSize()
 	{
 		return size;
-	}
-	
-	public void reverse()
-	{
-		Node current = head;
-		Node reversed = null;
-		
-		while(current != null)
-		{
-			Node next = current.getNext();
-			current.setNext(reversed);
-			reversed = current;
-			current = next;
-		}
-		
-		head = reversed;
-	}
-	
-	public String toString()
-	{
-		String output = "";
-		Node n = head.getNext();
-		while(n != null)
-		{
-			output += n.getData() + " ";
-			n = n.getNext();
-		}
-		return output;
 	}
 }

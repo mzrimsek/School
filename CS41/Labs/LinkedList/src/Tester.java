@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.21.2015
+ * @version 01.22.2015
  */
 
 import java.util.Scanner;
@@ -13,18 +13,23 @@ public class Tester
 		LinkedList list = new LinkedList();
 		
 		int n = 0;
-		
 		while(n != -1)
 		{
 			System.out.print("Enter number to add to list: ");
 			n = sc.nextInt();
 			if(n == -1) break;
+//			list.addFirst(n);
 			list.add(n);
 		}
-		list.reverse();
 		
 		System.out.print("\n[ ");
-		System.out.print(list);
+		Node current = list.getFirst();
+		for(int i = 0; i < list.getSize(); i++)
+		{
+			if(current != null)
+				System.out.print(current.getData() + " ");
+			current = current.getNext();
+		}
 		System.out.println("]");
 		sc.close();
 	}

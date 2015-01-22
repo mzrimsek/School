@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.21.2015
+ * @version 01.22.2015
  */
 
 public class Node
@@ -14,10 +14,10 @@ public class Node
 		this.data = data;
 	}
 	
-	public Node(Node next, Object data)
+	public Node(Object data, Node next)
 	{
-		this.next = next;
 		this.data = data;
+		this.next = next;
 	}
 	
 	public Node getNext()
@@ -39,6 +39,4 @@ public class Node
 	{
 		this.data = data;
 	}
-	
-	
 }
