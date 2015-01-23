@@ -3,40 +3,45 @@
  * @version 01.22.2015
  */
 
-public class Node
+public class Node<T>
 {
-	private Node next;
-	private Object data;
+	private Node<T> next;
+	private T data;
 	
-	public Node(Object data)
+	public Node(T data)
 	{
 		next = null;
 		this.data = data;
 	}
 	
-	public Node(Object data, Node next)
+	public Node(T data, Node<T> next)
 	{
 		this.data = data;
 		this.next = next;
 	}
 	
-	public Node getNext()
+	public Node<T> getNext()
 	{
 		return next;
 	}
 	
-	public void setNext(Node next)
+	public void setNext(Node<T> next)
 	{
 		this.next = next;
 	}
 
-	public Object getData()
+	public T getData()
 	{
 		return data;
 	}
 
-	public void setData(Object data)
+	public void setData(T data)
 	{
 		this.data = data;
+	}
+	
+	public int compareTo(Node<T> temp)
+	{
+		return this.data.toString().compareTo(temp.data.toString());
 	}
 }
