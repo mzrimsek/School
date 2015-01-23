@@ -42,6 +42,6 @@ public class Node<T>
 	
 	public int compareTo(Node<T> temp)
 	{
-		return this.data.toString().compareTo(temp.data.toString());
+		return this.data.toString().compareTo(temp.getData().toString());
 	}
 }
