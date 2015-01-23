@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.22.2015
+ * @version 01.23.2015
  */
 
 public class LinkedList<T>
