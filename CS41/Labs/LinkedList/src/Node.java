@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.22.2015
+ * @version 01.23.2015
  */
 
 public class Node<T>
@@ -40,6 +40,7 @@ public class Node<T>
 		this.data = data;
 	}
 	
+	//FIXME
 	public int compareTo(Node<T> temp)
 	{
 		return this.data.toString().compareTo(temp.getData().toString());
