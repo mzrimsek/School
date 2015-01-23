@@ -33,6 +33,7 @@ public class LinkedList<T>
 	//add to sorted position in list
 	public void insert(T data)
 	{
+		//FIXME
 		Node<T> current = head;
 		Node<T> temp = new Node<T>(data);
 		if(current == null)
