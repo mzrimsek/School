@@ -1,2 +1,2 @@
 # school
-CS School stuff
+A repository for files from classes.
