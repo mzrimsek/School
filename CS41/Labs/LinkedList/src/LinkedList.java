@@ -30,7 +30,7 @@ public class LinkedList<T>
 		else
 		{
 			Node<T> prev = getNode(n - 1);
-			Node<T> current = getNode(n);
+			Node<T> current = prev.getNext();
 			Node<T> temp = new Node<T>(data);
 			
 			prev.setNext(temp);
@@ -45,11 +45,11 @@ public class LinkedList<T>
 		if (!isValidIndex(n) || empty())
 			return;
 		else if (n == 0)
-			head = null;
+			head = head.getNext();
 		else
 		{
 			Node<T> prev = getNode(n - 1);
-			Node<T> current = getNode(n);
+			Node<T> current = prev.getNext();
 			Node<T> next = current.getNext();
 			
 			prev.setNext(next);
@@ -70,8 +70,7 @@ public class LinkedList<T>
 		Node<T> current = head;
 		for (int i = 0; i < size && current != null; i++)
 		{
-			if (i == n)
-				break;
+			if (i == n) break;
 			current = current.getNext();
 		}
 		return current;
@@ -80,8 +79,7 @@ public class LinkedList<T>
 	private boolean isValidIndex(int n)
 	{
 		boolean val = n < size || n >= 0;
-		if (val == false)
-			System.out.println("Invalid index");
+		if (val == false) System.out.println("Invalid index");
 		return val;
 	}
 	

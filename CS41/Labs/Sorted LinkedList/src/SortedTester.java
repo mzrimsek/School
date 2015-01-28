@@ -32,13 +32,15 @@ public class SortedTester
 			{
 				for (int i = 0; i < list.size(); i++)
 				{
-					//insert to sorted position
-					//check if n > list.get(i)
-					//insertion sort!?!?
+					// insert to sorted position
+					// check if n > list.get(i)
+					// insertion sort!?!?
 				}
 			}
+			
 			System.out.println(list);
 		}
+		System.out.println(list);
 		
 		sc.close();
 	}
