@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.27.2015
+ * @version 01.28.2015
  */
 
 public class LinkedList<T>
@@ -17,91 +17,77 @@ public class LinkedList<T>
 	// add to end of list
 	public void add(T data)
 	{
-		if (head == null)
-			addFirst(data);
-		else
-		{
-			Node<T> current = head;
-			// navigate to end of list
-			while (current.getNext() != null)
-				current = current.getNext();
-			current.setNext(new Node<T>(data));
-			size++;
-		}
+		add(data, size);
 	}
 	
 	// add to position in list
 	public void add(T data, int n)
 	{
-		if (n - 1 > size)
-			System.out.println("Invalid index");
-		else if (head == null || n == 0) // empty list or add to first
-			addFirst(data);
+		if (!isValidIndex(n))
+			return;
+		else if (empty() || n == 0) // empty list or add to first
+			head = new Node<T>(data, head);
 		else
 		{
-			Node<T> current = head;
-			for (int i = 0; i < size && current != null; i++)
-			{
-				if (i == n - 1) // found where we are inserting to
-				{
-					Node<T> next = current.getNext();
-					Node<T> temp = new Node<T>(data);
-					current.setNext(temp);
-					temp.setNext(next);
-					size++;
-					return;
-				}
-				current = current.getNext();
-			}
+			Node<T> prev = getNode(n - 1);
+			Node<T> current = getNode(n);
+			Node<T> temp = new Node<T>(data);
+			
+			prev.setNext(temp);
+			temp.setNext(current);
 		}
-	}
-	
-	// get Node at index
-	public Node<T> get(int n)
-	{
-		if (n - 1 > size)
-		{
-			System.out.println("Invalid index");
-			return null;
-		} else if (size == 0)
-			return null;
-		else if (size == 1)
-			return head;
-		else
-		{
-			Node<T> current = head;
-			for (int i = 0; i < size && current != null; i++)
-			{
-				if (i == n)
-					return current;
-				current = current.getNext();
-			}
-			System.out.println("Node not found at index."); // ??
-			return null;
-		}
+		size++;
 	}
 	
 	// remove at position
 	public void remove(int n)
 	{
-		// should be similar to add at position
+		if (!isValidIndex(n) || empty())
+			return;
+		else if (n == 0)
+			head = null;
+		else
+		{
+			Node<T> prev = getNode(n - 1);
+			Node<T> current = getNode(n);
+			Node<T> next = current.getNext();
+			
+			prev.setNext(next);
+			current = null;
+		}
+		size--;
 	}
 	
-	// add to end of list
-	public void addFirst(T data)
+	// get Node data at position
+	public T get(int n)
 	{
-		head = new Node<T>(data, head);
-		size++;
+		return getNode(n).getData();
 	}
 	
-	public Node<T> getFirst()
+	// get node at position
+	private Node<T> getNode(int n)
 	{
-		return head;
+		Node<T> current = head;
+		for (int i = 0; i < size && current != null; i++)
+		{
+			if (i == n)
+				break;
+			current = current.getNext();
+		}
+		return current;
+	}
+	
+	private boolean isValidIndex(int n)
+	{
+		boolean val = n < size || n >= 0;
+		if (val == false)
+			System.out.println("Invalid index");
+		return val;
 	}
 	
 	public boolean empty()
 	{
-		return size == 0;
+		return size == 0 && head == null;
 	}
 	
 	public int size()
@@ -109,15 +95,11 @@ public class LinkedList<T>
 		return size;
 	}
 	
-	public void print()
+	public String toString()
 	{
-		System.out.print("\n[ ");
-		Node<T> current = head;
-		for (int i = 0; i < size && current != null; i++)
-		{
-			System.out.print(current.getData() + " ");
-			current = current.getNext();
-		}
-		System.out.println("]");
+		String output = "[ ";
+		for (int i = 0; i < size; i++)
+			output += get(i) + " ";
+		return output + "]";
 	}
 }

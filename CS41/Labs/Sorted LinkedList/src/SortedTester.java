@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.27.2015
+ * @version 01.28.2015
  */
 
 import java.util.Scanner;
@@ -14,15 +14,31 @@ public class SortedTester
 		Scanner sc = new Scanner(System.in);
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		
-		int n = 0;
+		Integer n = 0;
 		while (n != -1)
 		{
 			System.out.print("Enter number: ");
 			n = sc.nextInt();
-			if(n == -1) break;
-			
+			if (n == -1) break;
+			if (list.empty())
+				list.add(n);
+			else if (list.size() == 1)
+			{
+				if (n > list.get(0))
+					list.add(n);
+				else list.add(n, 0);
+			}
+			else
+			{
+				for (int i = 0; i < list.size(); i++)
+				{
+					//insert to sorted position
+					//check if n > list.get(i)
+					//insertion sort!?!?
+				}
+			}
+			System.out.println(list);
 		}
-		list.print();
 		
 		sc.close();
 	}
