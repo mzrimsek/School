@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.23.2015
+ * @version 01.27.2015
  */
 
 public class Node<T>
@@ -29,18 +29,17 @@ public class Node<T>
 	{
 		this.next = next;
 	}
-
+	
 	public T getData()
 	{
 		return data;
 	}
-
+	
 	public void setData(T data)
 	{
 		this.data = data;
 	}
 	
-	//FIXME
 	public int compareTo(Node<T> temp)
 	{
 		return this.data.toString().compareTo(temp.getData().toString());

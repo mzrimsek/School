@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.22.2015
+ * @version 01.27.2015
  */
 
 import java.util.Scanner;
@@ -24,7 +24,7 @@ public class Tester
 		
 		System.out.print("\n[ ");
 		Node current = list.getFirst();
-		for(int i = 0; i < list.getSize() && current != null; i++)
+		for(int i = 0; i < list.size() && current != null; i++)
 		{
 			System.out.print(current.getData() + " ");
 			current = current.getNext();
