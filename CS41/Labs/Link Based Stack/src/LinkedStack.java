@@ -25,7 +25,8 @@ public class LinkedStack<T> extends LinkedList<T>
 	//get element data on top of stack
 	public T pop()
 	{
+		T data = peek();
 		remove(size()-1);
-		return peek();
+		return data;
 	}
 }
