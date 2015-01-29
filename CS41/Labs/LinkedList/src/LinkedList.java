@@ -39,6 +39,23 @@ public class LinkedList<T>
 		size++;
 	}
 	
+	//add to sorted position in list
+	public void insert(T data)
+	{
+		Node<T> temp = new Node<T>(data);
+		if (empty() || temp.compareTo(getNode(size-1)) > 0)
+			add(data);
+		else if (temp.compareTo(getNode(0)) < 0)
+			add(data, 0);
+		else
+		{
+			int pos = 0;
+			for (int i = pos; i < size; i++)
+				if (temp.compareTo(getNode(i)) >= 0) pos = i;
+			add(data, pos + 1);
+		}
+	}
+	
 	// remove at position
 	public void remove(int n)
 	{
@@ -61,6 +78,7 @@ public class LinkedList<T>
 	// get Node data at position
 	public T get(int n)
 	{
+		if (!isValidIndex(n)) return null;
 		return getNode(n).getData();
 	}
 	
@@ -76,6 +94,8 @@ public class LinkedList<T>
 		return current;
 	}
 	
+	// check if index being passed in is valid
+	// must be less than list size and cannot be negative
 	private boolean isValidIndex(int n)
 	{
 		boolean val = n < size || n >= 0;
@@ -83,16 +103,19 @@ public class LinkedList<T>
 		return val;
 	}
 	
+	// check if list is empty
 	public boolean empty()
 	{
 		return size == 0 && head == null;
 	}
 	
+	// return size of list
 	public int size()
 	{
 		return size;
 	}
 	
+	// return contents of list
 	public String toString()
 	{
 		String output = "[ ";

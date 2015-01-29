@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.27.2015
+ * @version 01.28.2015
  */
 
 public class Node<T>
@@ -40,8 +40,8 @@ public class Node<T>
 		this.data = data;
 	}
 	
-	public int compareTo(Node<T> temp)
+	public int compareTo(Node<T> that)
 	{
-		return this.data.toString().compareTo(temp.getData().toString());
+		return this.data.hashCode() - that.getData().hashCode();
 	}
 }
