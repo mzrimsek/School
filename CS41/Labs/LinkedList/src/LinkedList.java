@@ -25,7 +25,7 @@ public class LinkedList<T>
 	{
 		if (!isValidIndex(n))
 			return;
-		else if (empty() || n == 0) // empty list or add to first
+		else if (empty() || n == 0) 
 			head = new Node<T>(data, head);
 		else
 		{
@@ -45,7 +45,7 @@ public class LinkedList<T>
 		Node<T> temp = new Node<T>(data);
 		if (empty() || temp.compareTo(getNode(size-1)) > 0)
 			add(data);
-		else if (temp.compareTo(getNode(0)) < 0)
+		else if (temp.compareTo(head) < 0)
 			add(data, 0);
 		else
 		{
