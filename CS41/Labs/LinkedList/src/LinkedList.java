@@ -39,6 +39,14 @@ public class LinkedList<T>
 		size++;
 	}
 	
+	public void set(T data, int n)
+	{
+		if (!isValidIndex(n) || empty())
+			return;
+		else
+			getNode(n).setData(data);
+	}
+	
 	//add to sorted position in list
 	public void insert(T data)
 	{
