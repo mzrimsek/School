@@ -12,9 +12,7 @@ public class ReversePolish
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("Enter polish formula: ");
-		ReversePolishCalculator rpc = new ReversePolishCalculator(sc.nextLine());
-		
-		rpc.calculate();
+		System.out.println(new ReversePolishCalculator(sc.nextLine()));
 		
 		sc.close();
 	}

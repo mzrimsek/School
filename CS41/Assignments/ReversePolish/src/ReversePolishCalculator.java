@@ -5,36 +5,59 @@
 
 public class ReversePolishCalculator
 {
-	LinkedStack<String> stack;
-	String formula;
+	private LinkedStack<String> stack;
+	private String[] formulaTokens;
 	
 	public ReversePolishCalculator(String formula)
 	{
-		this.formula = formula.trim();
-		stack = populateStack();
+		stack = new LinkedStack<String>();
+		if(!isValidFormula())
+			return;
+		formulaTokens = formula.split(" ");
+		for (String s : formulaTokens)
+		{
+			if (isOperator(s)) s = doOperation(s, stack.pop(), stack.pop());
+			if (!s.equals("=")) stack.push(s);
+		}
 	}
 	
-	public void calculate()
+	public String doOperation(String op, String num2, String num1)
 	{
-		// do algorithm here
-		System.out.println(stack);
+		double n1 = Double.valueOf(num1);
+		double n2 = Double.valueOf(num2);
+		double val = 0;
+		if (op.equals("+"))
+			val = n1 + n2;
+		else if (op.equals("-"))
+			val = n1 - n2;
+		else if (op.equals("*"))
+			val = n1 * n2;
+		else
+		{
+			if (n2 == 0)
+			{
+				System.out.println("Error: Divide by zero");
+				return "NAN";
+			}
+			val = n1 / n2;
+		}
+		return val + "";
 	}
 	
-	// checks for valid data and then add data to the stack
-	private LinkedStack<String> populateStack()
-	{
-		LinkedStack<String> stack = new LinkedStack<String>();
-		if (isValidFormula()) for (String s : formula.split(" "))
-			if (!s.equals("=")) stack.push(s.trim());
-		return stack;
-	}
-	
-	// checks if entered formula is valid
+	// FIXME add real stuff to this function
 	private boolean isValidFormula()
 	{
-		boolean val = formula.length() != 0
-				&& formula.charAt(formula.length() - 1) == '=';
-		if (val == false) System.out.println("Invalid formula!");
-		return val;
+		return true;
+		// check on token instead of formula???
+	}
+	
+	private boolean isOperator(String s)
+	{
+		return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/");
+	}
+	
+	public String toString()
+	{
+		return stack.toString();
 	}
 }
