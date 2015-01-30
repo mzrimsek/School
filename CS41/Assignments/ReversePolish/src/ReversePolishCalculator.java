@@ -35,6 +35,8 @@ public class ReversePolishCalculator
 					{
 						s = doOperation(s, stack.pop(), stack.pop());
 					}
+					// Only throws exception if there not enough operands for
+					// all the inputed operators
 					catch (NullPointerException npe)
 					{
 						System.out.println("Error: Too many operators.");
@@ -50,6 +52,8 @@ public class ReversePolishCalculator
 				}
 			}
 		}
+		// Stack size will only be more than one after calculating if there are
+		// not enough operators for all inputed operands
 		if (stack.size() != 1)
 		{
 			System.out.println("Error: Too many operands.");
@@ -82,7 +86,7 @@ public class ReversePolishCalculator
 		else
 		// n n /
 		{
-			if (n2 == 0) return "NAN";
+			if (n2 == 0) return "NAN"; // divide by zero error
 			val = n1 / n2;
 		}
 		return val + "";
