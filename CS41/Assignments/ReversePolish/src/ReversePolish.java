@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.28.2015
+ * @version 01.29.2015
  */
 
 import java.util.Scanner;
@@ -11,8 +11,10 @@ public class ReversePolish
 	{
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.print("Enter polish formula: ");
-		System.out.println(new ReversePolishCalculator(sc.nextLine()));
+		System.out.print("Enter polish notation expression: ");
+		
+		ReversePolishCalculator rpc = new ReversePolishCalculator(sc.nextLine());
+		if(rpc.calculate()) System.out.println("Result: " + rpc);
 		
 		sc.close();
 	}

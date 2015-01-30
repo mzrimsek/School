@@ -1,59 +1,158 @@
 /**
+ * 
  * @author Mike Zrimsek
- * @version 01.28.2015
+ * @version 01.29.2015
  */
 
 public class ReversePolishCalculator
 {
 	private LinkedStack<String> stack;
-	private String[] formulaTokens;
+	private String formula;
 	
 	public ReversePolishCalculator(String formula)
 	{
 		stack = new LinkedStack<String>();
-		if(!isValidFormula())
-			return;
-		formulaTokens = formula.split(" ");
-		for (String s : formulaTokens)
-		{
-			if (isOperator(s)) s = doOperation(s, stack.pop(), stack.pop());
-			if (!s.equals("=")) stack.push(s);
-		}
+		this.formula = formula;
 	}
 	
-	public String doOperation(String op, String num2, String num1)
+	/**
+	 * 
+	 * @return True if result of expression was successfully calculated and
+	 *         prints the reason for failing if it was not
+	 */
+	public boolean calculate()
+	{
+		String[] formulaTokens = formula.split(" ");
+		// Checks for overall expression requirements
+		if (!isValidFormula(formulaTokens)) return false;
+		for (String s : formulaTokens)
+		{
+			if (!s.equals("="))
+			{
+				if (isOperator(s))
+				{
+					try
+					{
+						s = doOperation(s, stack.pop(), stack.pop());
+					}
+					catch (NullPointerException npe)
+					{
+						System.out.println("Error: Too many operators.");
+						return false;
+					}
+				}
+				if (!s.equals("NAN"))
+					stack.push(s);
+				else
+				{
+					System.out.println("Error: Divide by zero.");
+					return false;
+				}
+			}
+		}
+		if (stack.size() != 1)
+		{
+			System.out.println("Error: Too many operands.");
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @param op
+	 *            The operation to be performed
+	 * @param num2
+	 *            The second number used
+	 * @param num1
+	 *            The first number used
+	 * @return The result of the operation or 'NAN' for a divide by zero error
+	 */
+	private String doOperation(String op, String num2, String num1)
 	{
 		double n1 = Double.valueOf(num1);
 		double n2 = Double.valueOf(num2);
 		double val = 0;
-		if (op.equals("+"))
+		if (op.equals("+")) // n n +
 			val = n1 + n2;
-		else if (op.equals("-"))
+		else if (op.equals("-")) // n n -
 			val = n1 - n2;
-		else if (op.equals("*"))
+		else if (op.equals("*")) // n n *
 			val = n1 * n2;
 		else
+		// n n /
 		{
-			if (n2 == 0)
-			{
-				System.out.println("Error: Divide by zero");
-				return "NAN";
-			}
+			if (n2 == 0) return "NAN";
 			val = n1 / n2;
 		}
 		return val + "";
 	}
 	
-	// FIXME add real stuff to this function
-	private boolean isValidFormula()
+	/**
+	 * 
+	 * @param tokens
+	 *            Array of inputed expression tokens
+	 * @return True if inputed expression is valid and prints the reason for
+	 *         failing if it is not.
+	 */
+	private boolean isValidFormula(String[] tokens)
 	{
+		// Smallest expression is n n + =
+		if (tokens.length < 4)
+		{
+			System.out.println("Error: Expression too short.");
+			return false;
+		}
+		// Expressions must terminate with '='
+		else if (!tokens[tokens.length - 1].equals("="))
+		{
+			System.out
+					.println("Error: Expression must be terminated with '=' character.");
+			return false;
+		}
+		else
+		{
+			for (String s : tokens)
+			{
+				// Expression only contains numbers, operators, and '='
+				if (!isOperator(s) && !isDigit(s) && (!s.equals("=")))
+				{
+					System.out.println("Error: Invalid input character.");
+					return false;
+				}
+			}
+		}
 		return true;
-		// check on token instead of formula???
 	}
 	
+	/**
+	 * 
+	 * @param s
+	 *            String to test
+	 * @return True if value is a +, -, *, or /
+	 */
 	private boolean isOperator(String s)
 	{
 		return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/");
+	}
+	
+	/**
+	 * 
+	 * @param s
+	 *            String to test
+	 * @return True if value is a number
+	 */
+	private boolean isDigit(String s)
+	{
+		try
+		{
+			Double.valueOf(s);
+		}
+		catch (NumberFormatException e)
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	public String toString()
