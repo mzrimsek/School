@@ -107,6 +107,11 @@ public class ReversePolishCalculator
 			System.out.println("Error: Expression too short.");
 			return false;
 		}
+		else if(isOperator(tokens[0]) || isOperator(tokens[1]))
+		{
+			System.out.println("Error: Expression must begin with at least two numbers.");
+			return false;
+		}
 		// Expressions must terminate with '='
 		else if (!tokens[tokens.length - 1].equals("="))
 		{
