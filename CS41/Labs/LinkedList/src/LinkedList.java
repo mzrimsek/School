@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 01.28.2015
+ * @version 01.29.2015
  */
 
 public class LinkedList<T>
@@ -15,17 +15,19 @@ public class LinkedList<T>
 	}
 	
 	// add to end of list
-	public void add(T data)
+	// returns true if added at index successfully
+	public boolean add(T data)
 	{
-		add(data, size);
+		return add(data, size);
 	}
 	
 	// add to position in list
-	public void add(T data, int n)
+	// returns true if added at index successfully
+	public boolean add(T data, int n)
 	{
 		if (!isValidIndex(n))
-			return;
-		else if (empty() || n == 0) 
+			return false;
+		else if (empty() || n == 0)
 			head = new Node<T>(data, head);
 		else
 		{
@@ -37,21 +39,25 @@ public class LinkedList<T>
 			temp.setNext(current);
 		}
 		size++;
+		return true;
 	}
 	
-	public void set(T data, int n)
+	// sets Node data at index
+	// returns true if index set successfully
+	public boolean set(T data, int n)
 	{
 		if (!isValidIndex(n) || empty())
-			return;
-		else
-			getNode(n).setData(data);
+			return false;
+		else getNode(n).setData(data);
+		return true;
 	}
 	
-	//add to sorted position in list
+	// add to sorted position in list
+	// assumes list is sorted when adding
 	public void insert(T data)
 	{
 		Node<T> temp = new Node<T>(data);
-		if (empty() || temp.compareTo(getNode(size-1)) > 0)
+		if (empty() || temp.compareTo(getNode(size - 1)) > 0)
 			add(data);
 		else if (temp.compareTo(head) < 0)
 			add(data, 0);
@@ -65,10 +71,11 @@ public class LinkedList<T>
 	}
 	
 	// remove at position
-	public void remove(int n)
+	// returns true if index removed successfully
+	public boolean remove(int n)
 	{
 		if (!isValidIndex(n) || empty())
-			return;
+			return false;
 		else if (n == 0)
 			head = head.getNext();
 		else
@@ -81,6 +88,7 @@ public class LinkedList<T>
 			current = null;
 		}
 		size--;
+		return true;
 	}
 	
 	// get Node data at position
@@ -106,9 +114,7 @@ public class LinkedList<T>
 	// must be less than list size and cannot be negative
 	private boolean isValidIndex(int n)
 	{
-		boolean val = n < size || n >= 0;
-		if (val == false) System.out.println("Invalid index");
-		return val;
+		return n < size || n >= 0;
 	}
 	
 	// check if list is empty
