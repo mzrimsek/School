@@ -54,19 +54,19 @@ public class LinkedList<T>
 	
 	// add to sorted position in list
 	// assumes list is sorted when adding
-	public void insert(T data)
+	public boolean insert(T data)
 	{
 		Node<T> temp = new Node<T>(data);
 		if (empty() || temp.compareTo(getNode(size - 1)) > 0)
-			add(data);
+			return add(data);
 		else if (temp.compareTo(head) < 0)
-			add(data, 0);
+			return add(data, 0);
 		else
 		{
 			int pos = 0;
 			for (int i = pos; i < size; i++)
 				if (temp.compareTo(getNode(i)) >= 0) pos = i;
-			add(data, pos + 1);
+			return add(data, pos + 1);
 		}
 	}
 	

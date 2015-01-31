@@ -30,9 +30,13 @@ public class Tester
 //		System.out.println("]");
 		
 		list.add(4);
+		System.out.println(list);
 		list.add(4, 0);
+		System.out.println(list);
 		list.set(3, 0);
+		System.out.println(list);
 		list.add(5);
+		System.out.println(list);
 		list.add(7);
 		System.out.println(list);
 		sc.close();
