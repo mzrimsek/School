@@ -1,22 +1,38 @@
 /**
+ * 
  * @author Mike Zrimsek
- * @version 02.03.2015
+ * @version 02.04.2015
  *
  */
 
-import java.util.Scanner;
-
-public class NameWeight
+public class NameWeight 
 {
-	public static void main(String[] args)
+	private String name;
+	private Double weight;
+	
+	public NameWeight(String name, Double weight)
 	{
-		Scanner sc = new Scanner(System.in);
-		LinkedList<Person> people = new LinkedList<Person>();
-		people.insert(new Person("Joe", Double.valueOf(200), Person.SORT_BY_WEIGHT));
-		people.insert(new Person("Adam", Double.valueOf(210), Person.SORT_BY_WEIGHT));
-		people.insert(new Person("Mike", Double.valueOf(220), Person.SORT_BY_WEIGHT));
-		System.out.println(people);
-		
+		this.name = name;
+		this.weight = weight;
 	}
 	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public Double getWeight()
+	{
+		return weight;
+	}
+	
+	public void setWeight(Double weight)
+	{
+		this.weight = weight;
+	}
 }
