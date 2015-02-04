@@ -1,10 +1,11 @@
 /**
  * @author Mike Zrimsek
- * @version 01.28.2015
+ * @version 02.03.2015
  */
 
 public class Node<T>
 {
+	private Node<T> prev;
 	private Node<T> next;
 	private T data;
 	
@@ -20,6 +21,16 @@ public class Node<T>
 		this.next = next;
 	}
 	
+	public Node<T> getPrev()
+	{
+		return prev;
+	}
+
+	public void setPrev(Node<T> prev)
+	{
+		this.prev = prev;
+	}
+
 	public Node<T> getNext()
 	{
 		return next;
