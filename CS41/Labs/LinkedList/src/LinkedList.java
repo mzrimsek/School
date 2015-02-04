@@ -154,7 +154,7 @@ public class LinkedList<T>
 			}
 			else
 			{
-				Node<T> current = head; // traverse from end of list
+				Node<T> current = head; // traverse from front of list
 				for (int i = 0; i < mid && current != null; i++)
 				{
 					if (i == n) break;
