@@ -192,10 +192,10 @@ public class LinkedList<T>
 		Node<T> current = tail;
 		for (int i = 0; i < size && current != null; i++)
 		{
-			output += current.getData() + " ";
+			output += current.getData() + ", ";
 			current = current.getPrev();
 		}
-		return output + "]";
+		return output.substring(0, output.lastIndexOf(',')) + " ]";
 	}
 	
 	// return contents of list
@@ -205,9 +205,9 @@ public class LinkedList<T>
 		Node<T> current = head;
 		for (int i = 0; i < size && current != null; i++)
 		{
-			output += current.getData() + " ";
+			output += current.getData() + ", ";
 			current = current.getNext();
 		}
-		return output + "]";
+		return output.substring(0, output.lastIndexOf(',')) + " ]";
 	}
 }
