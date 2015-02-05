@@ -5,6 +5,7 @@
  *
  */
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class NameWeightTester
@@ -14,23 +15,37 @@ public class NameWeightTester
 		Scanner sc = new Scanner(System.in);
 		
 		NameWeight nw = new NameWeight();
-		for(int i = 0; i < 15; i++)
+		for (int i = 0; i < 15; i++)
 		{
-			System.out.print("Enter name: ");
-			String name = sc.nextLine();
-			System.out.print("Enter weight: ");
-			Double weight = sc.nextDouble();
+			String name;
+			Double weight;
+			try
+			{
+				System.out.print("Enter name: ");
+				name = sc.nextLine();
+				System.out.print("Enter weight: ");
+				weight = sc.nextDouble();
+			}
+			catch (InputMismatchException ime)
+			{
+				System.out.println("Invalid input!");
+				sc.close();
+				return;
+			}
+			
 			nw.add(name, weight);
 			sc.nextLine();
 		}
+		
 		System.out.println("By Name Ascending");
 		nw.printByName(true);
-		System.out.println("By Name Descending");
+		System.out.println("\nBy Name Descending");
 		nw.printByName(false);
-		System.out.println("By Weight Ascending");
+		System.out.println("\nBy Weight Ascending");
 		nw.printByWeight(true);
-		System.out.println("By Weight Descending");
+		System.out.println("\nBy Weight Descending");
 		nw.printByWeight(false);
+		
 		sc.close();
 	}
 }

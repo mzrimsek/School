@@ -7,21 +7,21 @@
 
 public class NameWeight
 {
-	private LinkedList<NameEntry> names; // list sorted by name
-	private LinkedList<WeightEntry> weights; // list sorted by weight
+	private LinkedList<Entry<String>> names; // list sorted by name
+	private LinkedList<Entry<Double>> weights; // list sorted by weight
 	
 	public NameWeight()
 	{
-		names = new LinkedList<NameEntry>();
-		weights = new LinkedList<WeightEntry>();
+		names = new LinkedList<Entry<String>>();
+		weights = new LinkedList<Entry<Double>>();
 	}
 	
 	public void add(String name, Double weight)
 	{
-		NameEntry nameE = new NameEntry(name);
-		WeightEntry weightE = new WeightEntry(weight);
-		weightE.setNamePointer(nameE);
-		nameE.setWeightPointer(weightE);
+		Entry<String> nameE = new Entry<String>(name);
+		Entry<Double> weightE = new Entry<Double>(weight);
+		weightE.setPointer(nameE);
+		nameE.setPointer(weightE);
 		
 		names.insert(nameE);
 		weights.insert(weightE);
