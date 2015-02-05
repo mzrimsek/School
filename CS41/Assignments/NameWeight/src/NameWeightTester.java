@@ -14,7 +14,7 @@ public class NameWeightTester
 		Scanner sc = new Scanner(System.in);
 		
 		NameWeight nw = new NameWeight();
-		for(int i = 0; i < 2; i++)
+		for(int i = 0; i < 15; i++)
 		{
 			System.out.print("Enter name: ");
 			String name = sc.nextLine();
@@ -25,13 +25,12 @@ public class NameWeightTester
 		}
 		System.out.println("By Name Ascending");
 		nw.printByName(true);
-//		System.out.println("By Name Descending");
-//		nw.printByName(false);
-//		System.out.println("By Weight Ascending");
-//		nw.printByWeight(true);
-//		System.out.println("By Weight Descending");
-//		nw.printByWeight(false);
-		System.out.println(nw);
+		System.out.println("By Name Descending");
+		nw.printByName(false);
+		System.out.println("By Weight Ascending");
+		nw.printByWeight(true);
+		System.out.println("By Weight Descending");
+		nw.printByWeight(false);
 		sc.close();
 	}
 }

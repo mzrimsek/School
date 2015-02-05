@@ -1,18 +1,19 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 02.04.2015
+ * @version 02.05.2015
  *
  */
 
-public class NameEntry extends Entry
+public class NameEntry implements Comparable<NameEntry>
 {
 	private String name;
+	private WeightEntry weightPointer;
 	
-	public NameEntry(String name, int entryNum)
+	public NameEntry(String name)
 	{
-		super(entryNum);
 		this.setName(name);
+		weightPointer = null;
 	}
 	
 	public String getName()
@@ -24,15 +25,25 @@ public class NameEntry extends Entry
 	{
 		this.name = name;
 	}
-
-	@Override
-	int hashcode()
+	
+	public WeightEntry getWeightPointer()
 	{
-		return name.hashCode();
+		return weightPointer;
+	}
+	
+	public void setWeightPointer(WeightEntry weightPointer)
+	{
+		this.weightPointer = weightPointer;
 	}
 	
 	public String toString()
 	{
-		return name + ":" + entryNum;
+		return name + " - " + weightPointer.getWeight();
+	}
+
+	@Override
+	public int compareTo(NameEntry that)
+	{
+		return this.name.compareTo(that.name);
 	}
 }
