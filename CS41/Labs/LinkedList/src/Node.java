@@ -1,9 +1,12 @@
 /**
  * @author Mike Zrimsek
- * @version 02.03.2015
+ * @version 02.05.2015
+ * 
+ * Nodes are comparable
+ * Nodes contain data that is comparable
  */
 
-public class Node<T>
+public class Node<T extends Comparable<T>> implements Comparable<Node<T>>
 {
 	private Node<T> prev;
 	private Node<T> next;
@@ -51,8 +54,9 @@ public class Node<T>
 		this.data = data;
 	}
 	
+	@Override
 	public int compareTo(Node<T> that)
 	{
-		return this.data.hashCode() - that.getData().hashCode();
+		return this.data.compareTo(that.data);
 	}
 }

@@ -1,9 +1,12 @@
 /**
  * @author Mike Zrimsek
- * @version 02.03.2015
+ * @version 02.05.2015
+ * 
+ * Doubly Linked Linked List
+ * List type must be comparable
  */
 
-public class LinkedList<T>
+public class LinkedList<T extends Comparable<T>>
 {
 	private Node<T> head;
 	private Node<T> tail;

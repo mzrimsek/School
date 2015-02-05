@@ -1,9 +1,9 @@
 /**
  * @author Mike Zrimsek
- * @version 01.29.2015
+ * @version 02.05.2015
  */
 
-public class LinkedStack<T> extends LinkedList<T>
+public class LinkedStack<T extends Comparable<T>> extends LinkedList<T>
 {
 	public LinkedStack()
 	{
