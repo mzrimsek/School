@@ -2,8 +2,7 @@
  * @author Mike Zrimsek
  * @version 02.05.2015
  * 
- * Doubly Linked Linked List
- * List type must be comparable
+ *          Doubly Linked Linked List List type must be comparable
  */
 
 public class LinkedList<T extends Comparable<T>>
@@ -83,21 +82,18 @@ public class LinkedList<T extends Comparable<T>>
 	public boolean insert(T data)
 	{
 		Node<T> temp = new Node<T>(data);
-		if (empty() || temp.compareTo(getNode(size - 1)) > 0) // if empty or
-																// smaller than
-																// first node,
-																// add to front
-			return add(data);
-		else if (temp.compareTo(head) < 0) // if larger than last node, add to
-											// end
-			return add(data, 0);
+		// if empty or greater than last node
+		if (empty() || temp.compareTo(head) < 0) // if less than first node
+			return add(data, 0); // add to front
+		else if (temp.compareTo(tail) > 0)
+			return add(data); // add to end
 		else
 		// find position in list where data should be inserted
 		{
 			int pos = 0;
-			for (int i = pos; i < size; i++)
-				if (temp.compareTo(getNode(i)) >= 0) pos = i;
-			return add(data, pos + 1);
+			for (int i = 0; i < size; i++)
+				if (temp.compareTo(getNode(i)) >= 0) pos++;
+			return add(data, pos);
 		}
 	}
 	
@@ -138,35 +134,20 @@ public class LinkedList<T extends Comparable<T>>
 	// get node at position
 	private Node<T> getNode(int n)
 	{
-		if (n == 0) //get first node
+		if (n == 0) // get first node
 			return head;
-		else if (n == size - 1) //get last node
+		else if (n == size - 1) // get last node
 			return tail;
 		else
 		{
-			int mid = size / 2; //middle index of list
-			if (n > mid) // back half of list
+			Node<T> current = head; // traverse from end of list
+			for (int i = 0; i < size && current != null; i++)
 			{
-				Node<T> current = tail; // traverse from end of list
-				for (int i = 0; i < mid && current != null; i++)
-				{
-					if (i == n) break;
-					current = current.getPrev();
-				}
-				return current;
+				if (i == n) break;
+				current = current.getNext();
 			}
-			else
-			{
-				Node<T> current = head; // traverse from front of list
-				for (int i = 0; i < mid && current != null; i++)
-				{
-					if (i == n) break;
-					current = current.getNext();
-				}
-				return current;
-			}
+			return current;
 		}
-		
 	}
 	
 	// check if index being passed in is valid
@@ -179,7 +160,7 @@ public class LinkedList<T extends Comparable<T>>
 	// check if list is empty
 	public boolean empty()
 	{
-		return size == 0 && head == null;
+		return size == 0 && head == null && tail == null;
 	}
 	
 	// return size of list

@@ -2,8 +2,8 @@
  * @author Mike Zrimsek
  * @version 02.05.2015
  * 
- * Nodes are comparable
- * Nodes contain data that is comparable
+ *          Nodes are comparable 
+ *          Nodes contain data that is comparable
  */
 
 public class Node<T extends Comparable<T>> implements Comparable<Node<T>>
@@ -28,12 +28,12 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>
 	{
 		return prev;
 	}
-
+	
 	public void setPrev(Node<T> prev)
 	{
 		this.prev = prev;
 	}
-
+	
 	public Node<T> getNext()
 	{
 		return next;
@@ -52,6 +52,11 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>
 	public void setData(T data)
 	{
 		this.data = data;
+	}
+	
+	public String toString()
+	{
+		return data.toString();
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 02.03.2015
+ * @version 02.05.2015
  */
 
 import java.util.Scanner;
@@ -29,23 +29,26 @@ public class Tester
 //		}
 //		System.out.println("]");
 		
-		list.add(4);
+		list.insert("A");
 		System.out.println(list);
-		list.add(4);
+		list.insert("Z");
 		System.out.println(list);
 		//list.set(3, 0);
 		//System.out.println(list);
-		list.add(5);
+		list.insert("B");
 		System.out.println(list);
-		list.add(7,2);
+		list.insert("Y");
 		System.out.println(list);
-		list.remove(3);
+		list.insert("C");
 		System.out.println(list);
-		list.remove(0);
+		list.insert("X");
 		System.out.println(list);
-		list.remove(0);
+		list.insert("D");
 		System.out.println(list);
-		System.out.println(list.reverse());
+		list.insert("W");
+		System.out.println(list);
+		// A B C D W X Y Z
+		//System.out.println(list.reverse());
 		sc.close();
 	}
 }
