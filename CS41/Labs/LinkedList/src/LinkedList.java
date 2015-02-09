@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 02.05.2015
+ * @version 02.09.2015
  * 
  *          Doubly Linked Linked List List type must be comparable
  */
@@ -106,10 +106,13 @@ public class LinkedList<T extends Comparable<T>>
 		else if (n == 0) // remove from front
 		{
 			head = head.getNext(); // set head to next node
-			head.setPrev(null); // set previous to null
+			head.setPrev(null); // set previous to null - end of list
 		}
 		else if (n == size - 1) // remove from last index
-			tail = tail.getPrev();
+		{
+			tail = tail.getPrev(); // set prev to last node
+			tail.setNext(null); // set next to null - end of list
+		}
 		else
 		{
 			Node<T> current = getNode(n);
@@ -132,7 +135,7 @@ public class LinkedList<T extends Comparable<T>>
 	}
 	
 	// get node at position
-	private Node<T> getNode(int n)
+	protected Node<T> getNode(int n)
 	{
 		if (n == 0) // get first node
 			return head;
@@ -169,17 +172,24 @@ public class LinkedList<T extends Comparable<T>>
 		return size;
 	}
 	
-	// return reversed contents of list
-	public String reverse()
+	protected LinkedList<T> reverseList()
 	{
-		String output = "[ ";
+		LinkedList<T> reversedList = new LinkedList<T>();
+		
 		Node<T> current = tail;
 		for (int i = 0; i < size && current != null; i++)
 		{
-			output += current.getData() + ", ";
+			reversedList.add(current.getData());
 			current = current.getPrev();
 		}
-		return output.substring(0, output.lastIndexOf(',')) + " ]";
+		
+		return reversedList;
+	}
+	
+	// return reversed contents of list
+	public String reverse()
+	{
+		return reverseList().toString();
 	}
 	
 	// return contents of list

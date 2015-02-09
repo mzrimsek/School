@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 02.05.2015
+ * @version 02.09.2015
  */
 
 import java.util.Scanner;
@@ -33,8 +33,6 @@ public class Tester
 		System.out.println(list);
 		list.insert("Z");
 		System.out.println(list);
-		//list.set(3, 0);
-		//System.out.println(list);
 		list.insert("B");
 		System.out.println(list);
 		list.insert("Y");
@@ -47,8 +45,11 @@ public class Tester
 		System.out.println(list);
 		list.insert("W");
 		System.out.println(list);
-		// A B C D W X Y Z
-		//System.out.println(list.reverse());
+		
+		LinkedList test = list.reverseList();
+		System.out.println("Unsorted: " + test);
+		ListSorter sorter = new ListSorter(test);
+		System.out.println("Sorted:" + sorter.sort(ListSorter.MERGE_SORT));
 		sc.close();
 	}
 }
