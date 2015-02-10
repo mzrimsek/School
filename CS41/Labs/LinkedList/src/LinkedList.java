@@ -18,6 +18,16 @@ public class LinkedList<T extends Comparable<T>>
 		size = 0;
 	}
 	
+	// creates a LinkedList of a set size
+	// all data is null by default
+	public LinkedList(int size)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			this.add(null);
+		}
+	}
+	
 	// add to end of list
 	// returns true if added at index successfully
 	public boolean add(T data)

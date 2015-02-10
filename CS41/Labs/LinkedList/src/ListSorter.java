@@ -38,7 +38,7 @@ public final class ListSorter<T extends Comparable<T>>
 				temp = insertionSort();
 				break;
 			case MERGE_SORT:
-				temp = mergeSort(0, list.size() - 1);
+				temp = mergeSort();
 				break;
 			case QUICK_SORT:
 				temp = quickSort();
@@ -63,7 +63,8 @@ public final class ListSorter<T extends Comparable<T>>
 			for (int j = i; j < sortedList.size(); j++)
 			{
 				Node<T> comp = sortedList.getNode(j);
-				if (temp.compareTo(comp) > 0) swap(temp, comp);
+				if (temp.compareTo(comp) > 0)
+					swap(temp, comp);
 			}
 		}
 		
@@ -77,17 +78,16 @@ public final class ListSorter<T extends Comparable<T>>
 		for (int i = 0; i < sortedList.size(); i++)
 		{
 			int small = i;
+			Node<T> smallVal = sortedList.getNode(small);
 			for (int j = i + 1; j < sortedList.size(); j++)
 			{
 				Node<T> comp = sortedList.getNode(j);
-				Node<T> temp = sortedList.getNode(small);
-				if (temp.compareTo(comp) < 0)
-				{
+				smallVal = sortedList.getNode(small);
+				if (comp.compareTo(smallVal) < 0)
 					small = j;
-					temp = sortedList.getNode(small);
-				}
-				swap(temp, comp);
 			}
+			
+			swap(smallVal, sortedList.getNode(i));
 		}
 		
 		return sortedList;
@@ -104,72 +104,104 @@ public final class ListSorter<T extends Comparable<T>>
 				Node<T> cur = sortedList.getNode(j);
 				Node<T> prev = cur.getPrev();
 				
-				if (cur.compareTo(prev) < 0) swap(cur, prev);
+				if (cur.compareTo(prev) < 0)
+					swap(cur, prev);
 			}
 		}
 		
 		return sortedList;
 	}
 	
-	private LinkedList<T> mergeSort(int start, int end)
+	private LinkedList<T> mergeSort()
 	{
 		LinkedList<T> sortedList = list;
+		LinkedList<T> temp = new LinkedList<T>(sortedList.size());
 		
-		if(end-start <= 0)
-			return null;
-		int mid = (start+end)/2;
-		mergeSort(start, mid);
-		mergeSort(mid+1, end);
-		merge(start, mid, mid+1, end);
+		mergeSort(sortedList, temp, 0, list.size() - 1);
 		
 		return sortedList;
 	}
 	
-	private void merge(int start1, int end1, int start2, int end2)
+	private void mergeSort(LinkedList<T> list, LinkedList<T> temp, int left,
+			int right)
 	{
-		LinkedList<T> temp = new LinkedList<T>();
-		
-		while (start1 <= end1 && start2 <= end2)
+		if (left < right)
 		{
-			T first = list.get(start1);
-			T second = list.get(start2);
-			if(first.compareTo(second) <= 0)
+			int mid = (left + right) / 2;
+			mergeSort(list, temp, left, mid);
+			mergeSort(list, temp, mid + 1, right);
+			merge(list, temp, left, mid + 1, right);
+		}
+	}
+	
+	private void merge(LinkedList<T> list, LinkedList<T> temp, int left,
+			int right, int rightend)
+	{
+		int leftend = right - 1;
+		int index = left;
+		
+		while (left <= leftend && right <= rightend)
+		{
+			T leftData = list.get(left);
+			T rightData = list.get(right);
+			if (leftData.compareTo(rightData) <= 0)
 			{
-				temp.add(first);
-				start1++;
+				temp.set(leftData, index++);
+				left++;
 			}
 			else
 			{
-				temp.add(second);
-				start2++;
+				temp.set(rightData, index++);
+				right++;
 			}
 		}
 		
-		while(start1 <= end1)
-		{
-			temp.add(list.get(start1));
-			start1++;
-		}
+		while (left <= leftend) //merge left side
+			temp.set(list.get(left++), index++);
 		
-		while(start2 <= end2)
-		{
-			temp.add(list.get(start2));
-			start2++;
-		}
+		while (right <= rightend) //merge right side
+			temp.set(list.get(right++), index++);
 		
-		for(int i = 0; i < temp.size(); i++)
-		{
-			list.set(temp.get(i), start1+i);
-		}
+		for (int i = 0; i < index; i++) //copy back from temp
+			list.set(temp.get(i), i);
 	}
 	
 	private LinkedList<T> quickSort()
 	{
 		LinkedList<T> sortedList = list;
 		
+		quickSort(sortedList, 0, sortedList.size() - 1);
+		
 		return sortedList;
 	}
 	
+	private void quickSort(LinkedList<T> list, int low, int high)
+	{
+		Node<T> pivot = list.getNode((low + high) / 2);
+		
+		int i = low, j = high;
+		
+		while (i <= j)
+		{
+			Node<T> first = list.getNode(i);
+			Node<T> second = list.getNode(j);
+			while (first.compareTo(pivot) < 0)
+				first = list.getNode(i++);
+			while (second.compareTo(pivot) > 0)
+				second = list.getNode(j--);
+			if (i <= j)
+			{
+				swap(first, second);
+				i++;
+				j--;
+			}
+		}
+		
+		if (low < i - 1) quickSort(list, low, i - 1);
+		if (i < high) quickSort(list, i+1, high);
+	}
+	
+	//swaps data in two different nodes
 	private void swap(Node<T> one, Node<T> two)
 	{
 		T data;

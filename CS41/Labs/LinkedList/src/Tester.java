@@ -12,22 +12,22 @@ public class Tester
 		Scanner sc = new Scanner(System.in);
 		LinkedList list = new LinkedList();
 		
-//		int n = 0;
-//		while(n != -1)
-//		{
-//			System.out.print("Enter number to add to list: ");
-//			n = sc.nextInt();
-//			if(n == -1) break;
-//			list.add(n, 0);
-////			list.add(n);
-//		}
+		// int n = 0;
+		// while(n != -1)
+		// {
+		// System.out.print("Enter number to add to list: ");
+		// n = sc.nextInt();
+		// if(n == -1) break;
+		// list.add(n, 0);
+		// // list.add(n);
+		// }
 		
-//		System.out.print("\n[ ");
-//		for(int i = 0; i < list.size(); i++)
-//		{
-//			System.out.print(list.get(i) + " ");
-//		}
-//		System.out.println("]");
+		// System.out.print("\n[ ");
+		// for(int i = 0; i < list.size(); i++)
+		// {
+		// System.out.print(list.get(i) + " ");
+		// }
+		// System.out.println("]");
 		
 		list.insert("A");
 		System.out.println(list);
@@ -48,8 +48,12 @@ public class Tester
 		
 		LinkedList test = list.reverseList();
 		System.out.println("Unsorted: " + test);
-		ListSorter sorter = new ListSorter(test);
-		System.out.println("Sorted:" + sorter.sort(ListSorter.MERGE_SORT));
+		for (int i = 0; i < 5; i++)
+		{
+			ListSorter ls = new ListSorter(test);
+			System.out.println("Sorted:" + ls.sort(i));
+		}
+		
 		sc.close();
 	}
 }
