@@ -1,7 +1,7 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 02.09.2015
+ * @version 02.10.2015
  *
  *          Takes a LinkedList and returns a sorted version of that list based
  *          on the chosen sort.
@@ -66,6 +66,7 @@ public final class ListSorter<T extends Comparable<T>>
 				if (temp.compareTo(comp) > 0)
 					swap(temp, comp);
 			}
+			System.out.println(sortedList);
 		}
 		
 		return sortedList;
@@ -88,6 +89,7 @@ public final class ListSorter<T extends Comparable<T>>
 			}
 			
 			swap(smallVal, sortedList.getNode(i));
+			System.out.println(sortedList);
 		}
 		
 		return sortedList;
@@ -107,6 +109,8 @@ public final class ListSorter<T extends Comparable<T>>
 				if (cur.compareTo(prev) < 0)
 					swap(cur, prev);
 			}
+			
+			System.out.println(sortedList);
 		}
 		
 		return sortedList;
@@ -131,6 +135,7 @@ public final class ListSorter<T extends Comparable<T>>
 			mergeSort(list, temp, left, mid);
 			mergeSort(list, temp, mid + 1, right);
 			merge(list, temp, left, mid + 1, right);
+			System.out.println(list);
 		}
 	}
 	
@@ -195,6 +200,7 @@ public final class ListSorter<T extends Comparable<T>>
 				i++;
 				j--;
 			}
+			System.out.println(list);
 		}
 		
 		if (low < i - 1) quickSort(list, low, i - 1);
@@ -204,6 +210,7 @@ public final class ListSorter<T extends Comparable<T>>
 	//swaps data in two different nodes
 	private void swap(Node<T> one, Node<T> two)
 	{
+//		System.out.println("Swapping " + one.getData() + " with " + two.getData());
 		T data;
 		data = one.getData();
 		one.setData(two.getData());

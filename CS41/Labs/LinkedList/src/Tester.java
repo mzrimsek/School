@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 02.09.2015
+ * @version 02.10.2015
  */
 
 import java.util.Scanner;
@@ -29,30 +29,41 @@ public class Tester
 		// }
 		// System.out.println("]");
 		
-		list.insert("A");
+		list.add(1);
 		System.out.println(list);
-		list.insert("Z");
+		list.add(8);
 		System.out.println(list);
-		list.insert("B");
+		list.add(2);
 		System.out.println(list);
-		list.insert("Y");
+		list.add(7);
 		System.out.println(list);
-		list.insert("C");
+		list.add(3);
 		System.out.println(list);
-		list.insert("X");
+		list.add(6);
 		System.out.println(list);
-		list.insert("D");
+		list.add(4);
 		System.out.println(list);
-		list.insert("W");
+		list.add(5);
 		System.out.println(list);
 		
 		LinkedList test = list.reverseList();
-		System.out.println("Unsorted: " + test);
-		for (int i = 0; i < 5; i++)
-		{
-			ListSorter ls = new ListSorter(test);
-			System.out.println("Sorted:" + ls.sort(i));
-		}
+		System.out.println(test);
+		ListSorter ls = new ListSorter(test);
+		
+//		System.out.println("Bubble Sort");
+//		ls.sort(ListSorter.BUBBLE_SORT);
+//		
+//		System.out.println("Selection Sort");
+//		ls.sort(ListSorter.SELECTION_SORT);
+////		
+//		System.out.println("Insertion Sort");
+//		ls.sort(ListSorter.INSERTION_SORT);
+////		
+		System.out.println("Merge Sort");
+		ls.sort(ListSorter.MERGE_SORT);
+////		
+//		System.out.println("Quick Sort");
+//		ls.sort(ListSorter.QUICK_SORT);
 		
 		sc.close();
 	}
