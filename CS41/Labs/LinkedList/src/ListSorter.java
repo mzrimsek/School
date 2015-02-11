@@ -16,10 +16,12 @@ public final class ListSorter<T extends Comparable<T>>
 	public static final int QUICK_SORT = 4;
 	
 	private LinkedList<T> list;
+	private boolean print;
 	
-	public ListSorter(LinkedList<T> list)
+	public ListSorter(LinkedList<T> list, boolean print)
 	{
 		this.list = list;
+		this.print = print;
 	}
 	
 	public LinkedList<T> sort(int type)
@@ -53,6 +55,7 @@ public final class ListSorter<T extends Comparable<T>>
 		return sort(type).reverseList();
 	}
 	
+	// Iterate through list and swap if value is smaller than following value
 	private LinkedList<T> bubbleSort()
 	{
 		LinkedList<T> sortedList = list;
@@ -63,15 +66,16 @@ public final class ListSorter<T extends Comparable<T>>
 			for (int j = i; j < sortedList.size(); j++)
 			{
 				Node<T> comp = sortedList.getNode(j);
-				if (temp.compareTo(comp) > 0)
-					swap(temp, comp);
+				if (temp.compareTo(comp) > 0) swap(temp, comp);
 			}
-			System.out.println(sortedList);
+			if (print) System.out.println(sortedList);
 		}
 		
 		return sortedList;
 	}
 	
+	// Iterate through list, find smallest value, and move it to next front
+	// position of the list
 	private LinkedList<T> selectionSort()
 	{
 		LinkedList<T> sortedList = list;
@@ -84,17 +88,18 @@ public final class ListSorter<T extends Comparable<T>>
 			{
 				Node<T> comp = sortedList.getNode(j);
 				smallVal = sortedList.getNode(small);
-				if (comp.compareTo(smallVal) < 0)
-					small = j;
+				if (comp.compareTo(smallVal) < 0) small = j;
 			}
 			
 			swap(smallVal, sortedList.getNode(i));
-			System.out.println(sortedList);
+			if (print) System.out.println(sortedList);
 		}
 		
 		return sortedList;
 	}
 	
+	// Iterate through the list and swap if current value is less than the
+	// previous value of the list.
 	private LinkedList<T> insertionSort()
 	{
 		LinkedList<T> sortedList = list;
@@ -106,11 +111,10 @@ public final class ListSorter<T extends Comparable<T>>
 				Node<T> cur = sortedList.getNode(j);
 				Node<T> prev = cur.getPrev();
 				
-				if (cur.compareTo(prev) < 0)
-					swap(cur, prev);
+				if (cur.compareTo(prev) < 0) swap(cur, prev);
 			}
 			
-			System.out.println(sortedList);
+			if (print) System.out.println(sortedList);
 		}
 		
 		return sortedList;
@@ -135,7 +139,7 @@ public final class ListSorter<T extends Comparable<T>>
 			mergeSort(list, temp, left, mid);
 			mergeSort(list, temp, mid + 1, right);
 			merge(list, temp, left, mid + 1, right);
-			System.out.println(list);
+			if (print) System.out.println(list);
 		}
 	}
 	
@@ -161,13 +165,16 @@ public final class ListSorter<T extends Comparable<T>>
 			}
 		}
 		
-		while (left <= leftend) //merge left side
+		while (left <= leftend)
+			// merge left side
 			temp.set(list.get(left++), index++);
 		
-		while (right <= rightend) //merge right side
+		while (right <= rightend)
+			// merge right side
 			temp.set(list.get(right++), index++);
 		
-		for (int i = 0; i < index; i++) //copy back from temp
+		for (int i = 0; i < index; i++)
+			// copy back from temp
 			list.set(temp.get(i), i);
 	}
 	
@@ -182,35 +189,32 @@ public final class ListSorter<T extends Comparable<T>>
 	
 	private void quickSort(LinkedList<T> list, int low, int high)
 	{
-		Node<T> pivot = list.getNode((low + high) / 2);
-		
-		int i = low, j = high;
-		
-		while (i <= j)
-		{
-			Node<T> first = list.getNode(i);
-			Node<T> second = list.getNode(j);
-			while (first.compareTo(pivot) < 0)
-				first = list.getNode(i++);
-			while (second.compareTo(pivot) > 0)
-				second = list.getNode(j--);
-			if (i <= j)
-			{
-				swap(first, second);
-				i++;
-				j--;
-			}
-			System.out.println(list);
-		}
-		
-		if (low < i - 1) quickSort(list, low, i - 1);
-		if (i < high) quickSort(list, i+1, high);
+		int x = partition(list, low, high);
+		if (low < x - 1) quickSort(list, low, x - 1);
+		if (high > x) quickSort(list, x, high);
 	}
 	
-	//swaps data in two different nodes
+	private int partition(LinkedList<T> list, int low, int high)
+	{
+		T pivot = list.get(low);
+		if (print) System.out.println("Pivot: " + pivot);
+		
+		while (low <= high)
+		{
+			while (list.get(low).compareTo(pivot) < 0)
+				low++;
+			while (list.get(high).compareTo(pivot) > 0)
+				high--;
+			if (low <= high) swap(list.getNode(low++), list.getNode(high--));
+			if (print) System.out.println(list);
+		}
+		
+		return low;
+	}
+	
+	// swaps data in two different nodes
 	private void swap(Node<T> one, Node<T> two)
 	{
-//		System.out.println("Swapping " + one.getData() + " with " + two.getData());
 		T data;
 		data = one.getData();
 		one.setData(two.getData());

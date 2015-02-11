@@ -48,7 +48,7 @@ public class Tester
 		
 		LinkedList test = list.reverseList();
 		System.out.println(test);
-		ListSorter ls = new ListSorter(test);
+		ListSorter ls = new ListSorter(test, true);
 		
 //		System.out.println("Bubble Sort");
 //		ls.sort(ListSorter.BUBBLE_SORT);
@@ -59,11 +59,11 @@ public class Tester
 //		System.out.println("Insertion Sort");
 //		ls.sort(ListSorter.INSERTION_SORT);
 ////		
-		System.out.println("Merge Sort");
-		ls.sort(ListSorter.MERGE_SORT);
+//		System.out.println("Merge Sort");
+//		ls.sort(ListSorter.MERGE_SORT);
 ////		
-//		System.out.println("Quick Sort");
-//		ls.sort(ListSorter.QUICK_SORT);
+		System.out.println("Quick Sort");
+		ls.sort(ListSorter.QUICK_SORT);
 		
 		sc.close();
 	}
