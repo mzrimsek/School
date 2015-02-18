@@ -1,6 +1,6 @@
 /**
  * @author Mike Zrimsek
- * @version 02.09.2015
+ * @version 02.17.2015
  * 
  *          Nodes are comparable 
  *          Nodes contain data that is comparable
@@ -10,7 +10,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>
 {
 	private Node<T> prev;
 	private Node<T> next;
-	protected T data;
+	private T data;
 	
 	public Node(T data)
 	{
