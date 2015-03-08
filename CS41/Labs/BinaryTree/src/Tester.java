@@ -1,7 +1,7 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 02.17.2015
+ * @version 03.08.2015
  *
  */
 
@@ -14,23 +14,28 @@ public class Tester
 		Scanner sc = new Scanner(System.in);
 		BinaryTree<Integer> tree = new BinaryTree<Integer>();
 		
-		tree.add(5);
+		tree.insert(5);
 		System.out.println(tree);
-		tree.add(4);
+		tree.insert(4);
 		System.out.println(tree);
-		tree.add(3);
+		tree.insert(3);
 		System.out.println(tree);
-		tree.add(6);
+		tree.insert(6);
 		System.out.println(tree);
-		tree.add(2);
+		tree.insert(2);
 		System.out.println(tree);
-		tree.add(20);
+		tree.insert(20);
 		System.out.println(tree);
-		tree.add(79);
+		tree.insert(79);
 		System.out.println(tree);
-		tree.add(7);
+		tree.insert(7);
 		System.out.println(tree);
 		System.out.println("Size: " + tree.size());
+		
+		tree.inorderTraversal();
+		tree.postorderTraversal();
+		tree.preorderTraversal();
+		
 		
 		sc.close();
 	}
