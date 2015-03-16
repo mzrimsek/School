@@ -1,7 +1,7 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 03.08.2015
+ * @version 03.15.2015
  *
  */
 
@@ -36,7 +36,11 @@ public class Tester
 		tree.postorderTraversal();
 		tree.preorderTraversal();
 		
+		System.out.println("Height: " + tree.height());
+		System.out.println("Leaves: " + tree.leaves());
 		
+		Integer num = 5;
+		System.out.println(num + " is in this tree: " + tree.exists(num));
 		sc.close();
 	}
 }

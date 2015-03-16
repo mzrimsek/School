@@ -1,7 +1,7 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 03.08.2015
+ * @version 03.15.2015
  *
  */
 
@@ -14,6 +14,73 @@ public class BinaryTree<T extends Comparable<T>>
 	{
 		head = null;
 		size = 0;
+	}
+	
+	// recursively find height of tree
+	public int height()
+	{
+		return height(head) - 1;
+	}
+	
+	// height helper
+	private int height(TreeNode<T> root)
+	{
+		if (root == null)
+			return 0;
+		else return 1 + Math.max(height(root.getLeft()),
+				height(root.getRight()));
+	}
+	
+	// gets number of leaves on tree
+	public int leaves()
+	{
+		return leaves(head);
+	}
+	
+	// leaves helper
+	// leaves are defined as nodes that have no children
+	private int leaves(TreeNode<T> root)
+	{
+		if (root == null) 
+			return 0;
+		else if(root.getLeft() == null && root.getRight() == null)
+			return 1;
+		else
+			return leaves(root.getLeft()) + leaves(root.getRight());
+	}
+	
+	// returns the root of the tree
+	public TreeNode<T> getRoot()
+	{
+		return head;
+	}
+	
+	// returns null if can't find matching data
+	// returns matching data if found
+	public T find(T data)
+	{
+		return find(head, data);
+	}
+	
+	// returns if data exists in tree
+	public boolean exists(T data)
+	{
+		return find(data) != null;
+	}
+	
+	// find helper
+	private T find(TreeNode<T> root, T data)
+	{
+		if(root == null)
+			return null;
+		
+		TreeNode<T> other = new TreeNode<T>(data);
+		if(other.compareTo(root) == 0)
+			return root.getData();
+		else if(other.compareTo(root) < 0)
+			return find(root.getLeft(), data);
+		else
+			return find(root.getRight(), data);
 	}
 	
 	// recursive add method
@@ -104,7 +171,7 @@ public class BinaryTree<T extends Comparable<T>>
 	
 	private void printInorder(TreeNode<T> root)
 	{
-		if(root == null) // empty tree
+		if (root == null) // empty tree
 			return;
 		
 		printInorder(root.getLeft());
@@ -122,7 +189,7 @@ public class BinaryTree<T extends Comparable<T>>
 	
 	private void printPostorder(TreeNode<T> root)
 	{
-		if(root == null) // empty tree
+		if (root == null) // empty tree
 			return;
 		
 		printPostorder(root.getLeft());
@@ -140,7 +207,7 @@ public class BinaryTree<T extends Comparable<T>>
 	
 	private void printPreorder(TreeNode<T> root)
 	{
-		if(root == null) // empty tree
+		if (root == null) // empty tree
 			return;
 		
 		System.out.print(root.getData() + " ");
