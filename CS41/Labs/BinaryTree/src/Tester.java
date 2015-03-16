@@ -1,7 +1,7 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 03.15.2015
+ * @version 03.16.2015
  *
  */
 
@@ -32,9 +32,9 @@ public class Tester
 		System.out.println(tree);
 		System.out.println("Size: " + tree.size());
 		
-		tree.inorderTraversal();
-		tree.postorderTraversal();
-		tree.preorderTraversal();
+		tree.inorderTraversal(true);
+		tree.postorderTraversal(true);
+		tree.preorderTraversal(true);
 		
 		System.out.println("Height: " + tree.height());
 		System.out.println("Leaves: " + tree.leaves());

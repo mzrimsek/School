@@ -1,14 +1,14 @@
 /**
  * 
  * @author Mike Zrimsek
- * @version 03.15.2015
+ * @version 03.16.2015
  *
  */
 
 public class BinaryTree<T extends Comparable<T>>
 {
-	private TreeNode<T> head;
-	private int size;
+	protected TreeNode<T> head;
+	protected int size;
 	
 	public BinaryTree()
 	{
@@ -162,9 +162,9 @@ public class BinaryTree<T extends Comparable<T>>
 	}
 	
 	// print contents of tree inorder (LVR)
-	public void inorderTraversal()
+	public void inorderTraversal(boolean display)
 	{
-		System.out.print("Inorder (LVR): ");
+		if(display) System.out.print("Inorder (LVR): ");
 		printInorder(head);
 		System.out.println();
 	}
@@ -180,9 +180,9 @@ public class BinaryTree<T extends Comparable<T>>
 	}
 	
 	// print contents of tree postorder (LRV)
-	public void postorderTraversal()
+	public void postorderTraversal(boolean display)
 	{
-		System.out.print("Postorder (LRV): ");
+		if(display) System.out.print("Postorder (LRV): ");
 		printPostorder(head);
 		System.out.println();
 	}
@@ -198,9 +198,9 @@ public class BinaryTree<T extends Comparable<T>>
 	}
 	
 	// print contents of tree preorder (VLR)
-	public void preorderTraversal()
+	public void preorderTraversal(boolean display)
 	{
-		System.out.print("Preorder (VLR): ");
+		if(display) System.out.print("Preorder (VLR): ");
 		printPreorder(head);
 		System.out.println();
 	}
