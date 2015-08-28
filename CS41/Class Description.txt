@@ -1,0 +1,2 @@
+Title: Data Structures
+Description: This course examines the basic concepts of data structures and related algorithms.  Students use arrays, structures, stacks, queues, linked lists, trees, graphgs, and tables to design algorithms and then write complete programs to implement these algorithms.  Recursion, searching, sorting, and timing and space analyses for these algorithms will also be discussed.
