@@ -1,2 +1,2 @@
 Title: Discrete Structures for CS
-Description: TO BE ADDED
+Description: Discrete structures for computer scientists with a focus on: mathematical reasoning, combinatorial analysis, discrete structures, algorithmic thinking, applications and modeling.  Specific topics include logic, sets, functions, relations, algorithms, proof techniques, counting, graphs, trees, Boolean algebra, grammars and languages.

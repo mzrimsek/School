@@ -1,2 +1,2 @@
 Title: Computer Architecture
-Description: TO BE ADDED
+Description: Functional overview of computer systems, data communication protocols, network architectures, routing protocols, network management, congestion control, network security, compression techniques, mobile and wireless networks, and WWW as an example of a client-server system.
