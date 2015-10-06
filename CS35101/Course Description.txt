@@ -1,2 +1,3 @@
 Title: Computer Architecture
 Description: Functional overview of computer systems, data communication protocols, network architectures, routing protocols, network management, congestion control, network security, compression techniques, mobile and wireless networks, and WWW as an example of a client-server system.
+Location: Kent State University, OH
