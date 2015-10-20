@@ -48,8 +48,8 @@ main:
 	JLoop:
 		add $t3, $s0, $t1	#get address of thestring[j]
 		lb $s1, ($t3)		#load thestring[j]
-		add $t3, $s0, $t2	#get address of thestring[maxPos]
-		lb $s2, ($t3)		#load thestring[maxPos]
+		add $t6, $s0, $t2	#get address of thestring[maxPos]
+		lb $s2, ($t6)		#load thestring[maxPos]
 		sgt $t4, $s1, $s2	#check thestring[j] > thestring[maxPos]
 		beq $t4, $0, JElse	#if not greater than maxPos to else
 		add $t2, $t1, $0	#maxPos = j
@@ -58,19 +58,19 @@ main:
 		slt $t4, $t1, $t5	#check j < string.length
 		bne $t4, $0, JLoop	#if not greater than string.length, loop again
 		
-	#if maxPos != i
-	#get address at thestring[i]
-	#load thestring[i]
-	#get address at thestring[maxPos]
-	#load thestring[maxPos]
-	#store value of thestring[maxPos] at address of thestring[i]
-	#store value of thestring[i] at address of thestring[maxPos]
-	#else
-	#i++
-	#if i = length break
-	#else
-	#do ILoop again
+		sne $t4, $t0, $t2	#check i != maxPos
+		bne $t4, $0, IElse	#if same pos, don't do anything
 		
+		add $t3, $s0, $t0	#get address of thestring[i]
+		lb $s1, ($t3)		#load thestring[i]
+		add $t6, $s0, $t2	#get address of thestring[maxPos]
+		lb $s2, ($t6)		#load thestring[maxPos]
+		sb $s1, ($t6)		#thestring[i] = thestring[maxPos]
+		sb $s2, ($t3)		#thestring[maxPos] = thestring[i]
+	IElse:
+		addi $t0, $t0, 1	#i++
+		sne $t4, $t0, $t5	#check i != thestring.length
+		bne $t4, $0, ILoop
 #display sorted string
 		la $a0, sorted		#display sorted prompt
 		li $v0, 4
