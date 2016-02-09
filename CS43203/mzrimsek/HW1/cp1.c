@@ -1,57 +1,73 @@
-#include        <stdio.h>
-#include        <unistd.h>
-#include        <fcntl.h>
-#include        <cstdlib>
-#include        <sys/stat.h>
+#include <stdio.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <memory.h>
 
-#define BUFFERSIZE      4096
-#define COPYMODE        0644
+#define BUFFERSIZE 4096
+#define COPYMODE 0644
+
+char* getFullFileName(int, char *, char *);
 
 void oops(char *, char *);
 
-void copyfile(char *, char *);
+int main (int ac,char *av[]){
+    int outFile, inFile, len, nChars;
+    char buf[BUFFERSIZE];
+    struct dirent *pDirent;
+    DIR *sourceDir;
+    DIR *targetDir;
 
-main(int ac, char *av[]){
-        //check args
-        if ( ac != 3 ){
-                fprintf( stderr, "usage: %s source destination\n", *av);
-                exit(1);
+    if ( ac != 3 ){
+        fprintf( stderr, "usage: %s source destination\n", *av);
+        exit(1);
+    }
+
+    sourceDir = opendir(av[1]);
+    if(sourceDir == NULL){
+        printf ("Cannot Open Directory");
+        exit(1);
+    }
+
+    targetDir = opendir(av[2]);
+    if (targetDir == NULL){
+        printf("Creating Directory %s", av[2]);
+        mkdir(av[2], S_IRUSR | S_IWUSR | S_IXUSR);
+    }
+
+    while ((pDirent = readdir(sourceDir)) != NULL) {
+        int sourceDirLen = strlen(av[1]) + strlen (pDirent->d_name) + 1;
+        char *sourceFile = getFullFileName(sourceDirLen, av[1], pDirent->d_name);
+        inFile = open(sourceFile, O_RDONLY);
+
+        int destDirLen = strlen(av[2]) + strlen (pDirent->d_name) + 1;
+        char *destFile = getFullFileName(destDirLen, av[2], pDirent->d_name);
+        outFile = creat(destFile, COPYMODE);
+
+        while((nChars = read(inFile, buf, BUFFERSIZE)) > 0){
+            if( write(outFile, buf, nChars) != nChars){
+                oops("Write error to ", destFile);
+            }
         }
-        copyfile(av[1], av[2]);
+    }
+
+    close(inFile);
+    close(outFile);
+    closedir(sourceDir);
+    closedir(targetDir);
+    return 0;
 }
 
-void copyfile(char *src_file, char *dest_file){
-        int     in_fd, out_fd, n_chars;
-        char    buf[BUFFERSIZE];
-        //open files
-        if ( (in_fd=open(src_file, O_RDONLY)) == -1 ){
-                oops("Cannot open ", src_file);
-        }
-
-
-        if ( (out_fd=creat( dest_file, COPYMODE)) == -1 ){
-                oops( "Cannot creat ", dest_file);
-        }
-
-        //copy files
-        while ( (n_chars = read(in_fd , buf, BUFFERSIZE)) > 0 ){
-                if ( write( out_fd, buf, n_chars ) != n_chars ){
-                        oops("Write error to ", dest_file);
-                }
-        }
-
-	if ( n_chars == -1 ){
-                oops("Read error from ", src_file);
-        }
-
-        //copy files
-        if ( close(in_fd) == -1 || close(out_fd) == -1 ){
-                oops("Error closing files","");
-        }
+char* getFullFileName(int dirLen, char *fileName, char *dirName){
+    char *name = (char *) malloc(dirLen);
+    strcpy(name, fileName);
+    strcat(name, "/");
+    strcat(name, dirName);
+    return name;
 }
 
 void oops(char *s1, char *s2){
-        fprintf(stderr,"Error: %s ", s1);
-        perror(s2);
-        exit(1);
+    fprintf(stderr, "Error: %s ", s1);
+    perror(s2);
+    exit(1);
 }
