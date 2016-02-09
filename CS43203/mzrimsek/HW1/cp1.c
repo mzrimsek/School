@@ -7,8 +7,8 @@
 #define BUFFERSIZE 4096
 #define COPYMODE 0644
 
+int getDirLen(char *, char *);
 char* getFullFileName(int, char *, char *);
-
 void oops(char *, char *);
 
 int main (int ac,char *av[]){
@@ -25,22 +25,23 @@ int main (int ac,char *av[]){
 
     sourceDir = opendir(av[1]);
     if(sourceDir == NULL){
-        printf ("Cannot Open Directory");
+        printf ("Cannot Open Directory\n");
         exit(1);
     }
 
     targetDir = opendir(av[2]);
     if (targetDir == NULL){
-        printf("Creating Directory %s", av[2]);
+        printf("Creating Directory %s\n", av[2]);
         mkdir(av[2], S_IRUSR | S_IWUSR | S_IXUSR);
     }
 
+    printf("Copying files from %s to %s\n", av[1], av[2]);
     while ((pDirent = readdir(sourceDir)) != NULL) {
-        int sourceDirLen = strlen(av[1]) + strlen (pDirent->d_name) + 1;
+        int sourceDirLen = getDirLen(av[1], pDirent->d_name);
         char *sourceFile = getFullFileName(sourceDirLen, av[1], pDirent->d_name);
         inFile = open(sourceFile, O_RDONLY);
 
-        int destDirLen = strlen(av[2]) + strlen (pDirent->d_name) + 1;
+        int destDirLen = getDirLen(av[2], pDirent->d_name);
         char *destFile = getFullFileName(destDirLen, av[2], pDirent->d_name);
         outFile = creat(destFile, COPYMODE);
 
@@ -56,6 +57,10 @@ int main (int ac,char *av[]){
     closedir(sourceDir);
     closedir(targetDir);
     return 0;
+}
+
+int getDirLen(char *fileName, char *dirName){
+    return strlen(fileName) + strlen (dirName) + 1;
 }
 
 char* getFullFileName(int dirLen, char *fileName, char *dirName){
