@@ -2,3 +2,4 @@ EVAL
 .svn
 .git
 *.pdf
+*.out
