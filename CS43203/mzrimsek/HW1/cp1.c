@@ -18,7 +18,7 @@ int main (int ac,char *av[]){
     DIR *sourceDir;
     DIR *targetDir;
 
-    if ( ac != 3 ){
+    if ( ac < 3 ){
         fprintf( stderr, "usage: %s source destination\n", *av);
         exit(1);
     }
