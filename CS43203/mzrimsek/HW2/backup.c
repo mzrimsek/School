@@ -15,9 +15,12 @@ void oops(char *, char *);
 int main (int ac,char *av[]){
     int outFile, inFile, len, nChars;
     char buf[BUFFERSIZE];
+
     struct dirent *pDirent;
     DIR *sourceDir;
     DIR *targetDir;
+
+    struct stat;
 
     if ( ac < 3 ){
         fprintf( stderr, "usage: %s source destination\n", *av);
