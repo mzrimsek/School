@@ -1,3 +1,9 @@
+/*
+Mike Zrimsek
+Systems Programming
+Homework 1 - Who
+ */
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/types.h>
