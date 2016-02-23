@@ -74,7 +74,7 @@ void processDirectory(DIR *sourceDir, char *av[]){
     }
 }
 
-int main (int ac, char *av[]){
+int main(int ac, char *av[]){
     DIR *sourceDir;
     DIR *targetDir;
 
