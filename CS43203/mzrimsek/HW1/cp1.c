@@ -1,3 +1,9 @@
+/*
+Mike Zrimsek
+Systems Programming
+Homework 1 - Copy
+ */
+
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
