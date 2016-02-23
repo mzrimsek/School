@@ -17,8 +17,7 @@ char* getFullFileName(char *fileName, char *dirName){
     int dirLen = getDirLen(fileName, dirName);
     char *name = (char *) malloc(dirLen);
     strcpy(name, fileName);
-    strcat(name, "/");
-    strcat(name, dirName);
+    strcat(strcat(name, "/"), dirName);
     return name;
 }
 
@@ -33,35 +32,43 @@ struct utimbuf getBackupTimes(char *sourceFile, struct stat statbuf){
     return backupTimes;
 }
 
-void traverseDirectory(struct dirent *pDirent, DIR *sourceDir, char *av[]){
-    int inFile, outFile, nChars;
-    char buf[BUFFERSIZE];
+void updateBackupTimes(char *sourceFile, char *destFile){
     struct stat statbuf;
 
-    while ((pDirent = readdir(sourceDir)) != NULL) {
-        char *sourceFile = getFullFileName(av[1], pDirent->d_name);
-        char *destFile = getFullFileName(av[2], pDirent->d_name);
+    struct utimbuf backupTimes = getBackupTimes(sourceFile, statbuf);
+    utime(destFile, &backupTimes);
+}
 
-        inFile = open(sourceFile, O_RDONLY);
-        outFile = creat(destFile, COPYMODE);
+void copyFile(char *sourceFile, char *destFile){
+    int numChars;
+    char buf[BUFFERSIZE];
 
-        struct utimbuf newTimes = getBackupTimes(sourceFile, statbuf);
+    int inFile = open(sourceFile, O_RDONLY);
+    int outFile = creat(destFile, COPYMODE);
 
-        while((nChars = read(inFile, buf, BUFFERSIZE)) > 0){
-            if( write(outFile, buf, nChars) != nChars){
-                printf("Write error to %s\n", destFile);
-            }
+    while((numChars = read(inFile, buf, BUFFERSIZE)) > 0){
+        if( write(outFile, buf, numChars) != numChars){
+            printf("Write error to %s\n", destFile);
         }
-
-        utime(destFile, &newTimes);
     }
 
     close(inFile);
     close(outFile);
 }
 
-int main (int ac, char *av[]){
+void processDirectory(DIR *sourceDir, char *av[]){
     struct dirent *pDirent;
+
+    while ((pDirent = readdir(sourceDir)) != NULL) {
+        char *sourceFile = getFullFileName(av[1], pDirent->d_name);
+        char *destFile = getFullFileName(av[2], pDirent->d_name);
+
+        copyFile(sourceFile, destFile);
+        updateBackupTimes(sourceFile, destFile);
+    }
+}
+
+int main (int ac, char *av[]){
     DIR *sourceDir;
     DIR *targetDir;
 
@@ -83,7 +90,7 @@ int main (int ac, char *av[]){
     }
 
     printf("Copying files from %s to %s\n", av[1], av[2]);
-    traverseDirectory(pDirent, sourceDir, av);
+    processDirectory(sourceDir, av);
 
     closedir(sourceDir);
     closedir(targetDir);
