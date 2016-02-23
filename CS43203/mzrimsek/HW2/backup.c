@@ -16,7 +16,7 @@ Homework 2 - Backup
 #define COPYMODE 0644
 
 int getDirLen(char *fileName, char *dirName){
-    return strlen(fileName) + strlen (dirName) + 1;
+    return strlen(fileName) + strlen(dirName) + 1;
 }
 
 char* getFullFileName(char *fileName, char *dirName){
@@ -62,15 +62,22 @@ void copyFile(char *sourceFile, char *destFile){
     close(outFile);
 }
 
+int isValidFile(char *fileName){
+    return fileName[0] != 46;
+}
+
 void processDirectory(DIR *sourceDir, char *av[]){
     struct dirent *pDirent;
 
     while ((pDirent = readdir(sourceDir)) != NULL) {
         char *sourceFile = getFullFileName(av[1], pDirent->d_name);
         char *destFile = getFullFileName(av[2], pDirent->d_name);
+        strcat(destFile, ".bak");
 
-        copyFile(sourceFile, destFile);
-        updateBackupTimes(sourceFile, destFile);
+        if(isValidFile(pDirent->d_name)){
+            copyFile(sourceFile, destFile);
+            updateBackupTimes(sourceFile, destFile);
+        }
     }
 }
 
