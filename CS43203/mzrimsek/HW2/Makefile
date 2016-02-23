@@ -1,7 +1,7 @@
-all: backup write1
+all: backup write2
 clean:
-	rm -f backup write1
+	rm -f backup write2
 backup: backup.c
 	cc -w -o backup backup.c
-write1: write1.c
-	cc -w -o write1 write1.c
+write2: write2.c
+	cc -w -o write2 write2.c
