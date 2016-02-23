@@ -1,3 +1,9 @@
+/*
+Mike Zrimsek
+Systems Programming
+Homework 2 - Backup
+ */
+
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
