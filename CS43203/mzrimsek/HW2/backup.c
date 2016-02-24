@@ -27,6 +27,14 @@ char* getFullFileName(char *fileName, char *dirName){
     return name;
 }
 
+int hasDirectoryFlag(char *param){
+    return param[0] == '-' && param[1] == 'd';
+}
+
+int isValidFile(char *fileName){
+    return fileName[0] != '.';
+}
+
 struct utimbuf getBackupTimes(char *sourceFile, struct stat statbuf){
     struct utimbuf backupTimes;
 
@@ -62,17 +70,12 @@ void copyFile(char *sourceFile, char *destFile){
     close(outFile);
 }
 
-int isValidFile(char *fileName){
-    return fileName[0] != 46;
-}
-
-void processDirectory(DIR *sourceDir, char *av[]){
+void processDirectory(DIR *sourceDir, char *source, char *dest){
     struct dirent *pDirent;
 
     while ((pDirent = readdir(sourceDir)) != NULL) {
-        char *sourceFile = getFullFileName(av[1], pDirent->d_name);
-        char *destFile = getFullFileName(av[2], pDirent->d_name);
-        strcat(destFile, ".bak");
+        char *sourceFile = getFullFileName(source, pDirent->d_name);
+        char *destFile = strcat(getFullFileName(dest, pDirent->d_name), ".bak");
 
         if(isValidFile(pDirent->d_name)){
             copyFile(sourceFile, destFile);
@@ -81,31 +84,58 @@ void processDirectory(DIR *sourceDir, char *av[]){
     }
 }
 
+void processFile(DIR *sourceDir, char *file){
+    struct dirent *pDirent = readdir(sourceDir);
+
+    char *sourceFile = getFullFileName(pDirent->d_name, file);
+    char *destFile = strcat(sourceFile, ".bak");
+
+    copyFile(sourceFile, destFile);
+    updateBackupTimes(sourceFile, destFile);
+}
+
 int main(int ac, char *av[]){
     DIR *sourceDir;
     DIR *targetDir;
 
-    if (ac < 3){
-        printf("Please specify source and target directories\n");
-        exit(1);
+    if(hasDirectoryFlag(av[1])){
+        if (ac < 4){
+            printf("Please specify source and target directories\n");
+            exit(1);
+        }
+
+        sourceDir = opendir(av[2]);
+        if(sourceDir == NULL){
+            printf ("Cannot open directory %s\n", av[2]);
+            exit(1);
+        }
+
+        targetDir = opendir(av[3]);
+        if (targetDir == NULL){
+            printf("Creating directory %s\n", av[3]);
+            mkdir(av[3], S_IRUSR | S_IWUSR | S_IXUSR);
+        }
+
+        printf("Copying files from %s to %s\n", av[2], av[3]);
+        processDirectory(sourceDir, av[2], av[3]);
+
+        closedir(sourceDir);
+        closedir(targetDir);
     }
+    else{
+        if(ac != 2){
+            printf("Please specify single file to backup\n");
+            exit(1);
+        }
 
-    sourceDir = opendir(av[1]);
-    if(sourceDir == NULL){
-        printf ("Cannot open directory %s\n", av[1]);
-        exit(1);
+        sourceDir = opendir(".");
+        if(sourceDir == NULL){
+            printf ("Cannot open directory");
+            exit(1);
+        }
+        
+        printf("Backing up %s\n", av[1]);
+        processFile(sourceDir, av[1]);
     }
-
-    targetDir = opendir(av[2]);
-    if (targetDir == NULL){
-        printf("Creating directory %s\n", av[2]);
-        mkdir(av[2], S_IRUSR | S_IWUSR | S_IXUSR);
-    }
-
-    printf("Copying files from %s to %s\n", av[1], av[2]);
-    processDirectory(sourceDir, av);
-
-    closedir(sourceDir);
-    closedir(targetDir);
     return 0;
 }
