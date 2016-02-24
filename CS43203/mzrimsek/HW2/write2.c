@@ -21,8 +21,8 @@ int isacdev(char *s){
 }
 
 char* is_a_device(char *s){
-    char	*rv;
-	  char	*str_add(char*, char*);
+    char *rv;
+	  char *str_add(char*, char*);
 
 		if (isacdev(s))
 				return s;
@@ -55,8 +55,8 @@ char* get_tty(char *logname){
  	  int num = 0;
  	  char *result = NULL;
 
-		char	*mytty = ttyname(0);
-		char	*ttydev = mytty + strlen("/dev/");
+		char *mytty = ttyname(0);
+		char *ttydev = mytty + strlen("/dev/");
 
 		setutent();
 		while(utrec = getutent())
@@ -65,8 +65,7 @@ char* get_tty(char *logname){
 					&& strcmp(utrec->ut_user,logname)==0
 					&& strcmp(utrec->ut_line,ttydev)!=0
 					&& utrec->ut_line[0] != ':'
-					&& is_a_device(utrec->ut_line)
-		   ){
+					&& is_a_device(utrec->ut_line)){
 				 	num++;
 					if (num == 1)
 							result = str_add("/dev/", utrec->ut_line );
@@ -74,9 +73,10 @@ char* get_tty(char *logname){
 		}
 		endutent();
 
-		if (num > 1)
+		if (num > 1){
 				printf("Warning: %s is logged in %d times, using %s\n",
 				logname, num, result);
+		}
 
  	  return result;
 }
@@ -98,7 +98,7 @@ int main(int ac, char *av[]){
     char buf[BUFSIZ];
 		char *termname;
 
-	  if ( ac != 2 ){
+	  if (ac != 2){
 		    fprintf(stderr,"usage: write0 logname\n");
 		    exit(1);
 	  }
