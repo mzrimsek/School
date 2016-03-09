@@ -4,4 +4,4 @@ clean:
 sigdemo3: sigdemo3.c
 	cc -w -o sigdemo3 sigdemo3.c
 reaction: reaction.c
-	cc -w -o reaction reaction.c
+	cc -w -o reaction reaction.c -lcurses
