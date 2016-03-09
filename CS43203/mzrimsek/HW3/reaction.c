@@ -74,7 +74,7 @@ void reactionReport(long reportData[], int numRounds){
 }
 
 main(){
-    int totalTests = 2;
+    int totalTests = 10;
     long resultTimes[totalTests];
     time_t t;
 
