@@ -2,6 +2,77 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define oops(m, x) { perror(m); exit(x); }
+
+main(int ac, char **av){
+    int first_pipe[2];
+    int second_pipe[2];
+    int pid;
+
+    //check argument count
+    if(ac != 4){
+        fprintf(stderr, "usage: pipe3 cmd1 cmd2 cmd3\n");
+        exit(1);
+    }
+
+    //make first pipe
+    if(pipe(first_pipe) == -1){
+        oops("Cannot get pipe", 1);
+    }
+
+    //fork for first command
+    if((pid = fork()) == -1){
+        oops("Cannot fork", 2);
+    }
+    else{
+        dup2(first_pipe[1], 1);
+
+        close(first_pipe[0]);
+        close(first_pipe[1]);
+
+        execlp(av[1], av[1], NULL);
+        oops(av[1], 4);
+    }
+
+    //make second pipe
+    if(pipe(second_pipe) == -1){
+        oops("Cannot get pipe", 1);
+    }
+
+    //fork for second command
+    if((pid = fork()) == -1){
+        oops("Cannot fork", 2);
+    }
+    else{
+        dup2(first_pipe[0], 0);
+        dup2(second_pipe[1], 1);
+
+        close(first_pipe[0]);
+        close(first_pipe[1]);
+        close(second_pipe[0]);
+        close(second_pipe[1]);
+
+        execlp(av[2], av[2], NULL);
+        oops(av[2], 4);
+    }
+
+    close(first_pipe[0]);
+    close(first_pipe[1]);
+
+    if((pid = fork()) != -1){
+        oops("Cannot fork", 2);
+    }
+    else{
+        dup2(second_pipe[0], 0);
+
+        close(second_pipe[0]);
+        close(second_pipe[1]);
+
+        execlp(av[3], av[3], NULL);
+        oops(av[3], 4);
+    }
+}
+
 // #define	oops(m,x)	{ perror(m); exit(x); }
 //
 // main(int ac, char **av)
@@ -56,42 +127,3 @@
 // 		execlp(av[1], av[1], NULL);
 // 		oops(av[1], 5);
 // }
-
-int spawn_process(int in, int out, char **av){
-		int pid;
-
-		if((pid = fork()) == 0){
-				if(in != 0){
-						dup2(in, 0);
-						close(in);
-				}
-
-				if(out != 1){
-						dup2(out, 1);
-						close(out);
-				}
-				return execlp(av[0], av[0], NULL);
-		}
-		return pid;
-}
-
-int fork_pipes(int n, char **av){
-		int i, pid, fd[2];
-		int in = 0;
-
-		for(i = 0; i < n-1; i++){
-				pipe(fd);
-				spawn_process(in, fd[1], av[i+1]);
-				close(fd[1]);
-				in = fd[0];
-		}
-
-		if(in != 0){
-				dup2(in, 0);
-		}
-		return execlp(av[i], av[i], NULL);
-}
-
-int main(int ac, char **av){
-		return fork_pipes(ac, **av);
-}
