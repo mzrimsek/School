@@ -1,3 +1,9 @@
+/*
+Mike Zrimsek
+Systems Programming
+Homework 5 - pipe3
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
