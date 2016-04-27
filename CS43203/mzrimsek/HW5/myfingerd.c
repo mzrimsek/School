@@ -38,13 +38,12 @@ main(int ac, char *av[]){
 
     printf(hp->h_addr);
 
-    if(bind(sock_id, (struct sockaddr *)&saddr, sizeof(saddr)) != 0){
+    if(bind(sock_id, (struct sockaddr_in *)&saddr, sizeof(saddr)) != 0){
         oops("bind");
     }
 
     while(1){
-        saddr_len = sizeof(saddr);
-        sock_fd = accept(sock_id, (struct sockaddr *)&saddr, sizeof(saddr));
+        sock_fd = accept(sock_id, (struct sockaddr_in *)&saddr, sizeof(saddr));
         if(sock_fd < 0){
             oops("accept");
         }
