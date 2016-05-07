@@ -1,7 +1,7 @@
-all: pipe3 myfingerd
+all: lclnt3 lserv3
 clean:
-	rm -f pipe3 myfingerd
-pipe3: pipe3.c
-	cc -w -o pipe3 pipe3.c
-myfingerd: myfingerd.c
-	cc -w -o myfingerd myfingerd.c
+	rm -f lclnt3 lserv3
+lclnt3: lclnt3.c
+	cc -w -o lclnt3 lclnt3.c
+lserv3: lserv3.c
+	cc -w -o lserv3 lserv3.c lserv_funcs3.c dgram.c
