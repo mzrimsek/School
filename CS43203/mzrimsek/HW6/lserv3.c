@@ -34,7 +34,7 @@ int main(int ac, char *av[])
 						buf[ret] = '\0';
 						narrate("GOT:", buf, &client_addr);
 						time_left = alarm(0);
-						handle_request(buf,&client_addr,addrlen);
+						handle_request(buf, &client_addr, addrlen);
 						alarm(time_left);
 				}
 				else if (errno != EINTR){

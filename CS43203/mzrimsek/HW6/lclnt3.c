@@ -24,7 +24,7 @@ do_regular_work()
 		printf("SuperSleep version 1.0 Running - Licensed Software\n");
 		sleep(15);
 
-		if (validate_ticket() != 0){
+		if (validate_ticket() != 0 && get_ticket() != 0){
 				printf("Server errors. Please Try later.\n");
 				return;
 		}
