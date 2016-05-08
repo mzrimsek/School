@@ -23,8 +23,8 @@
 #define RECLAIM_INTERVAL 5
 
 struct ticket {
-		pid_t pid,
-		struct in_addr host
+		pid_t pid;
+		struct in_addr host;
 };
 
 struct ticket ticket_array[MAXUSERS];
@@ -42,14 +42,28 @@ setup()
 				oops("make socket");
 		}
 		free_all_tickets();
+		signal(SIGHUP, show_ticket_array);
 		return sd;
 }
 free_all_tickets()
 {
 	int	i;
-
-	for(i = 0; i < MAXUSERS; i++)
-		ticket_array[i].pid = TICKET_AVAIL;
+	for(i = 0; i < MAXUSERS; i++){
+			ticket_array[i].pid = TICKET_AVAIL;
+	}
+}
+void show_ticket_array(int s)
+{
+    int i;
+    for(i = 0; i< MAXUSERS; i++){
+        printf("%3d\t", i);
+        if (ticket_array[i].pid == TICKET_AVAIL){
+						printf("FREE\n");
+				}
+        else{
+						printf("%5d\n", ticket_array[i]);
+				}
+    }
 }
 shut_down()
 {
@@ -94,7 +108,7 @@ static char *do_hello(char *msg_p, struct sockaddr_in *clientp)
 				narrate("database corrupt","",NULL);
 				return("FAIL database corrupt");
 		}
-		ip_address = ((struct sockaddr_in *)client)->sin_addr;
+		ip_address = ((struct sockaddr_in *)clientp)->sin_addr;
 		ticket_array[x].pid = atoi(msg_p + 5);
 		ticket_array[x].host = ip_address;
 		sprintf(replybuf, "TICK %d.%d", ticket_array[x], x);
