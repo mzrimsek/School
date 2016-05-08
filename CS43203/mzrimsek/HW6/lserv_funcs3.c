@@ -37,6 +37,8 @@ static char *do_validate();
 
 setup()
 {
+		void show_ticket_array(int);
+		
 		sd = make_dgram_server_socket(SERVER_PORTNUM);
 		if (sd == -1){
 				oops("make socket");
