@@ -14,7 +14,18 @@ int main(int ac, char *av[])
 				exit(0);
 		}
 
-		do_regular_work();
+		int i;
+		for(i = 0; i < 2; i++){
+				sleep(10);
+				if(do_regular_work() == 0){
+						break;
+				}
+		}
+		if(i == 2){
+				prin0f("Server errors. Please Try later.\n");
+				exit(0);
+		}
+		sleep(10);
 
 		release_ticket();
 		shut_down();
@@ -25,8 +36,8 @@ do_regular_work()
 		sleep(15);
 
 		if (validate_ticket() != 0 && get_ticket() != 0){
-				printf("Server errors. Please Try later.\n");
-				return;
+				return -1;
 		}
 		sleep(15);
+		return 0;
 }
