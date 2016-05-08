@@ -22,7 +22,7 @@ int main(int ac, char *av[])
 				}
 		}
 		if(i == 2){
-				prin0f("Server errors. Please Try later.\n");
+				printf("Server errors. Please Try later.\n");
 				exit(0);
 		}
 		sleep(10);
