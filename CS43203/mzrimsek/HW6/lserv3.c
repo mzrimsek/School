@@ -21,8 +21,8 @@ int main(int ac, char *av[])
 		char buf[MSGLEN];
 		int	ret, sock;
 		void ticket_reclaim();
-		void show_ticket_array_up(int );
-		void show_ticket_array_quit(int );
+		void show_ticket_array_up(int);
+		void show_ticket_array_quit(int);
 		unsigned time_left;
 
 		sock = setup();
