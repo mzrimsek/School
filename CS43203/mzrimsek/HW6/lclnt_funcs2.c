@@ -1,7 +1,7 @@
 /**
  * Mike Zrimsek
  * Systems Programming
- * Homework 6 - lserv_funcs2
+ * Homework 6 - lclnt_funcs2
  */
 
 #include <stdio.h>
@@ -13,7 +13,7 @@
 #include <netdb.h>
 
 static int pid = -1;
-static int sd = -1;
+static int my_socket = -1;
 static struct sockaddr serv_addr;
 static socklen_t serv_alen;
 static char ticket_buf[128];
@@ -31,8 +31,8 @@ setup()
 		char hostname[BUFSIZ];
 
 		pid = getpid();
-		sd  = make_dgram_client_socket();
-		if (sd == -1){
+		my_socket  = make_dgram_client_socket();
+		if(my_socket == -1){
 				oops("Cannot create socket");
 		}
 		gethostname(hostname, HOSTLEN);
@@ -41,7 +41,7 @@ setup()
 }
 shut_down()
 {
-		close(sd);
+		close(my_socket);
 }
 int get_ticket()
 {
@@ -53,18 +53,18 @@ int get_ticket()
 		}
 		sprintf(buf, "HELO %d", pid);
 
-		if ((response = do_transaction(buf)) == NULL){
+		if((response = do_transaction(buf)) == NULL){
 				return(-1);
 		}
 
-		if (strncmp(response, "TICK", 4) == 0){
+		if(strncmp(response, "TICK", 4) == 0){
 				strcpy(ticket_buf, response + 5);
 				have_ticket = 1;
 				narrate("got ticket", ticket_buf);
 				return(0);
 		}
 
-		if (strncmp(response,"FAIL",4) == 0){
+		if(strncmp(response,"FAIL",4) == 0){
 				narrate("Could not get ticket",response);
 		}
 		else{
@@ -82,7 +82,7 @@ int release_ticket()
 		}
 
 		sprintf(buf, "GBYE %s", ticket_buf);
-		if ((response = do_transaction(buf)) == NULL){
+		if((response = do_transaction(buf)) == NULL){
 				return(-1);
 		}
 
@@ -90,7 +90,7 @@ int release_ticket()
 				narrate("released ticket OK","");
 				return 0;
 		}
-		if (strncmp(response, "FAIL", 4) == 0){
+		if(strncmp(response, "FAIL", 4) == 0){
 				narrate("release failed", response+5);
 		}
 		else{
@@ -105,14 +105,14 @@ char *do_transaction(char *msg)
 		socklen_t addrlen;
 		int ret;
 
-		ret = sendto(sd, msg, strlen(msg), 0, &serv_addr, serv_alen);
-		if (ret == -1){
+		ret = sendto(my_socket, msg, strlen(msg), 0, &serv_addr, serv_alen);
+		if(ret == -1){
 				syserr("sendto");
 				return(NULL);
 		}
 
-		ret = recvfrom(sd, buf, MSGLEN, 0, &retaddr, &addrlen);
-		if (ret == -1){
+		ret = recvfrom(my_socket, buf, MSGLEN, 0, &retaddr, &addrlen);
+		if(ret == -1){
 				syserr("recvfrom");
 				return(NULL);
 		}
@@ -139,15 +139,15 @@ int validate_ticket()
 
 		sprintf(buf, "VALD %s", ticket_buf);
 
-		if ((response = do_transaction(buf)) == NULL){
+		if((response = do_transaction(buf)) == NULL){
 				return(-1);
 		}
 		narrate("Validated ticket: ", response);
 
-		if (strncmp(response, "GOOD", 4) == 0){
+		if(strncmp(response, "GOOD", 4) == 0){
 				return(0);
 		}
-		if (strncmp(response,"FAIL",4) == 0){
+		if(strncmp(response,"FAIL", 4) == 0){
 				have_ticket = 0;
 				return(-1);
 		}

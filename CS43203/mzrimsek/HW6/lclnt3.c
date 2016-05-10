@@ -14,6 +14,11 @@ int main(int ac, char *av[])
 				exit(0);
 		}
 
+		try_to_do_regular_work();
+		release_ticket();
+		shut_down();
+}
+try_to_do_regular_work(){
 		int i;
 		for(i = 0; i < 2; i++){
 				sleep(10);
@@ -26,9 +31,6 @@ int main(int ac, char *av[])
 				exit(0);
 		}
 		sleep(10);
-
-		release_ticket();
-		shut_down();
 }
 do_regular_work()
 {
