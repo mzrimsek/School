@@ -19,23 +19,23 @@ int main(int ac, char *av[])
 		struct sockaddr client_addr;
 		socklen_t addrlen;
 		char buf[MSGLEN];
-		int	ret, sock;
+		int	value_from_socket, socket;
 		void ticket_reclaim();
-		void show_ticket_array_up(int);
-		void show_ticket_array_quit(int);
+		void show_tickets_up(int);
+		void show_tickets_quit(int);
 		unsigned time_left;
 
-		sock = setup();
+		socket = setup();
 		signal(SIGALRM, ticket_reclaim);
-		signal(SIGHUP, show_ticket_array_up);
-		signal(SIGQUIT, show_ticket_array_quit);
+		signal(SIGHUP, show_tickets_up);
+		signal(SIGQUIT, show_tickets_quit);
 		alarm(RECLAIM_INTERVAL);
 
 		while(1){
 				addrlen = sizeof(client_addr);
-				ret = recvfrom(sock, buf, MSGLEN, 0, (struct sockaddr *)&client_addr, &addrlen);
-				if(ret != -1){
-						buf[ret] = '\0';
+				value_from_socket = recvfrom(socket, buf, MSGLEN, 0, (struct sockaddr *)&client_addr, &addrlen);
+				if(value_from_socket != -1){
+						buf[value_from_socket] = '\0';
 						narrate("GOT:", buf, &client_addr);
 						time_left = alarm(0);
 						handle_request(buf, &client_addr, addrlen);

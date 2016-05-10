@@ -23,17 +23,16 @@
 #define TICKET_AVAIL 0
 #define MAXUSERS 3
 #define oops(x) { perror(x); exit(-1); }
-
 #define RECLAIM_INTERVAL 5
 
 int setup();
 void shut_down();
-void handle_request(char *,struct sockaddr *, socklen_t );
+void handle_request(char *,struct sockaddr *, socklen_t);
 void narrate(char *, char *, struct sockaddr *);
 void ticket_reclaim();
 void free_all_tickets();
-void show_ticket_array_up(int );
-void show_ticket_array_quit(int );
+void show_tickets_up(int);
+void show_tickets_quit(int);
 static char *do_hello(char *, struct sockaddr *);
 static char *do_goodbye(char *, struct sockaddr *);
 static char *do_validate(char *,struct sockaddr *);
@@ -43,7 +42,7 @@ struct ticket {
     struct in_addr host;
 };
 
-struct ticket ticket_array[MAXUSERS];
+struct ticket tickets[MAXUSERS];
 int my_socket = -1;
 int num_tickets_out = 0;
 
@@ -64,7 +63,7 @@ void free_all_tickets()
 {
     int i;
     for(i = 0; i < MAXUSERS; i++){
-        ticket_array[i].pid = TICKET_AVAIL;
+        tickets[i].pid = TICKET_AVAIL;
     }
 }
 void shut_down()
@@ -97,7 +96,6 @@ void handle_request(char *req,struct sockaddr *client, socklen_t addlen)
 }
 static char *do_hello(char *msg_p, struct sockaddr *client)
 {
-    int x;
     static char replybuf[MSGLEN];
     struct in_addr ip_address;
 
@@ -105,17 +103,18 @@ static char *do_hello(char *msg_p, struct sockaddr *client)
         return("FAIL no tickets available");
     }
 
-    for(x = 0; x < MAXUSERS && ticket_array[x].pid != TICKET_AVAIL; x++);
+    int i;
+    for(i = 0; i < MAXUSERS && tickets[i].pid != TICKET_AVAIL; i++);
 
-    if(x == MAXUSERS) {
+    if(i == MAXUSERS) {
         narrate("database corrupt", "", NULL);
         return("FAIL database corrupt");
     }
 
     ip_address = ((struct sockaddr_in *)client)->sin_addr;
-    ticket_array[x].pid  = atoi(msg_p + 5);
-    ticket_array[x].host = ip_address;
-    sprintf(replybuf, "TICK %d.%d.%s", ticket_array[x].pid, x, inet_ntoa(ip_address));
+    tickets[i].pid  = atoi(msg_p + 5);
+    tickets[i].host = ip_address;
+    sprintf(replybuf, "TICK %d.%d.%s", tickets[i].pid, i, inet_ntoa(ip_address));
     num_tickets_out++;
     return(replybuf);
 }
@@ -124,11 +123,11 @@ static char *do_goodbye(char *msg_p, struct sockaddr *client)
     int pid, slot;
     char addr[MSGLEN];
 
-    if((sscanf((msg_p + 5), "%d.%d.%s", &pid, &slot, addr) != 3) || (ticket_array[slot].pid != pid) || (strcmp(addr, inet_ntoa(ticket_array[slot].host))!=0)){
-        narrate("Bogus ticket", msg_p+5, NULL);
+    if((sscanf((msg_p + 5), "%d.%d.%s", &pid, &slot, addr) != 3) || (tickets[slot].pid != pid) || (strcmp(addr, inet_ntoa(tickets[slot].host))!=0)){
+        narrate("Bogus ticket", msg_p + 5, NULL);
         return("FAIL invalid ticket");
     }
-    ticket_array[slot].pid = TICKET_AVAIL;
+    tickets[slot].pid = TICKET_AVAIL;
     num_tickets_out--;
     return("THNX See ya!");
 }
@@ -150,7 +149,7 @@ static char *do_validate(char *msg, struct sockaddr *client)
     struct in_addr caller_ip = ((struct sockaddr_in*)client)->sin_addr;
     int addrlen = sizeof(struct in_addr);
 
-    if (sscanf(msg+5,"%d.%d.%s",&pid,&slot,addr) == 3 && ticket_array[slot].pid == pid && strcmp(addr, inet_ntoa(ticket_array[slot].host)) == 0 && memcmp(&caller_ip,&(ticket_array[slot].host),addrlen) == 0){
+    if (sscanf(msg+5,"%d.%d.%s",&pid,&slot,addr) == 3 && tickets[slot].pid == pid && strcmp(addr, inet_ntoa(tickets[slot].host)) == 0 && memcmp(&caller_ip,&(tickets[slot].host),addrlen) == 0){
         return("GOOD Valid ticket");
     }
     narrate("Bogus ticket", msg+5, NULL);
@@ -158,35 +157,35 @@ static char *do_validate(char *msg, struct sockaddr *client)
 }
 void ticket_reclaim()
 {
-    int i;
     char tick[BUFSIZ];
 
+    int i;
     for(i = 0; i < MAXUSERS; i++) {
-        if((ticket_array[i].pid != TICKET_AVAIL) && (kill(ticket_array[i].pid, 0) == -1) && (errno == ESRCH)) {
-            sprintf(tick, "%d.%d.%s", ticket_array[i].pid, i, inet_ntoa(ticket_array[i].host));
+        if((tickets[i].pid != TICKET_AVAIL) && (kill(tickets[i].pid, 0) == -1) && (errno == ESRCH)) {
+            sprintf(tick, "%d.%d.%s", tickets[i].pid, i, inet_ntoa(tickets[i].host));
             narrate("freeing", tick, NULL);
-            ticket_array[i].pid = TICKET_AVAIL;
+            tickets[i].pid = TICKET_AVAIL;
             num_tickets_out--;
         }
     }
     alarm(RECLAIM_INTERVAL);
 }
-void show_ticket_array_up(int s)
+void show_tickets_up(int s)
 {
 	int	i;
 	for(i = 0; i<MAXUSERS; i++){
 		printf("%3d\t", i);
-		if (ticket_array[i].pid == TICKET_AVAIL){
+		if (tickets[i].pid == TICKET_AVAIL){
     		printf("FREE\n");
         }
 		else{
-            printf("%5d\n", ticket_array[i]);
+            printf("%5d\n", tickets[i]);
         }
 	}
 }
-void show_ticket_array_quit(int s)
+void show_tickets_quit(int s)
 {
-	show_ticket_array_up(s);
+	show_tickets_up(s);
 	printf("Shutting down\n");
 	shut_down();
 }

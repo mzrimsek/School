@@ -13,7 +13,6 @@ int main(int ac, char *av[])
 		if (get_ticket() != 0){
 				exit(0);
 		}
-
 		try_to_do_regular_work();
 		release_ticket();
 		shut_down();
