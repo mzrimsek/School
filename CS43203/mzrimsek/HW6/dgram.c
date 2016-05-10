@@ -1,7 +1,7 @@
 /***************************************************************
  *	dgram.c
  *	support functions for datagram based programs
- */ 
+ */
 
 #include	<stdio.h>
 #include	<unistd.h>
@@ -57,7 +57,7 @@ int make_internet_address(char *hostname, int port, struct sockaddr_in *addrp)
 	return 0;
 }
 
-int 
+int
 get_internet_address(char *host, int len, int *portp, struct sockaddr_in *addrp)
 /*
  * extracts host and port from an internet socket address

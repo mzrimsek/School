@@ -2,6 +2,6 @@ all: lclnt3 lserv3
 clean:
 	rm -f lclnt3 lserv3
 lclnt3: lclnt3.c
-	cc -w -o lclnt3 lclnt3.c lserv_funcs3.c dgram.c
+	cc -w -o lclnt3 lclnt3.c lclnt_funcs2.c dgram.c
 lserv3: lserv3.c
 	cc -w -o lserv3 lserv3.c lserv_funcs3.c dgram.c

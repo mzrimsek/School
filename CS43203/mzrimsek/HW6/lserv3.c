@@ -12,8 +12,8 @@
 #include <sys/errno.h>
 
 #define	MSGLEN		128
-
 #define RECLAIM_INTERVAL 5
+
 int main(int ac, char *av[])
 {
 		struct sockaddr client_addr;
@@ -21,10 +21,14 @@ int main(int ac, char *av[])
 		char buf[MSGLEN];
 		int	ret, sock;
 		void ticket_reclaim();
+		void show_ticket_array_up(int );
+		void show_ticket_array_quit(int );
 		unsigned time_left;
 
 		sock = setup();
 		signal(SIGALRM, ticket_reclaim);
+		signal(SIGHUP, show_ticket_array_up);
+		signal(SIGQUIT, show_ticket_array_quit);
 		alarm(RECLAIM_INTERVAL);
 
 		while(1){
