@@ -1,0 +1,3 @@
+Title: Operating Systems
+Description: Introduction to operating systems, processes and threads, CPU scheduling, mutual exclusion and synchronization, deadlock, memory management, file systems, networking and distributed systems.
+Location: Kent State University, OH 
