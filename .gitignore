@@ -3,4 +3,4 @@ EVAL
 .git
 *.pdf
 *.out
-*.txt
+*.o
