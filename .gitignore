@@ -5,3 +5,6 @@ EVAL
 *.out
 *.o
 kern
+*.elf
+*.iso
+bochslog.txt
