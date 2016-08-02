@@ -9,4 +9,4 @@ iso: kernel.elf
 run:
 	bochs -f bochsrc.txt -q
 clean:
-	rm -rf *.o kernel.elf os.iso
+	rm -rf *.o kernel.elf os.iso bochslog.txt
