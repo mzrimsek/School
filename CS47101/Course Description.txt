@@ -1,0 +1,3 @@
+Title: Computer Graphics
+Description: 
+Location: Kent State University, OH
