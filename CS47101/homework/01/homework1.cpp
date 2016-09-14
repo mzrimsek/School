@@ -1,3 +1,7 @@
+// Mike Zrimsek
+// Computer Graphics
+// Homework 1
+
 #include <GL/glut.h>
 
 static int WINDOW_WIDTH = 500;
