@@ -1,5 +1,8 @@
 #include <GL/glut.h>
 
+static int WINDOW_WIDTH = 500;
+static int WINDOW_HEIGHT = 500;
+
 void init()
 {
   glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -13,7 +16,7 @@ void init()
 //rainbow square
 void bottomLeftPolygon()
 {
-  glViewport(0, 0, 250, 250);
+  glViewport(0, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
   glBegin(GL_POLYGON);
     glColor3f(1.0, 0.0, 0.0);
@@ -33,7 +36,7 @@ void bottomLeftPolygon()
 //blue square
 void bottomRightPolygon()
 {
-  glViewport(250, 0, 250, 250);
+  glViewport(WINDOW_WIDTH/2, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
   glBegin(GL_POLYGON);
     glColor3f(0.0, 0.0, 1.0);
@@ -53,7 +56,7 @@ void bottomRightPolygon()
 //green square
 void topLeftPolygon()
 {
-  glViewport(0, 250, 250, 250);
+  glViewport(0, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
   glBegin(GL_POLYGON);
     glColor3f(0.0, 1.0, 0.0);
@@ -73,7 +76,7 @@ void topLeftPolygon()
 //red square
 void topRightPolygon()
 {
-  glViewport(250, 250, 250, 250);
+  glViewport(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 
   glBegin(GL_POLYGON);
     glColor3f(1.0, 0.0, 0.0);
@@ -106,7 +109,7 @@ int main(int argc, char** argv)
 {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
-  glutInitWindowSize(500, 500);
+  glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   glutInitWindowPosition(0,0);
   glutCreateWindow("Homework 1");
 
