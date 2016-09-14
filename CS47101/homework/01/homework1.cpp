@@ -10,9 +10,11 @@ void init()
   glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 }
 
-void myDisplay()
+//rainbow square
+void bottomLeftPolygon()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glViewport(0, 0, 250, 250);
+
   glBegin(GL_POLYGON);
     glColor3f(1.0, 0.0, 0.0);
     glVertex2f(-0.5, -0.5);
@@ -26,6 +28,77 @@ void myDisplay()
     glColor3f(1.0, 1.0, 0.0);
     glVertex2f(0.5, -0.5);
   glEnd();
+}
+
+//blue square
+void bottomRightPolygon()
+{
+  glViewport(250, 0, 250, 250);
+
+  glBegin(GL_POLYGON);
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex2f(-0.5, -0.5);
+
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex2f(-0.5, 0.5);
+
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex2f(0.5, 0.5);
+
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex2f(0.5, -0.5);
+  glEnd();
+}
+
+//green square
+void topLeftPolygon()
+{
+  glViewport(0, 250, 250, 250);
+
+  glBegin(GL_POLYGON);
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(-0.5, -0.5);
+
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(-0.5, 0.5);
+
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(0.5, 0.5);
+
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(0.5, -0.5);
+  glEnd();
+}
+
+//red square
+void topRightPolygon()
+{
+  glViewport(250, 250, 250, 250);
+
+  glBegin(GL_POLYGON);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(-0.5, -0.5);
+
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(-0.5, 0.5);
+
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(0.5, 0.5);
+
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(0.5, -0.5);
+  glEnd();
+}
+
+void myDisplay()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  bottomLeftPolygon();
+  bottomRightPolygon();
+  topLeftPolygon();
+  topRightPolygon();
+
   glFlush();
 }
 
