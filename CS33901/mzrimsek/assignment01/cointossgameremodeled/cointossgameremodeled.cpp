@@ -34,18 +34,22 @@ void printInstructions()
   cout <<"\nGuess 3 in a row, and cash in for 100 dollars";
 }
 
+void initializeGameVariables(int* playsLeft, int* streak, char* cashIn)
+{
+	*playsLeft = 5;
+	*streak = 0;
+	*cashIn = 'n';
+}
+
 int main()
 {
-	int guess;
-	int playsLeft = 5;
-	int streak = 0;
-	char playAgain = 'y';
-	char cashIn = 'n';
-
+	int guess, playsLeft, streak;
+	char cashIn, playAgain = 'y';
 	printInstructions();
 
 	while (playAgain =='y')
 	{
+		initializeGameVariables(&playsLeft, &streak, &cashIn);
 		do
 		{
 			srand(static_cast<unsigned int>(time(0)));
@@ -71,14 +75,9 @@ int main()
 				cout << "\n\nYou have reached a streak of three!! Cash in?(y/n)";
 				cin >>cashIn;
 			}
-			else if(streak == 5)
+			else if(streak == 5 || playsLeft == 0)
 			{
         cashIn = 'y';
-			}
-
-			if(playsLeft == 0)
-			{
-				cashIn = 'y';
 			}
 		}while (cashIn != 'y');
 
@@ -99,10 +98,6 @@ int main()
 
 		cout << "\n\nDo you wish to play again?(y/n)" ;
 		cin >> playAgain;
-
-		playsLeft = 5;
-		cashIn = 'n';
-		streak = 0;
 	}
 
 	cout << "\n\nOk, cya!!"<<endl;
