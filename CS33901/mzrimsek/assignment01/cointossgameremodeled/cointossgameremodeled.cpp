@@ -129,7 +129,7 @@ int main()
 		int streak = 0;
 
 		playGame(&streak);
-    printGameOver(streak);
+		printGameOver(streak);
 
 		playAgain = getPlayAgain();
 	}
