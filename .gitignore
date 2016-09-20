@@ -8,3 +8,4 @@ kern
 *.elf
 *.iso
 *.txt
+.vscode
