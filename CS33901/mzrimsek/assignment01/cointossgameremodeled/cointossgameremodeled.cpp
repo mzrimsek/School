@@ -27,7 +27,7 @@ void compareAndHandleGuess(int guess, int coinFace, int* streak, int playsLeft)
 	}
 }
 
-void checkCoinFace(int guess, int coinFace, int* streak, int playsLeft)
+void checkAndCompareCoinFace(int guess, int coinFace, int* streak, int playsLeft)
 {
 	if(coinFace == 1)
 	{
@@ -114,7 +114,7 @@ void playGame(int* streak)
 		int guess = getUserGuess();
 		playsLeft--;
 
-		checkCoinFace(guess, coinFace, streak, playsLeft);
+		checkAndCompareCoinFace(guess, coinFace, streak, playsLeft);
 		cashIn = getCashIn(*streak, playsLeft);
 	} while(cashIn != 'y');
 }
