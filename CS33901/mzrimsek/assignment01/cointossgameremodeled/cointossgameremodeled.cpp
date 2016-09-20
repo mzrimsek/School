@@ -15,7 +15,8 @@ class Player{
 };
 
 class CoinGame{
-	Player *player;
+	private:
+		Player *player;
 
 	void handleCorrectGuess(int* streak, int playsLeft)
 	{
@@ -41,8 +42,11 @@ class CoinGame{
 		}
 	}
 
-	void checkAndCompareCoinFace(int guess, int coinFace, int* streak, int playsLeft)
+	void compareCoinFaceAndGuess(int* streak, int playsLeft)
 	{
+		int coinFace = getCoinFace();
+		int guess = player->getCoinGuess();
+
 		if(coinFace == 1)
 		{
 			cout << "\nThe coin landed Heads up!";
@@ -116,11 +120,8 @@ class CoinGame{
 
 		do
 		{
-			int coinFace = getCoinFace();
-			int guess = player->getCoinGuess();
 			playsLeft--;
-
-			checkAndCompareCoinFace(guess, coinFace, streak, playsLeft);
+			compareCoinFaceAndGuess(streak, playsLeft);
 			cashIn = getCashIn(*streak, playsLeft);
 		} while(cashIn != 'y');
 	}
@@ -145,7 +146,6 @@ class CoinGame{
 
 				playAgain = getPlayAgain();
 			}
-
 			cout << "\n\nOk, cya!!"<<endl;
 		}
 };
