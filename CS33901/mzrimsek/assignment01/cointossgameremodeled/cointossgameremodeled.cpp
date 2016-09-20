@@ -50,10 +50,9 @@ int getUserGuess()
 
 int main()
 {
-	char playAgain = 'y';
-
 	printInstructions();
 
+	char playAgain = 'y';
 	while (playAgain =='y')
 	{
 		int playsLeft = 5;
@@ -82,23 +81,24 @@ int main()
 				cout << "\n\nYou have reached a streak of three!! Cash in?(y/n)";
 				cin >>cashIn;
 			}
-			else if(streak == 5 || playsLeft == 0)
+			
+			if(streak == 5 || playsLeft == 0)
 			{
-        cashIn = 'y';
+				cashIn = 'y';
 			}
 		}while (cashIn != 'y');
 
-    if(streak == 3 && cashIn == 'y')
+    if(streak == 3)
 		{
 			cout << "\n\nCONGRATULATIONS!!";
 			cout << "\nYou have cashed in for 100 dollars with a streak of 3!"<<endl;
 		}
-		else if(streak == 5 && cashIn == 'y')
+		else if(streak == 5)
 		{
 			cout << "\n\nCONGRATULATIONS!!";
   		cout << "\nYou win the Jackpot of 1,000,000 dollars with a streak of FIVE!!!"<<endl;
 		}
-		else if(streak != 5 && cashIn == 'y')
+		else
 		{
 			cout << "\n\nYou have run out of plays! Better luck next time!"<<endl;
 		}
