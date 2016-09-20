@@ -38,26 +38,30 @@ int main()
 						cin >> guess;
 						--playsLeft;
 
-            if(guess == coinFace & coinFace == 1)
-            {
-            		cout << "\nThe coin landed Heads up!";
-		            handleCorrectGuess(&streak, playsLeft);
-            }
-            else if(guess == coinFace & coinFace == 2)
-            {
-            		cout << "\nThe coin landed Tails up! ";
-		            handleCorrectGuess(&streak, playsLeft);
-            }
-            else if(guess != coinFace & coinFace == 1)
-            {
-            		cout << "\nThe coin landed Heads up! ";
-								handleIncorrectGuess(&streak, playsLeft);
-            }
-            else if(guess != coinFace & coinFace == 2)
-            {
+						if(coinFace == 1)
+						{
+								cout << "\nThe coin landed Heads up!";
+								if(guess == coinFace)
+								{
+										handleCorrectGuess(&streak, playsLeft);
+								}
+								else
+								{
+										handleIncorrectGuess(&streak, playsLeft);
+								}
+						}
+						else if(coinFace == 2)
+						{
 								cout << "\nThe coin landed Tails up! ";
-            		handleIncorrectGuess(&streak, playsLeft);
-            }
+								if(guess == coinFace)
+								{
+										handleCorrectGuess(&streak, playsLeft);
+								}
+								else
+								{
+										handleIncorrectGuess(&streak, playsLeft);
+								}
+						}
 
 						if(streak == 3)
 						{
