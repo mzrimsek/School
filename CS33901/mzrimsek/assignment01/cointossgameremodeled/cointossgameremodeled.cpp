@@ -27,6 +27,13 @@ void checkAndHandleGuess(int guess, int coinFace, int* streak, int playsLeft)
 	}
 }
 
+void printInstructions()
+{
+	cout <<"\n\n			Welcome to Coin Toss Game!!" <<endl;
+  cout <<"\n\nRules:\nGuess 5 coin tosses in a row to win the 1,000,000 dollar Jackpot.";
+  cout <<"\nGuess 3 in a row, and cash in for 100 dollars";
+}
+
 int main()
 {
 	int guess;
@@ -35,9 +42,7 @@ int main()
 	char playAgain = 'y';
 	char cashIn = 'n';
 
-  cout <<"\n\n			Welcome to Coin Toss Game!!" <<endl;
-  cout <<"\n\nRules:\nGuess 5 coin tosses in a row to win the 1,000,000 dollar Jackpot.";
-  cout <<"\nGuess 3 in a row, and cash in for 100 dollars";
+	printInstructions();
 
 	while (playAgain =='y')
 	{
