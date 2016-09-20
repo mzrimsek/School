@@ -15,6 +15,18 @@ void handleIncorrectGuess(int* streak, int playsLeft)
 		cout << "\n\nUnlucky, you were wrong! " << playsLeft << " plays left!";
 }
 
+void checkAndHandleGuess(int guess, int coinFace, int* streak, int playsLeft)
+{
+		if(guess == coinFace)
+		{
+				handleCorrectGuess(streak, playsLeft);
+		}
+		else
+		{
+				handleIncorrectGuess(streak, playsLeft);
+		}
+}
+
 int main()
 {
 		int guess;
@@ -41,26 +53,12 @@ int main()
 						if(coinFace == 1)
 						{
 								cout << "\nThe coin landed Heads up!";
-								if(guess == coinFace)
-								{
-										handleCorrectGuess(&streak, playsLeft);
-								}
-								else
-								{
-										handleIncorrectGuess(&streak, playsLeft);
-								}
+								checkAndHandleGuess(guess, coinFace, &streak, playsLeft);
 						}
 						else if(coinFace == 2)
 						{
 								cout << "\nThe coin landed Tails up! ";
-								if(guess == coinFace)
-								{
-										handleCorrectGuess(&streak, playsLeft);
-								}
-								else
-								{
-										handleIncorrectGuess(&streak, playsLeft);
-								}
+								checkAndHandleGuess(guess, coinFace, &streak, playsLeft);
 						}
 
 						if(streak == 3)
