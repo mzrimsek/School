@@ -34,29 +34,36 @@ void printInstructions()
   cout <<"\nGuess 3 in a row, and cash in for 100 dollars";
 }
 
-void initializeGameVariables(int* playsLeft, int* streak, char* cashIn)
+int getCoinFace()
 {
-	*playsLeft = 5;
-	*streak = 0;
-	*cashIn = 'n';
+	srand(static_cast<unsigned int>(time(0)));
+	return rand() % 2+1;
+}
+
+int getUserGuess()
+{
+	int guess;
+	cout << "\n\nHeads or Tails? (1 or 2)" <<endl;
+	cin >> guess;
+	return guess;
 }
 
 int main()
 {
-	int guess, playsLeft, streak;
-	char cashIn, playAgain = 'y';
+	char playAgain = 'y';
+
 	printInstructions();
 
 	while (playAgain =='y')
 	{
-		initializeGameVariables(&playsLeft, &streak, &cashIn);
+		int playsLeft = 5;
+		int streak = 0;
+		char cashIn = 'n';
+
 		do
 		{
-			srand(static_cast<unsigned int>(time(0)));
-			int coinFace = rand() % 2+1;
-
-			cout << "\n\nHeads or Tails? (1 or 2)" <<endl;
-			cin >> guess;
+			int coinFace = getCoinFace();
+			int guess = getUserGuess();
 			--playsLeft;
 
 			if(coinFace == 1)
