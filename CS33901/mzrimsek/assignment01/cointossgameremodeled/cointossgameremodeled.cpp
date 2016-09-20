@@ -1,3 +1,9 @@
+/**
+Mike Zrimsek
+Software Engineering
+Assignment 01 - Coin Toss Game Refactor
+**/
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
