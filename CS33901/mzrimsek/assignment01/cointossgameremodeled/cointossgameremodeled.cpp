@@ -86,13 +86,37 @@ char getCashIn(int streak, int playsLeft)
 	if(streak == 3)
 	{
 		cout << "\n\nYou have reached a streak of three!! Cash in?(y/n)";
-		cin >>cashIn;
+		cin >> cashIn;
 	}
 	if(streak == 5 || playsLeft == 0)
 	{
 		cashIn = 'y';
 	}
 	return cashIn;
+}
+
+char getPlayAgain()
+{
+	char playAgain;
+	cout << "\n\nDo you wish to play again?(y/n)" ;
+	cin >> playAgain;
+	return playAgain;
+}
+
+void playGame(int* streak)
+{
+	int playsLeft = 5;
+	char cashIn = 'n';
+
+	do
+	{
+		int coinFace = getCoinFace();
+		int guess = getUserGuess();
+		playsLeft--;
+
+		checkCoinFace(guess, coinFace, streak, playsLeft);
+		cashIn = getCashIn(*streak, playsLeft);
+	} while(cashIn != 'y');
 }
 
 int main()
@@ -102,24 +126,12 @@ int main()
 	char playAgain = 'y';
 	while (playAgain =='y')
 	{
-		int playsLeft = 5;
 		int streak = 0;
-		char cashIn = 'n';
 
-		do
-		{
-			int coinFace = getCoinFace();
-			int guess = getUserGuess();
-			--playsLeft;
-
-			checkCoinFace(guess, coinFace, &streak, playsLeft);
-			cashIn = getCashIn(streak, playsLeft);
-		}while (cashIn != 'y');
-
+		playGame(&streak);
     printGameOver(streak);
 
-		cout << "\n\nDo you wish to play again?(y/n)" ;
-		cin >> playAgain;
+		playAgain = getPlayAgain();
 	}
 
 	cout << "\n\nOk, cya!!"<<endl;
