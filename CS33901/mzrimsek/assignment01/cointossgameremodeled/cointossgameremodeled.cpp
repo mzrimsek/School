@@ -36,8 +36,9 @@ class CoinGame{
 		cout << "\n\nUnlucky, you were wrong! " << playsLeft << " plays left!";
 	}
 
-	void compareAndHandleGuess(int guess, int coinFace, int* streak, int playsLeft)
+	void compareCoinFaceAndGuess(int coinFace, int* streak, int playsLeft)
 	{
+		int guess = player->getCoinGuess();
 		if(guess == coinFace)
 		{
 			handleCorrectGuess(streak, playsLeft);
@@ -48,20 +49,18 @@ class CoinGame{
 		}
 	}
 
-	void compareCoinFaceAndGuess(int* streak, int playsLeft)
+	void checkCoinFace(int* streak, int playsLeft)
 	{
 		int coinFace = getCoinFace();
-		int guess = player->getCoinGuess();
-
 		if(coinFace == 1)
 		{
 			cout << "\nThe coin landed Heads up!";
-			compareAndHandleGuess(guess, coinFace, streak, playsLeft);
+			compareCoinFaceAndGuess(coinFace, streak, playsLeft);
 		}
 		else if(coinFace == 2)
 		{
 			cout << "\nThe coin landed Tails up! ";
-			compareAndHandleGuess(guess, coinFace, streak, playsLeft);
+			compareCoinFaceAndGuess(coinFace, streak, playsLeft);
 		}
 	}
 
@@ -127,7 +126,7 @@ class CoinGame{
 		do
 		{
 			playsLeft--;
-			compareCoinFaceAndGuess(streak, playsLeft);
+			checkCoinFace(streak, playsLeft);
 			cashIn = getCashIn(*streak, playsLeft);
 		} while(cashIn != 'y');
 	}
