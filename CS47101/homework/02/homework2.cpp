@@ -20,7 +20,9 @@ static int RUBBERBANDING_CIRCLE_MENU_SELECTION = 3;
 
 int square_x, square_y;
 double square_size = 20.0;
-double circle_x = -0.6, circle_y = -0.6;
+
+double circle_x = 50, circle_y = 50;
+int circle_change = 7;
 
 void mainMenu(int value)
 {
@@ -83,11 +85,26 @@ void idleCallback()
 {
   if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
-    double circleStep = .0001;
-    circle_x += circleStep;
-    circle_y += circleStep;
+    if(circle_x > WINDOW_WIDTH || circle_y > WINDOW_HEIGHT)
+    {
+      circle_x = 50;
+      circle_y = 50;
+    }
+    circle_x += circle_change;
+    circle_y += circle_change;
   }
   glutPostRedisplay();
+}
+
+void drawSquare(int x, int y)
+{
+  glTranslatef(x, y, 0.0);
+  glBegin(GL_POLYGON);
+    glVertex2f(square_size, square_size);
+    glVertex2f(-square_size, square_size);
+    glVertex2f(-square_size, -square_size);
+    glVertex2f(+square_size, -square_size);
+  glEnd();
 }
 
 void drawCircle(double x, double y, double radius)
@@ -116,28 +133,17 @@ void displayCallback()
 
   if(mainMenuSelection == SQUARE_MENU_SELECTION)
   {
-    glTranslatef(square_x, square_y, 0.0);
-
-    glBegin(GL_POLYGON);
-      glVertex2f(square_size, square_size);
-      glVertex2f(-square_size, square_size);
-      glVertex2f(-square_size, -square_size);
-      glVertex2f(+square_size, -square_size);
-    glEnd();
+    drawSquare(square_x, square_y);
   }
   else if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
     glColor3f(0.0, 0.0, 1.0);
-    drawCircle(circle_x, circle_y, 0.25);
+    drawCircle(circle_x, circle_y, 50);
   }
   else if(mainMenuSelection == RUBBERBANDING_CIRCLE_MENU_SELECTION)
   {
     
   }
-  
-
-	
-
   glutSwapBuffers();
 }
 
