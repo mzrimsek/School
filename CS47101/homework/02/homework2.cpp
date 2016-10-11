@@ -85,10 +85,9 @@ void idleCallback()
 {
   if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
-    if(circle_x > WINDOW_WIDTH || circle_y > WINDOW_HEIGHT)
+    if(circle_x > WINDOW_WIDTH - 50 || circle_y > WINDOW_HEIGHT - 50 || circle_x < 50 || circle_y < 50)
     {
-      circle_x = 50;
-      circle_y = 50;
+      circle_change *= -1;
     }
     circle_x += circle_change;
     circle_y += circle_change;
