@@ -18,6 +18,7 @@ static int SQUARE_MENU_SELECTION = 1;
 static int CIRCLE_MENU_SELECTION = 2;
 static int RUBBERBANDING_CIRCLE_MENU_SELECTION = 3;
 
+int square_x, square_y;
 double circle_x = -0.6, circle_y = -0.6;
 
 void mainMenu(int value)
@@ -42,7 +43,11 @@ void mouseCallback(int btn, int state, int x, int y)
 
 void mouseMotionCallback(int x, int y)
 {
-  printf("x: %d, y: %d", x, y);
+  printf("x: %d, y: %d\n", x, y);
+  square_x = x;
+  square_y = WINDOW_HEIGHT - y;
+
+  glutPostRedisplay();
 }
 
 void keyboardCallback(unsigned char key, int x, int y)
@@ -85,13 +90,9 @@ void displayCallback()
   if(mainMenuSelection == SQUARE_MENU_SELECTION)
   {
     //red rectangle moves with mouse when left click is down
-    glBegin(GL_POLYGON);
-      glColor3f(1.0, 0.0, 0.0);
-      glVertex2f(0.33, 0.75);
-      glVertex2f(0.33, 0.25);
-      glVertex2f(0.66, 0.25);
-      glVertex2f(0.66, 0.75);
-    glEnd();
+    glColor3f(1.0, 0.0, 0.0);
+    glTranslatef(square_x, square_y, 0.0);
+    glRectf(-.5, -.5, .5, .5);
   }
   else if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
@@ -103,7 +104,7 @@ void displayCallback()
     
   }
 
-  glFlush();
+  glutSwapBuffers();
 }
 
 int main(int argc, char** argv)
