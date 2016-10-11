@@ -19,6 +19,7 @@ static int CIRCLE_MENU_SELECTION = 2;
 static int RUBBERBANDING_CIRCLE_MENU_SELECTION = 3;
 
 int square_x, square_y;
+double square_size = 20.0;
 double circle_x = -0.6, circle_y = -0.6;
 
 void mainMenu(int value)
@@ -38,15 +39,33 @@ void createMainMenu()
 
 void mouseCallback(int btn, int state, int x, int y)
 {
+  printf("button: %d, state: %d, x: %d, y: %d\n", btn, state, x, y);
+  glutPostRedisplay();
+}
 
+void trackSquareLocation(int x, int y)
+{
+  square_x = x;
+  square_y = WINDOW_HEIGHT - y;
 }
 
 void mouseMotionCallback(int x, int y)
 {
-  printf("x: %d, y: %d\n", x, y);
-  square_x = x;
-  square_y = WINDOW_HEIGHT - y;
+  if(mainMenuSelection == SQUARE_MENU_SELECTION)
+  {
+    trackSquareLocation(x, y);
+    glColor3f(1.0, 0.0, 0.0);
+  }
+  glutPostRedisplay();
+}
 
+void mousePassiveMotionCallback(int x, int y)
+{
+  if(mainMenuSelection == SQUARE_MENU_SELECTION)
+  {
+    trackSquareLocation(x, y);
+    glColor3f(1.0, 1.0, 0.0);
+  }
   glutPostRedisplay();
 }
 
@@ -68,7 +87,6 @@ void idleCallback()
     circle_x += circleStep;
     circle_y += circleStep;
   }
-  
   glutPostRedisplay();
 }
 
@@ -83,16 +101,29 @@ void drawCircle(double x, double y, double radius)
   glEnd();
 }
 
+void reshapeCallback(int width, int height)
+{
+	WINDOW_WIDTH = width;
+	WINDOW_HEIGHT = height;
+}
+
 void displayCallback()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+  glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
   if(mainMenuSelection == SQUARE_MENU_SELECTION)
   {
-    //red rectangle moves with mouse when left click is down
-    glColor3f(1.0, 0.0, 0.0);
     glTranslatef(square_x, square_y, 0.0);
-    glRectf(-.5, -.5, .5, .5);
+
+    glBegin(GL_POLYGON);
+      glVertex2f(square_size, square_size);
+      glVertex2f(-square_size, square_size);
+      glVertex2f(-square_size, -square_size);
+      glVertex2f(+square_size, -square_size);
+    glEnd();
   }
   else if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
@@ -103,6 +134,9 @@ void displayCallback()
   {
     
   }
+  
+
+	
 
   glutSwapBuffers();
 }
@@ -112,17 +146,26 @@ int main(int argc, char** argv)
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-  glutInitWindowPosition(0,0);
+  glutInitWindowPosition(0, 0);
   glutCreateWindow("Homework 2");
+
+  glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+
+  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+  glutSwapBuffers();  
 
   createMainMenu();
   glutMouseFunc(mouseCallback);
   glutKeyboardFunc(keyboardCallback);
   glutMotionFunc(mouseMotionCallback);
+  glutPassiveMotionFunc(mousePassiveMotionCallback);
   glutIdleFunc(idleCallback);
-
-  glClearColor(0.0, 0.0, 0.0, 0.0);
   glutDisplayFunc(displayCallback);
+  glutReshapeFunc(reshapeCallback);
 
   glutMainLoop();
   return 0;
