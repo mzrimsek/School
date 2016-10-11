@@ -65,10 +65,10 @@ void stopMotion(int x, int y)
 
 void mouseCallback(int btn, int state, int x, int y)
 {
-  if (btn == GLUT_LEFT_BUTTON)
+  if(btn == GLUT_LEFT_BUTTON)
 	{
-    if (state == GLUT_DOWN) startMotion(x, y);
-		if (state == GLUT_UP) stopMotion(x, y);
+    if(state == GLUT_DOWN) startMotion(x, y);
+    if(state == GLUT_UP) stopMotion(x, y);
 	}
   glutPostRedisplay();
 }
@@ -156,16 +156,16 @@ void drawCircle(double x, double y, double radius)
 
 void reshapeCallback(int width, int height)
 {
-	WINDOW_WIDTH = width;
-	WINDOW_HEIGHT = height;
+  WINDOW_WIDTH = width;
+  WINDOW_HEIGHT = height;
 }
 
 void displayCallback()
 {
   glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+  glLoadIdentity();
 
   if(mainMenuSelection == SQUARE_MENU_SELECTION)
   {
@@ -205,9 +205,9 @@ int main(int argc, char** argv)
   glutCreateWindow("Homework 2");
 
   glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT, -1.0, 1.0);
-	glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glOrtho(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT, -1.0, 1.0);
+  glMatrixMode(GL_MODELVIEW);
 
   glClearColor(0.0, 0.0, 0.0, 0.0);
   glClear(GL_COLOR_BUFFER_BIT);
