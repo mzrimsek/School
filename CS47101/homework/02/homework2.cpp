@@ -179,14 +179,19 @@ void displayCallback()
   else if(mainMenuSelection == RUBBERBANDING_CIRCLE_MENU_SELECTION)
   {
     double rubber_circle_radius = rubber_circle_end_x - rubber_circle_start_x;
+    
     glColor3f(0.0, 1.0, 0.0);
-
     drawCircle(rubber_circle_start_x, rubber_circle_start_y, 1);
     if(rubber_circle_tracking)
     {
+      glColor3f(1.0, 1.0, 1.0);
       drawCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
     }
-    drawCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
+    else
+    {
+      glColor3f(0.0, 1.0, 0.0);
+      drawCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
+    }
   }
   glutSwapBuffers();
 }
