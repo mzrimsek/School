@@ -7,11 +7,18 @@
 static int WINDOW_WIDTH = 500;
 static int WINDOW_HEIGHT = 500;
 
+static int mainMenuId;
+
 void myDisplay()
 {
   glClear(GL_COLOR_BUFFER_BIT);
 
   glFlush();
+}
+
+void mainMenu(int value)
+{
+
 }
 
 int main(int argc, char** argv)
@@ -24,5 +31,12 @@ int main(int argc, char** argv)
 
   glutDisplayFunc(myDisplay);
 
+  mainMenuId = glutCreateMenu(mainMenu);
+  glutAddMenuEntry("Rectangles", 1);
+  glutAddMenuEntry("Circle", 2);
+  glutAddMenuEntry("Rubberbanding Circle", 3);
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+
   glutMainLoop();
+  return 0;
 }
