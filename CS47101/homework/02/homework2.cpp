@@ -22,6 +22,7 @@ int square_x, square_y;
 double square_size = 20.0;
 
 double circle_x = 50, circle_y = 50;
+double circle_radius = 50;
 int circle_change = 7;
 
 void mainMenu(int value)
@@ -85,7 +86,8 @@ void idleCallback()
 {
   if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
-    if(circle_x > WINDOW_WIDTH - 50 || circle_y > WINDOW_HEIGHT - 50 || circle_x < 50 || circle_y < 50)
+    if(circle_x > WINDOW_WIDTH - circle_radius || circle_y > WINDOW_HEIGHT - circle_radius 
+    || circle_x < circle_radius || circle_y < circle_radius)
     {
       circle_change *= -1;
     }
@@ -137,7 +139,7 @@ void displayCallback()
   else if(mainMenuSelection == CIRCLE_MENU_SELECTION)
   {
     glColor3f(0.0, 0.0, 1.0);
-    drawCircle(circle_x, circle_y, 50);
+    drawCircle(circle_x, circle_y, circle_radius);
   }
   else if(mainMenuSelection == RUBBERBANDING_CIRCLE_MENU_SELECTION)
   {
