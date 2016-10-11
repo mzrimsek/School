@@ -25,6 +25,10 @@ double circle_x = 50, circle_y = 50;
 double circle_radius = 50;
 int circle_change = 7;
 
+double rubber_circle_tracking = 0;
+double rubber_circle_start_x, rubber_circle_start_y;
+double rubber_circle_end_x, rubber_circle_end_y;
+
 void mainMenu(int value)
 {
   mainMenuSelection = value;
@@ -40,9 +44,32 @@ void createMainMenu()
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
+void startMotion(int x, int y)
+{
+  rubber_circle_tracking = 1;
+
+  rubber_circle_start_x = x;
+  rubber_circle_start_y = y;
+
+  rubber_circle_end_x = x;
+  rubber_circle_end_y = y;
+}
+
+void stopMotion(int x, int y)
+{
+  rubber_circle_tracking = 0;
+
+  rubber_circle_end_x = x;
+  rubber_circle_end_y = y;
+}
+
 void mouseCallback(int btn, int state, int x, int y)
 {
-  printf("button: %d, state: %d, x: %d, y: %d\n", btn, state, x, y);
+  if (btn == GLUT_LEFT_BUTTON)
+	{
+    if (state == GLUT_DOWN) startMotion(x, y);
+		if (state == GLUT_UP) stopMotion(x, y);
+	}
   glutPostRedisplay();
 }
 
@@ -58,6 +85,14 @@ void mouseMotionCallback(int x, int y)
   {
     trackSquareLocation(x, y);
     glColor3f(1.0, 0.0, 0.0);
+  }
+  if(mainMenuSelection == RUBBERBANDING_CIRCLE_MENU_SELECTION)
+  {
+    if(rubber_circle_tracking)
+    {
+      rubber_circle_end_x = x;
+      rubber_circle_end_y = WINDOW_HEIGHT - y;
+    }
   }
   glutPostRedisplay();
 }
@@ -119,6 +154,14 @@ void drawCircle(double x, double y, double radius)
   glEnd();
 }
 
+void drawRubberCircle(double x, double y, double radius)
+{
+  glLineStipple(1, 0xF00F);
+	glEnable(GL_LINE_STIPPLE);
+	glLineWidth(1.0);
+  drawCircle(x, y, radius);
+}
+
 void reshapeCallback(int width, int height)
 {
 	WINDOW_WIDTH = width;
@@ -143,7 +186,13 @@ void displayCallback()
   }
   else if(mainMenuSelection == RUBBERBANDING_CIRCLE_MENU_SELECTION)
   {
-    
+    double rubber_circle_radius = rubber_circle_end_x - rubber_circle_start_x;
+    glColor3f(0.0, 1.0, 0.0);
+    if(rubber_circle_tracking)
+    {
+      drawRubberCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
+    }
+    drawCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
   }
   glutSwapBuffers();
 }
