@@ -14,7 +14,7 @@ static double DEGREE_TO_RADIAN = 3.14159/180;
 int mainMenuId;
 int mainMenuSelection = 0;
 
-static int RECTANGLES_MENU_SELECTION = 1;
+static int SQUARE_MENU_SELECTION = 1;
 static int CIRCLE_MENU_SELECTION = 2;
 static int RUBBERBANDING_CIRCLE_MENU_SELECTION = 3;
 
@@ -29,7 +29,7 @@ void mainMenu(int value)
 void createMainMenu()
 {
   mainMenuId = glutCreateMenu(mainMenu);
-  glutAddMenuEntry("Rectangles", RECTANGLES_MENU_SELECTION);
+  glutAddMenuEntry("Square", SQUARE_MENU_SELECTION);
   glutAddMenuEntry("Circle", CIRCLE_MENU_SELECTION);
   glutAddMenuEntry("Rubberbanding Circle", RUBBERBANDING_CIRCLE_MENU_SELECTION);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -42,7 +42,7 @@ void mouseCallback(int btn, int state, int x, int y)
 
 void mouseMotionCallback(int x, int y)
 {
-
+  printf("x: %d, y: %d", x, y);
 }
 
 void keyboardCallback(unsigned char key, int x, int y)
@@ -82,7 +82,7 @@ void displayCallback()
 {
   glClear(GL_COLOR_BUFFER_BIT);
 
-  if(mainMenuSelection == RECTANGLES_MENU_SELECTION)
+  if(mainMenuSelection == SQUARE_MENU_SELECTION)
   {
     //red rectangle moves with mouse when left click is down
     glBegin(GL_POLYGON);
@@ -91,15 +91,6 @@ void displayCallback()
       glVertex2f(0.33, 0.25);
       glVertex2f(0.66, 0.25);
       glVertex2f(0.66, 0.75);
-    glEnd();
-
-    //yellow rectangle moves with mouse
-    glBegin(GL_POLYGON);
-      glColor3f(1.0, 1.0, 0.0);
-      glVertex2f(-0.75, -0.75);
-      glVertex2f(-0.75, -0.25);
-      glVertex2f(0.25, -0.25);
-      glVertex2f(0.25, -0.75);
     glEnd();
   }
   else if(mainMenuSelection == CIRCLE_MENU_SELECTION)
@@ -118,15 +109,15 @@ void displayCallback()
 int main(int argc, char** argv)
 {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+  glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   glutInitWindowPosition(0,0);
   glutCreateWindow("Homework 2");
 
   createMainMenu();
   glutMouseFunc(mouseCallback);
-  glutMotionFunc(mouseMotionCallback);
   glutKeyboardFunc(keyboardCallback);
+  glutMotionFunc(mouseMotionCallback);
   glutIdleFunc(idleCallback);
 
   glClearColor(0.0, 0.0, 0.0, 0.0);
