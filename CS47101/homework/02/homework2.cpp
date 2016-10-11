@@ -66,10 +66,10 @@ void stopMotion(int x, int y)
 void mouseCallback(int btn, int state, int x, int y)
 {
   if(btn == GLUT_LEFT_BUTTON)
-	{
+  {
     if(state == GLUT_DOWN) startMotion(x, y);
     if(state == GLUT_UP) stopMotion(x, y);
-	}
+  }
   glutPostRedisplay();
 }
 
