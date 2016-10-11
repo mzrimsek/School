@@ -49,10 +49,10 @@ void startMotion(int x, int y)
   rubber_circle_tracking = 1;
 
   rubber_circle_start_x = x;
-  rubber_circle_start_y = y;
+  rubber_circle_start_y = WINDOW_HEIGHT - y;
 
   rubber_circle_end_x = x;
-  rubber_circle_end_y = y;
+  rubber_circle_end_y = WINDOW_HEIGHT - y;
 }
 
 void stopMotion(int x, int y)
@@ -60,7 +60,7 @@ void stopMotion(int x, int y)
   rubber_circle_tracking = 0;
 
   rubber_circle_end_x = x;
-  rubber_circle_end_y = y;
+  rubber_circle_end_y = WINDOW_HEIGHT - y;
 }
 
 void mouseCallback(int btn, int state, int x, int y)
@@ -154,14 +154,6 @@ void drawCircle(double x, double y, double radius)
   glEnd();
 }
 
-void drawRubberCircle(double x, double y, double radius)
-{
-  glLineStipple(1, 0xF00F);
-	glEnable(GL_LINE_STIPPLE);
-	glLineWidth(1.0);
-  drawCircle(x, y, radius);
-}
-
 void reshapeCallback(int width, int height)
 {
 	WINDOW_WIDTH = width;
@@ -188,9 +180,11 @@ void displayCallback()
   {
     double rubber_circle_radius = rubber_circle_end_x - rubber_circle_start_x;
     glColor3f(0.0, 1.0, 0.0);
+
+    drawCircle(rubber_circle_start_x, rubber_circle_start_y, 1);
     if(rubber_circle_tracking)
     {
-      drawRubberCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
+      drawCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
     }
     drawCircle(rubber_circle_start_x, rubber_circle_start_y, rubber_circle_radius);
   }
