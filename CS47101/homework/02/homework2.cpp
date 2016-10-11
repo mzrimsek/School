@@ -2,13 +2,17 @@
 // Computer Graphics
 // Homework 2
 
+#include <math.h>
 #include <GL/glut.h>
 
 static int WINDOW_WIDTH = 500;
 static int WINDOW_HEIGHT = 500;
 
 static int mainMenuId;
-static int mainMenuSelection;
+static int mainMenuSelection = 0;
+
+static int rectangleIdle = 0;
+static int circleIdle = 0;
 
 void mainMenu(int value)
 {
@@ -57,7 +61,17 @@ void display()
   }
   else if(mainMenuSelection == 2)
   {
-
+    double radius = .25;
+    double pi = 3.1415926535897932384626433832795;
+    glBegin(GL_LINE_LOOP);
+		  for(double i = 0; i < 2 * pi; i += pi / 24)
+      {
+        glColor3f(0.0, 0.0, 1.0);
+        double x = cos(i) * radius;
+        double y = sin(i) * radius;
+        glVertex3f(x-(1-radius), y-(1-radius), 0.0);
+      }
+		glEnd();
   }
   else if(mainMenuSelection == 3)
   {
