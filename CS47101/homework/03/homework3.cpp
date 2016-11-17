@@ -28,6 +28,17 @@ void createLightSource(GLenum lightSource, const GLfloat *lightPosition)
 	glLightfv(lightSource, GL_POSITION, lightPosition);
 }
 
+void createSphere(GLenum lightSource1, GLenum lightSource2, const GLfloat *sphereColor)
+{
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, sphereColor);
+	glEnable(lightSource1);
+	glEnable(lightSource2);
+	glutSolidSphere(0.4, 20, 16);
+	glPopMatrix();
+	glDisable(lightSource1);
+    glDisable(lightSource2);
+}
+
 void init(void)
 {
 	GLfloat lmodel_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -51,34 +62,16 @@ void display(void)
 	glPushMatrix();
 
     //sphere A
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glTranslatef(0.75, -0.5, 0.0);
-	glutSolidSphere(0.4, 20, 16);
-	glPopMatrix();
-	glDisable(GL_LIGHT0);
-    glDisable(GL_LIGHT1);
+    glTranslatef(0.75, -0.5, 0.0);
+    createSphere(GL_LIGHT0, GL_LIGHT1, red);
 
     //sphere B
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, green);
-    glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
 	glTranslatef(-0.75, -0.5, 0.0);
-	glutSolidSphere(0.4, 20, 16);
-	glPopMatrix();
-    glDisable(GL_LIGHT1);
-	glDisable(GL_LIGHT2);
+    createSphere(GL_LIGHT1, GL_LIGHT2, green);    
 
     //sphere C
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blue);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT2);
 	glTranslatef(0.75, 1.0, 0.0);
-	glutSolidSphere(0.4, 20, 16);
-	glPopMatrix();
-    glDisable(GL_LIGHT0);
-	glDisable(GL_LIGHT2);
+    createSphere(GL_LIGHT0, GL_LIGHT2, blue);
 
 	glFlush();
 }
