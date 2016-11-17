@@ -11,12 +11,10 @@ GLfloat mat_emission[] = { 1.0, 1.0, 0.1, 1.0 };
 GLfloat default_emission[] = { 0.0, 0.0, 0.0, 1.0 };
 GLfloat light[] = { 1.0, 1.0, 1.0 };
 
-//colors
-GLfloat red[] = { 1.0, 0.0, 0.0, 1.0 };
-GLfloat green[] = { 0.0, 1.0, 0.0, 1.0 };
-GLfloat blue[] = { 0.0, 0.0, 1.0, 1.0 };
+GLfloat sphereA_color[] = { 1.0, 0.0, 0.0, 1.0 };
+GLfloat sphereB_color[] = { 0.0, 1.0, 0.0, 1.0 };
+GLfloat sphereC_color[] = { 0.0, 0.0, 1.0, 1.0 };
 
-//light source positions
 GLfloat light0_position[] = { 1.0, 1.0, 1.0, 0.0 };
 GLfloat light1_position[] = { -1.0, -1.0, -1.0, 0.0 };
 GLfloat light2_position[] = { 0.0, -1.0, 0.0, 0.0 };
@@ -61,17 +59,14 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 
-    //sphere A
     glTranslatef(0.75, -0.5, 0.0);
-    createSphere(GL_LIGHT0, GL_LIGHT1, red);
+    createSphere(GL_LIGHT0, GL_LIGHT1, sphereA_color);
 
-    //sphere B
 	glTranslatef(-0.75, -0.5, 0.0);
-    createSphere(GL_LIGHT1, GL_LIGHT2, green);    
+    createSphere(GL_LIGHT1, GL_LIGHT2, sphereB_color);    
 
-    //sphere C
 	glTranslatef(0.75, 1.0, 0.0);
-    createSphere(GL_LIGHT0, GL_LIGHT2, blue);
+    createSphere(GL_LIGHT0, GL_LIGHT2, sphereC_color);
 
 	glFlush();
 }
