@@ -1,21 +1,6 @@
 #include <string>
 #include "Customer.h"
 
-using namespace std;
-
-class Customer
-{
-    private:
-        string firstName;
-        string lastName;
-        bool isMember;
-    public:
-        Customer(string, string, bool);
-        string GetName();
-        bool GetIsMember();
-        void SetIsMember(bool);
-}
-
 Customer::Customer(string tFirstName, string tLastName, bool tIsMember)
 {
     firstName = tFirstName;
