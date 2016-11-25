@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 class Ticket
 {
     private:
@@ -12,6 +14,6 @@ class Ticket
         Ticket(string, string);
         string GetCustomerName();
         string GetVehicleLicensePlate();
-}
+};
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 class Vehicle
 {
     private:
@@ -17,6 +19,6 @@ class Vehicle
         string GetlicensePlate();
         double GetWeight();
         int GetWheels();
-}
+};
 
 #endif

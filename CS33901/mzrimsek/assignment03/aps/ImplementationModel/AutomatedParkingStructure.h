@@ -8,6 +8,8 @@
 #include "Models/Ticket.h"
 #include "Models/Vehicle.h"
 
+using namespace std;
+
 class AutomatedParkingStructure
 {
     private:
@@ -19,6 +21,6 @@ class AutomatedParkingStructure
         Vehicle RetrieveVehicle(Customer, Ticket);
         int GetTotalSpaces();
         int GetAvailableSpaces();
-}
+};
 
 #endif

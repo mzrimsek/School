@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 class Customer
 {
     private:
@@ -14,6 +16,6 @@ class Customer
         string GetName();
         bool GetIsMember();
         void SetIsMember(bool);
-}
+};
 
 #endif
