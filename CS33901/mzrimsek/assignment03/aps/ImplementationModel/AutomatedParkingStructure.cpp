@@ -5,22 +5,7 @@
 #include "Models/Ticket.h"
 #include "Models/Vehicle.h"
 
-using namespace std;
-
-class AutomatedParkingStructure
-{
-    private:
-        int totalSpaces;
-        vector<Vehicle> storedVehicles;
-    public:
-        AutomatedParkingStructure(int, int);
-        Ticket StoreVehicle(Customer, Vehicle);
-        Vehicle RetrieveVehicle(Customer, Ticket);
-        int GetTotalSpaces();
-        int GetAvailableSpaces();
-}
-
-AutomatedParkingStructure::AutomatedParkingStructure(int tTotalSpaces, int tAvailableSpaces)
+AutomatedParkingStructure::AutomatedParkingStructure(int tTotalSpaces)
 {
     totalSpaces = tTotalSpaces;
     storedVehicles(vector<Vehicle>(0));
