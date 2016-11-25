@@ -1,8 +1,20 @@
+#ifndef Vehicle_H
+#define Vehicle_H
+
+#include <string>
+
 class Vehicle
 {
+    private:
+        string licensePlate;
+        string make;
+        string model;
+        int year;
+        double weight;
+        int wheels;
     public:
         Vehicle(string, string, string, int, double, int);
-        string GetLicensePlate();
+        string GetlicensePlate();
         double GetWeight();
         int GetWheels();
 }
