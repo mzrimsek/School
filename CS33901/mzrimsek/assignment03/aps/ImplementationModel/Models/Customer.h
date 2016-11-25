@@ -15,3 +15,5 @@ class Customer
         bool GetIsMember();
         void SetIsMember(bool);
 }
+
+#endif

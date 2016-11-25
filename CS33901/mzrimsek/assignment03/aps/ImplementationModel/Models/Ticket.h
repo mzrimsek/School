@@ -13,3 +13,5 @@ class Ticket
         string GetCustomerName();
         string GetVehicleLicensePlate();
 }
+
+#endif

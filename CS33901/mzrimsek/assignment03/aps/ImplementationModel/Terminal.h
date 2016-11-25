@@ -1,3 +1,6 @@
+#ifndef Terminal_H
+#define Terminal_H
+
 #include <string>
 #include "AutomatedParkingStructure.h"
 #include "Models/Customer.h"
@@ -17,3 +20,5 @@ class Terminal
         void SetCurrentCustomer(Customer);
         void SetCurrentVehicle(Vehicle);
 }
+
+#endif

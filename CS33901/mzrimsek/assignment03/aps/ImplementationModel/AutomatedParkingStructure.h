@@ -1,3 +1,6 @@
+#ifndef AutomatedParkingStructure_H
+#define AutomatedParkingStructure_H
+
 #include <string>
 #include <vector>
 #include "AutomatedParkingStructure.h"
@@ -17,3 +20,5 @@ class AutomatedParkingStructure
         int GetTotalSpaces();
         int GetAvailableSpaces();
 }
+
+#endif

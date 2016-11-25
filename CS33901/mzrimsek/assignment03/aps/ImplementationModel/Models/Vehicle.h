@@ -18,3 +18,5 @@ class Vehicle
         double GetWeight();
         int GetWheels();
 }
+
+#endif
