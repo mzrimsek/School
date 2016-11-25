@@ -7,17 +7,17 @@ class Ticket
 {
     private:
         string customerName;
-        int vehiclePosition;
+        string vehicleLicensePlate;
     public:
-        Ticket(string, int);
+        Ticket(string, string);
         string GetCustomerName();
-        int GetVehiclePosition();
+        string GetVehicleLicensePlate();
 }
 
-Ticket::Ticket(string tCustomerName, int tVehiclePosition)
+Ticket::Ticket(string tCustomerName, string tVehicleLicensePlate)
 {
     customerName = tCustomerName;
-    vehiclePosition = tVehiclePosition;
+    vehicleLicensePlate = tVehicleLicensePlate;
 }
 
 string Ticket::GetCustomerName()
@@ -25,7 +25,7 @@ string Ticket::GetCustomerName()
     return customerName;
 }
 
-int Ticket::GetVehiclePosition()
+string Ticket::GetVehicleLicensePlate()
 {
-    return vehiclePosition;
+    return vehicleLicensePlate;
 }

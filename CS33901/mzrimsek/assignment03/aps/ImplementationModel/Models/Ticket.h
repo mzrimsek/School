@@ -1,7 +1,7 @@
 class Ticket
 {
     public:
-        Ticket(string, int);
+        Ticket(string, string);
         string GetCustomerName();
-        int GetVehiclePosition();
+        string GetVehicleLicensePlate();
 }

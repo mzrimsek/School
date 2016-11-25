@@ -1,7 +1,9 @@
+#include <string>
 #include <vector>
-#include "Models/Vehicle.h"
+#include "AutomatedParkingStructure.h"
 #include "Models/Customer.h"
 #include "Models/Ticket.h"
+#include "Models/Vehicle.h"
 
 using namespace std;
 
@@ -9,76 +11,58 @@ class AutomatedParkingStructure
 {
     private:
         int totalSpaces;
-        int availableSpaces;
         vector<Vehicle> storedVehicles;
     public:
         AutomatedParkingStructure(int, int);
         Ticket StoreVehicle(Customer, Vehicle);
         Vehicle RetrieveVehicle(Customer, Ticket);
+        int GetTotalSpaces();
+        int GetAvailableSpaces();
 }
 
 AutomatedParkingStructure::AutomatedParkingStructure(int tTotalSpaces, int tAvailableSpaces)
 {
     totalSpaces = tTotalSpaces;
-    availableSpaces = tAvailableSpaces;
-    storedVehicles(vector<Vehicle>(totalSpaces));
+    storedVehicles(vector<Vehicle>(0));
 }
 
 Ticket AutomatedParkingStructure::StoreVehicle(Customer customer, Vehicle vehicle)
 {
-    bool canBeStored = CanBeStored(vehicle);
-    
-    if(canBeStored && availableSpaces != 0)
-    {
-        int vehiclePosition = GetNextValidVehiclePosition(vehicle);
-        storedVehicles[vehiclePosition] = vehicle;
-        
-        string customerName = customer.GetName();
-        return new Ticket(customerName, vehiclePosition);
-    }
-    return null;
+    storedVehicles.push_back(vehicle);
+    string customerName = customer.GetName();
+    return new Ticket(customerName, vehiclePosition);
 }
 
 Vehicle AutomatedParkingStructure::RetrieveVehicle(Customer customer, Ticket ticket)
 {
-    string customerName = customer.GetName();
-    string ticketName = ticket.GetCustomerName();
-
-    if(customerName.compare(ticketName) == 0)
+    string vehicleLicensePlate = ticket.GetVehicleLicensePlate();
+    for(int i = 0; i < storedVehicles.size; i++)
     {
-        int vehiclePosition = ticket.GetVehiclePosition();
-        return storedVehicles[vehiclePosition];
+        Vehicle currentVehicle = storedVehicles[i];
+        bool doLicensePlatesMatch = IsCorrectLicensePlate(vehicleLicensePlate, currentVehicle);
+
+        if(doLicensePlatesMatch)
+        {
+            storedVehicles.erase(i);
+            return currentVehicle;
+        }
     }
+    printf("Vehicle not found!");
     return null;
 }
 
-bool CanBeStored(Vehicle vehicle)
+int AutomatedParkingStructure::GetTotalSpaces()
 {
-    double vehicleWeight = vehicle.GetWeight();
-    int vehicleWheels = vehicle.GetWheels();
-
-    return vehicleWeight < 1000.0 && vehicleWheels == 4;
+    return totalSpaces;
 }
 
-int GetNextValidVehiclePosition(Vehicle vehicle)
+int AutomatedParkingStructure::GetAvailableSpaces()
 {
-    int vehiclePosition = 0;
-    int iteration = 0;
-    while(storedVehicles[vehiclePosition] != null)
-    {
-        vehiclePosition = HashVehicle(vehicle, iteration);
-        iteration++;
-    }
-    return vehiclePosition;
+    return totalSpaces - storedVehicles.size;
 }
 
-int HashVehicle(Vehicle vehicle, int iteration)
+bool IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
 {
-    string licensePlate = vehicle.GetLicensePlate();
-    int hash = 0;
-    for(int i = 0; i < licensePlate.size; i++)
-    {
-        hash += licensePlate[i] * (i * iteration);
-    }
-    return hash % totalSpaces;
+    string vehicleLicensePlate = vehicle.GetLicensePlate();
+    return vehicleLicensePlate.compare(licensePlate) == 0;
 }
