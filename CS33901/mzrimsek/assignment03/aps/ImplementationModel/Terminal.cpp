@@ -4,22 +4,6 @@
 #include "Models/Ticket.h"
 #include "Models/Vehicle.h"
 
-using namespace std;
-
-class Terminal
-{
-    private:
-        AutomatedParkingStructure aps;
-        Customer currentCustomer;
-        Vehcile currentVehicle;
-    public:
-        Terminal(AutomatedParkingStructure);
-        Ticket StoreCurrentVehicle();
-        Vehicle RetrieveVehicle(Ticket);
-        void SetCurrentCustomer(Customer);
-        void SetCurrentVehicle(Vehicle);
-}
-
 Terminal::Terminal(AutomatedParkingStructure tAps)
 {
     aps = tAps;
