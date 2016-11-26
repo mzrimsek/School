@@ -18,7 +18,7 @@ class AutomatedParkingStructure
     public:
         AutomatedParkingStructure(int);
         Ticket StoreVehicle(Customer, Vehicle);
-        Vehicle RetrieveVehicle(Customer, Ticket);
+        Vehicle RetrieveVehicle(Ticket);
         int GetTotalSpaces();
         int GetAvailableSpaces();
 };

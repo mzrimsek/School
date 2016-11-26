@@ -41,7 +41,7 @@ Vehicle Terminal::RetrieveVehicle(Ticket ticket)
     }
     else
     {
-        return aps.RetrieveVehicle(currentCustomer, ticket);
+        return aps.RetrieveVehicle(ticket);
     }
     return null;
 }

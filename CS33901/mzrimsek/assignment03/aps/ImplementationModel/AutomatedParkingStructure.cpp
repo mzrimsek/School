@@ -18,7 +18,7 @@ Ticket AutomatedParkingStructure::StoreVehicle(Customer customer, Vehicle vehicl
     return new Ticket(customerName, vehiclePosition);
 }
 
-Vehicle AutomatedParkingStructure::RetrieveVehicle(Customer customer, Ticket ticket)
+Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
 {
     string vehicleLicensePlate = ticket.GetVehicleLicensePlate();
     for(int i = 0; i < storedVehicles.size; i++)
