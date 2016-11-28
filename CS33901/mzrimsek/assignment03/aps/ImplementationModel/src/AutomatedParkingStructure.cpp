@@ -1,4 +1,5 @@
 #include <string>
+#include <stdio.h>
 #include <vector>
 #include "AutomatedParkingStructure.h"
 #include "Models/Customer.h"
@@ -33,7 +34,7 @@ Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
         }
     }
     printf("Vehicle not found!");
-    return null;
+    throw;
 }
 
 int AutomatedParkingStructure::GetTotalSpaces()

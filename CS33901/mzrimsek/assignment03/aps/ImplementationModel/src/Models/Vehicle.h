@@ -16,7 +16,7 @@ class Vehicle
         int wheels;
     public:
         Vehicle(string, string, string, int, double, int);
-        string GetlicensePlate();
+        string GetLicensePlate();
         double GetWeight();
         int GetWheels();
 };

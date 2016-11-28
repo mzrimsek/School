@@ -11,7 +11,7 @@ Vehicle::Vehicle(string tLicensePlate, string tMake, string tModel, int tYear, d
     wheels = tWheels;
 }
 
-string Vehicle::GetlicensePlate()
+string Vehicle::GetLicensePlate()
 {
     return licensePlate;
 }

@@ -1,4 +1,5 @@
 #include <string>
+#include <stdio.h>
 #include "AutomatedParkingStructure.h"
 #include "Models/Customer.h"
 #include "Models/Ticket.h"
@@ -28,7 +29,7 @@ Ticket Terminal::StoreCurrentVehicle()
     {
         return aps.StoreVehicle(currentCustomer, vehicle);
     }
-    return null;
+    throw;
 }
 
 Vehicle Terminal::RetrieveVehicle(Ticket ticket)
@@ -43,7 +44,7 @@ Vehicle Terminal::RetrieveVehicle(Ticket ticket)
     {
         return aps.RetrieveVehicle(ticket);
     }
-    return null;
+    throw;
 }
 
 bool CanBeStored(Vehicle vehicle)
