@@ -9,13 +9,11 @@
 Terminal::Terminal(AutomatedParkingStructure tAps)
 {
     aps = tAps;
-    currentCustomer = null;
-    currentVehicle = null;
 }
 
 Ticket Terminal::StoreCurrentVehicle()
 {
-    bool canBeStored = CanBeStored(vehicle);
+    bool canBeStored = CanBeStored(currentVehicle);
     int availableSpaces = aps.GetAvailableSpaces();
 
     if(!canBeStored)
@@ -28,7 +26,7 @@ Ticket Terminal::StoreCurrentVehicle()
     }
     else
     {
-        return aps.StoreVehicle(currentCustomer, vehicle);
+        return aps.StoreVehicle(currentCustomer, currentVehicle);
     }
     throw;
 }
