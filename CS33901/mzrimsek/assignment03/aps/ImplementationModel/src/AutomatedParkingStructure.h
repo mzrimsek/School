@@ -15,6 +15,7 @@ class AutomatedParkingStructure
     private:
         int totalSpaces;
         vector<Vehicle> storedVehicles;
+        bool IsCorrectLicensePlate(string, Vehicle);
     public:
         AutomatedParkingStructure(int);
         Ticket StoreVehicle(Customer, Vehicle);

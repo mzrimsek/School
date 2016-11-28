@@ -1,6 +1,7 @@
 #include <string>
 #include <stdio.h>
 #include "AutomatedParkingStructure.h"
+#include "Terminal.h"
 #include "Models/Customer.h"
 #include "Models/Ticket.h"
 #include "Models/Vehicle.h"
@@ -47,7 +48,7 @@ Vehicle Terminal::RetrieveVehicle(Ticket ticket)
     throw;
 }
 
-bool CanBeStored(Vehicle vehicle)
+bool Terminal::CanBeStored(Vehicle vehicle)
 {
     double vehicleWeight = vehicle.GetWeight();
     int vehicleWheels = vehicle.GetWheels();
@@ -55,14 +56,14 @@ bool CanBeStored(Vehicle vehicle)
     return vehicleWeight < 1000.0 && vehicleWheels == 4;
 }
 
-bool IsCorrectTicket(Customer customer, Ticket ticket)
+bool Terminal::IsCorrectTicket(Customer customer, Ticket ticket)
 {
     string customerName = customer.GetName();
     string ticketName = ticket.GetCustomerName();
     return customerName.compare(ticketName) == 0;
 }
 
-bool IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
+bool Terminal::IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
 {
     string vehicleLicensePlate = vehicle.GetLicensePlate();
     return vehicleLicensePlate.compare(licensePlate) == 0;

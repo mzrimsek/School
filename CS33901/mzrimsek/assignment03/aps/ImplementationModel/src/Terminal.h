@@ -15,6 +15,9 @@ class Terminal
         AutomatedParkingStructure aps;
         Customer currentCustomer;
         Vehicle currentVehicle;
+        bool CanBeStored(Vehicle);
+        bool IsCorrectTicket(Customer, Ticket);
+        bool IsCorrectLicensePlate(string, Vehicle);
     public:
         Terminal(AutomatedParkingStructure);
         Ticket StoreCurrentVehicle();

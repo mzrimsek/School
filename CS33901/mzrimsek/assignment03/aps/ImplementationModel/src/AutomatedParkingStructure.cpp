@@ -9,20 +9,21 @@
 AutomatedParkingStructure::AutomatedParkingStructure(int tTotalSpaces)
 {
     totalSpaces = tTotalSpaces;
-    storedVehicles(vector<Vehicle>(0));
+    storedVehicles.reserve(totalSpaces);
 }
 
 Ticket AutomatedParkingStructure::StoreVehicle(Customer customer, Vehicle vehicle)
 {
     storedVehicles.push_back(vehicle);
     string customerName = customer.GetName();
-    return new Ticket(customerName, vehiclePosition);
+    string licensePlate = vehicle.GetLicensePlate();
+    return new Ticket(customerName, licensePlate);
 }
 
 Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
 {
     string vehicleLicensePlate = ticket.GetVehicleLicensePlate();
-    for(int i = 0; i < storedVehicles.size; i++)
+    for(int i = 0; i < storedVehicles.size(); i++)
     {
         Vehicle currentVehicle = storedVehicles[i];
         bool doLicensePlatesMatch = IsCorrectLicensePlate(vehicleLicensePlate, currentVehicle);
@@ -44,10 +45,10 @@ int AutomatedParkingStructure::GetTotalSpaces()
 
 int AutomatedParkingStructure::GetAvailableSpaces()
 {
-    return totalSpaces - storedVehicles.size;
+    return totalSpaces - storedVehicles.size();
 }
 
-bool IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
+bool AutomatedParkingStructure::IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
 {
     string vehicleLicensePlate = vehicle.GetLicensePlate();
     return vehicleLicensePlate.compare(licensePlate) == 0;
