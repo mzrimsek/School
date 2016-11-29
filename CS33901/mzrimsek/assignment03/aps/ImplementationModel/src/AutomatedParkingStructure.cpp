@@ -12,12 +12,12 @@ AutomatedParkingStructure::AutomatedParkingStructure(int tTotalSpaces)
     storedVehicles.reserve(totalSpaces);
 }
 
-Ticket AutomatedParkingStructure::StoreVehicle(Customer customer, Vehicle vehicle)
+Ticket& AutomatedParkingStructure::StoreVehicle(Customer customer, Vehicle vehicle)
 {
     storedVehicles.push_back(vehicle);
     string customerName = customer.GetName();
     string licensePlate = vehicle.GetLicensePlate();
-    return new Ticket(customerName, licensePlate);
+    return *(new Ticket(customerName, licensePlate));
 }
 
 Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
@@ -30,7 +30,7 @@ Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
 
         if(doLicensePlatesMatch)
         {
-            storedVehicles.erase(i);
+            storedVehicles.erase(storedVehicles.begin()+i);
             return currentVehicle;
         }
     }
