@@ -46,7 +46,7 @@ Vehicle Terminal::RetrieveVehicle(Ticket ticket)
     throw;
 }
 
-bool Terminal::CanBeStored(Vehicle vehicle)
+bool Terminal::CanBeStored(Vehicle* vehicle)
 {
     double vehicleWeight = vehicle->GetWeight();
     int vehicleWheels = vehicle->GetWheels();
@@ -54,7 +54,7 @@ bool Terminal::CanBeStored(Vehicle vehicle)
     return vehicleWeight < 1000.0 && vehicleWheels == 4;
 }
 
-bool Terminal::IsCorrectTicket(Customer customer, Ticket ticket)
+bool Terminal::IsCorrectTicket(Customer* customer, Ticket ticket)
 {
     string customerName = customer->GetName();
     string ticketName = ticket.GetCustomerName();

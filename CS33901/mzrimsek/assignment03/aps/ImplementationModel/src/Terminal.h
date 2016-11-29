@@ -13,15 +13,15 @@ class Terminal
 {
     private:
         AutomatedParkingStructure* aps;
-        Customer currentCustomer;
-        Vehicle currentVehicle;
+        Customer* currentCustomer;
+        Vehicle* currentVehicle;
         bool CanBeStored(Vehicle*);
-        bool IsCorrectTicket(Customer, Ticket);
+        bool IsCorrectTicket(Customer*, Ticket);
         bool IsCorrectLicensePlate(string, Vehicle);
     public:
         Terminal(AutomatedParkingStructure*);
         Ticket StoreCurrentVehicle();
-        Vehicle* RetrieveVehicle(Ticket);
+        Vehicle RetrieveVehicle(Ticket);
         void SetCurrentCustomer(Customer);
         void SetCurrentVehicle(Vehicle);
 };

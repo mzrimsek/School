@@ -18,7 +18,7 @@ class AutomatedParkingStructure
         bool IsCorrectLicensePlate(string, Vehicle);
     public:
         AutomatedParkingStructure(int);
-        Ticket& StoreVehicle(Customer, Vehicle);
+        Ticket& StoreVehicle(Customer*, Vehicle*);
         Vehicle RetrieveVehicle(Ticket);
         int GetTotalSpaces();
         int GetAvailableSpaces();

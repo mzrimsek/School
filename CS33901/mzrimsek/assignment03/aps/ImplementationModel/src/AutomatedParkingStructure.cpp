@@ -12,11 +12,12 @@ AutomatedParkingStructure::AutomatedParkingStructure(int tTotalSpaces)
     storedVehicles.reserve(totalSpaces);
 }
 
-Ticket& AutomatedParkingStructure::StoreVehicle(Customer customer, Vehicle vehicle)
+Ticket& AutomatedParkingStructure::StoreVehicle(Customer* customer, Vehicle* vehicle)
 {
-    storedVehicles.push_back(vehicle);
-    string customerName = customer.GetName();
-    string licensePlate = vehicle.GetLicensePlate();
+    Vehicle vehicleToStore = *vehicle;
+    storedVehicles.push_back(vehicleToStore);
+    string customerName = customer->GetName();
+    string licensePlate = vehicleToStore.GetLicensePlate();
     return *(new Ticket(customerName, licensePlate));
 }
 
