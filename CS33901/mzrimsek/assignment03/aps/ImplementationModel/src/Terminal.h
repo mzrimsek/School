@@ -12,16 +12,16 @@ using namespace std;
 class Terminal
 {
     private:
-        AutomatedParkingStructure aps;
+        AutomatedParkingStructure* aps;
         Customer currentCustomer;
         Vehicle currentVehicle;
-        bool CanBeStored(Vehicle);
+        bool CanBeStored(Vehicle*);
         bool IsCorrectTicket(Customer, Ticket);
         bool IsCorrectLicensePlate(string, Vehicle);
     public:
-        Terminal(AutomatedParkingStructure);
+        Terminal(AutomatedParkingStructure*);
         Ticket StoreCurrentVehicle();
-        Vehicle RetrieveVehicle(Ticket);
+        Vehicle* RetrieveVehicle(Ticket);
         void SetCurrentCustomer(Customer);
         void SetCurrentVehicle(Vehicle);
 };

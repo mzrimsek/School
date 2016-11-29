@@ -6,7 +6,7 @@
 #include "Models/Ticket.h"
 #include "Models/Vehicle.h"
 
-Terminal::Terminal(AutomatedParkingStructure tAps)
+Terminal::Terminal(AutomatedParkingStructure* tAps)
 {
     aps = tAps;
 }
@@ -14,7 +14,7 @@ Terminal::Terminal(AutomatedParkingStructure tAps)
 Ticket Terminal::StoreCurrentVehicle()
 {
     bool canBeStored = CanBeStored(currentVehicle);
-    int availableSpaces = aps.GetAvailableSpaces();
+    int availableSpaces = aps->GetAvailableSpaces();
 
     if(!canBeStored)
     {
@@ -26,7 +26,7 @@ Ticket Terminal::StoreCurrentVehicle()
     }
     else
     {
-        return aps.StoreVehicle(currentCustomer, currentVehicle);
+        return aps->StoreVehicle(currentCustomer, currentVehicle);
     }
     throw;
 }
@@ -41,22 +41,22 @@ Vehicle Terminal::RetrieveVehicle(Ticket ticket)
     }
     else
     {
-        return aps.RetrieveVehicle(ticket);
+        return aps->RetrieveVehicle(ticket);
     }
     throw;
 }
 
 bool Terminal::CanBeStored(Vehicle vehicle)
 {
-    double vehicleWeight = vehicle.GetWeight();
-    int vehicleWheels = vehicle.GetWheels();
+    double vehicleWeight = vehicle->GetWeight();
+    int vehicleWheels = vehicle->GetWheels();
 
     return vehicleWeight < 1000.0 && vehicleWheels == 4;
 }
 
 bool Terminal::IsCorrectTicket(Customer customer, Ticket ticket)
 {
-    string customerName = customer.GetName();
+    string customerName = customer->GetName();
     string ticketName = ticket.GetCustomerName();
     return customerName.compare(ticketName) == 0;
 }
