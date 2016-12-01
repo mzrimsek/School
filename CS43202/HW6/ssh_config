@@ -1,0 +1,9 @@
+Host jumpy
+Hostname sysadmin2.cs.kent.edu
+User jumpuser
+IdentityFile ~/.ssh/id_ed25519
+
+Host 172.17.0.*
+User root
+IdentityFile ~/.ssh/id_ed25519
+ProxyCommand ssh -q -W %h:%p jumpy 2>/dev/null
