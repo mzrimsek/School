@@ -38,30 +38,43 @@ void init(void)
     glClearColor(0.0, 0.0, 0.0, 0.0);
 }
 
+void renderLetter(int index)
+{
+    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[index]);
+}
+
+void renderFirstName()
+{
+    renderLetter(12); //M
+    renderLetter(8);  //I
+    renderLetter(2);  //C
+    renderLetter(7);  //H
+    renderLetter(0);  //A
+    renderLetter(4);  //E
+    renderLetter(11); //L
+}
+
+void renderLastName()
+{
+    renderLetter(25); //Z
+    renderLetter(17); //R
+    renderLetter(8);  //I
+    renderLetter(12); //M
+    renderLetter(18); //S
+    renderLetter(4);  //E
+    renderLetter(10); //K
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
     glColor3f (1.0, 1.0, 1.0);
 
-    //first name
     glRasterPos2i(15, 55);
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[12]); //M
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[8]);  //I
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[2]);  //C
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[7]);  //H
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[0]);  //A
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[4]);  //E
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[11]); //L
+    renderFirstName();
 
-    //last name
     glRasterPos2i(15, 35);
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[25]); //Z
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[17]); //R
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[8]);  //I
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[12]); //M
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[18]); //S
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[4]);  //E
-    glBitmap(8, 13, 0.0, 2.0, 10.0, 0.0, letters[10]); //K
+    renderLastName();
 
     glFlush();
 }
