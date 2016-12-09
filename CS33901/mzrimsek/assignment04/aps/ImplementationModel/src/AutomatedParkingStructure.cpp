@@ -9,32 +9,30 @@
 AutomatedParkingStructure::AutomatedParkingStructure(int floors, int dimension)
 {
     totalSpaces = floors*dimension*dimension;
-
     storedVehicles = new Vehicle**[floors];
-    for(int floor = 0; floor < floors; floors++)
+
+    for(int floor = 0; floor < floors; floor++)
     {
-        storedVehicles[floor] = new Vehicle*[dimension];
-        for(int column = 0; column < dimension; column++)
+        storedVehicles[floor] = new Vehicle*[dimension+1];
+        for(int row = 0; row < dimension+1; row++)
         {
-            storedVehicles[floor][column] = new Vehicle[dimension+1];
-            for(int row = 0; row < dimension+1; row++)
+            storedVehicles[floor][row] = new Vehicle[dimension];
+            for(int column = 0; column < dimension; column++)
             {
-                storedVehicles[floor][column][row] = *(new Vehicle("", "", "", 0, 0, 0));
+                storedVehicles[floor][row][column] = *(new Vehicle("", "", "", 0, 0, 0));
             }
         } 
     }
 
     for(int floor = 0; floor < floors; floor++)
     {
-        cout << "floor " << floor << "\n";
-        for(int row = 0; row < dimension+1; row++)
+        for(int column = 0; column < dimension; column++)
         {
-            for(int column = 0; column < dimension; column++)
-            {
-                cout << "[" << storedVehicles[floor][row][column].GetLicensePlate() << "]";
-            }
+            storedVehicles[floor][dimension][column] = *(new Vehicle("RES", "", "", 0, 0, 0));
         }
     }
+
+    Print(floors, dimension);
 }
 
 void AutomatedParkingStructure::StoreVehicle(Vehicle* vehicle)
@@ -64,4 +62,20 @@ bool AutomatedParkingStructure::IsCorrectLicensePlate(string licensePlate, Vehic
 {
     string vehicleLicensePlate = vehicle.GetLicensePlate();
     return vehicleLicensePlate.compare(licensePlate) == 0;
+}
+
+void AutomatedParkingStructure::Print(int floors, int dimension)
+{
+    for(int floor = 0; floor < floors; floor++)
+    {
+        cout << "floor " << floor << "\n";
+        for(int row = 0; row < dimension+1; row++)
+        {
+            for(int column = 0; column < dimension; column++)
+            {
+                cout << "[" << storedVehicles[floor][row][column].GetLicensePlate() << "]";
+            }
+            cout << "\n";
+        }
+    }
 }
