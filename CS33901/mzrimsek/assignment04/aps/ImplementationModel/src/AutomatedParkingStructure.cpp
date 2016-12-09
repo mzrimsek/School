@@ -38,20 +38,21 @@ AutomatedParkingStructure::AutomatedParkingStructure(int tFloors, int tDimension
 
 void AutomatedParkingStructure::StoreVehicle(Vehicle* vehicle)
 {
-    for(int floor = 0; floor < floors; floor++)
+    bool spotFound = false;
+    for(int floor = 0; floor < floors && !spotFound; floor++)
     {
-        for(int column = dimension-1; column >= 0; column--)
+        for(int column = dimension-1; column >= 0 && !spotFound; column--)
         {
-            for(int row = 0; row < dimension; row++)
+            for(int row = 0; row < dimension && !spotFound; row++)
             {
                 Vehicle spot = storedVehicles[floor][row][column];
-                if(spot.GetLicensePlate().compare("") == 0)
+                if(spot.GetLicensePlate().compare("") == 0 && !spotFound)
                 {
                     storedVehicles[floor][row][column] = *vehicle;
                     availableSpaces--;
+                    spotFound = true;
                     Print();
                 }
-                return;
             }
         }
     }

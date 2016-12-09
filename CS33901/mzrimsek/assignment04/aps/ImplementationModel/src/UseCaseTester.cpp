@@ -95,7 +95,7 @@ void TestNoSpaceToStoreVehicle()
     cout << "Testing no space to store vehicle" << "\n";
     cout << "---------------------------------" << "\n";
     
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(0, 0);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
@@ -133,6 +133,43 @@ void TestNotUpgradeMember()
     terminal->UpgradeToMember();
 }
 
+void TestAddAndRetrieveTwoValidVehicleForNonMember()
+{
+    cout << "Testing adding and retrieving two valid vehicle for non member" << "\n";
+    cout << "--------------------------------------------------------------" << "\n";
+
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(2, 2);
+    Terminal* terminal = new Terminal(aps);
+
+    LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
+
+    int totalSpaces = aps->GetAvailableSpaces();
+    Ticket ticket1 = terminal->StoreCurrentVehicle(10);
+    int availableSpaces = aps->GetAvailableSpaces();
+    if(availableSpaces == totalSpaces-1)
+    {
+        cout << "Vehicle added!\n";
+    }
+
+    LoadVehicleAndCustomer(terminal, "inputs/validVehicle2.txt", "inputs/nonMemberCustomer.txt");
+    Ticket ticket2 = terminal->StoreCurrentVehicle(20);
+    availableSpaces = aps->GetAvailableSpaces();
+    if(availableSpaces == totalSpaces-2)
+    {
+        cout << "Vehicle added!\n";
+    }
+
+    terminal->RetrieveVehicle(ticket2);
+    availableSpaces = aps->GetAvailableSpaces();
+
+    terminal->RetrieveVehicle(ticket1);
+    availableSpaces = aps->GetAvailableSpaces();
+    if(availableSpaces == totalSpaces)
+    {
+        cout << "Vehicle retrieved!\n";
+    }
+}
+
 int main()
 {
     cout << "1.";
@@ -158,6 +195,10 @@ int main()
     cout << "6.";
     TestNotUpgradeMember();
     cout << "\n\n";
-    
+
+    cout << "7.";
+    TestAddAndRetrieveTwoValidVehicleForNonMember();
+    cout << "\n\n";
+
     return 0;
 }
