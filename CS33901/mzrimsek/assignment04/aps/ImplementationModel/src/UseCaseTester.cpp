@@ -2,63 +2,18 @@
 #include "Models/Vehicle.h"
 #include "Models/Customer.h"
 #include "Models/Ticket.h"
+#include "TestObjectGetter.h"
 #include <string>
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 
-Vehicle* createVehicle(string fileName)
-{
-    ifstream inputFile(fileName.c_str());
-
-    string* lines = new string[6];
-    if(inputFile.is_open())
-    {
-        int index = 0;
-        while(getline(inputFile, lines[index]))
-        {
-            index++;
-        }
-    }
-    inputFile.close();
-
-    string licensePlate = lines[0];
-    string make = lines[1];
-    string model = lines[2];
-    int year = stoi(lines[3]);
-    double weight = stod(lines[4]);
-    int wheels = stoi(lines[5]);
-
-    return new Vehicle(licensePlate, make, model, year, weight, wheels);
-}
-
-Customer* createCustomer(string fileName)
-{
-    ifstream inputFile(fileName.c_str());
-
-    string* lines = new string[3];
-    if(inputFile.is_open())
-    {
-        int index = 0;
-        while(getline(inputFile, lines[index]))
-        {
-            index++;
-        }
-    }
-    inputFile.close();
-
-    string firstName = lines[0];
-    string lastName = lines[1];
-    bool isMember = lines[2].compare("True")==0;
-
-    return new Customer(firstName, lastName, isMember);
-}
+TestObjectGetter* testObjectGetter = new TestObjectGetter();
 
 void loadVehicleAndCustomer(Terminal* terminal, string vehicleFile, string customerFile)
 {
-    Vehicle* vehicle = createVehicle(vehicleFile);
-    Customer* customer = createCustomer(customerFile);
+    Vehicle* vehicle = testObjectGetter->GetVehicle(vehicleFile);
+    Customer* customer = testObjectGetter->GetCustomer(customerFile);
     terminal->SetCurrentVehicle(vehicle);
     terminal->SetCurrentCustomer(customer);
 }
