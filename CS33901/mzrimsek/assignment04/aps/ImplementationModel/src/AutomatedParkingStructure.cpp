@@ -6,8 +6,11 @@
 #include "Models/Ticket.h"
 #include "Models/Vehicle.h"
 
-AutomatedParkingStructure::AutomatedParkingStructure(int floors, int dimension)
+AutomatedParkingStructure::AutomatedParkingStructure(int tFloors, int tDimension)
 {
+    floors = tFloors;
+    dimension = tDimension;
+
     totalSpaces = floors*dimension*dimension;
     storedVehicles = new Vehicle**[floors];
 
@@ -31,13 +34,25 @@ AutomatedParkingStructure::AutomatedParkingStructure(int floors, int dimension)
             storedVehicles[floor][dimension][column] = *(new Vehicle("RES", "", "", 0, 0, 0));
         }
     }
-
-    Print(floors, dimension);
 }
 
 void AutomatedParkingStructure::StoreVehicle(Vehicle* vehicle)
 {
-    
+    for(int floor = 0; floor < floors; floor++)
+    {
+        for(int column = dimension-1; column >= 0; column--)
+        {
+            for(int row = 0; row < dimension; row++)
+            {
+                Vehicle spot = storedVehicles[floor][row][column];
+                if(spot.GetLicensePlate().compare("") == 0)
+                {
+                    storedVehicles[floor][row][column] = *vehicle;
+                    Print();
+                }
+            }
+        }
+    }
 }
 
 Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
@@ -64,7 +79,7 @@ bool AutomatedParkingStructure::IsCorrectLicensePlate(string licensePlate, Vehic
     return vehicleLicensePlate.compare(licensePlate) == 0;
 }
 
-void AutomatedParkingStructure::Print(int floors, int dimension)
+void AutomatedParkingStructure::Print()
 {
     for(int floor = 0; floor < floors; floor++)
     {

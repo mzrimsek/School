@@ -17,9 +17,11 @@ class AutomatedParkingStructure
 {
     private:
         int totalSpaces;
+        int floors;
+        int dimension;
         Vehicle*** storedVehicles;
         bool IsCorrectLicensePlate(string, Vehicle);
-        void Print(int, int);
+        void Print();
     public:
         AutomatedParkingStructure(int, int);
         void StoreVehicle(Vehicle*);

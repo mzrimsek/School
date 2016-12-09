@@ -25,7 +25,7 @@ void TestAddAndRetrieveValidVehicleForNonMember()
     cout << "----------------------------------------------------------" << "\n";
 
     int totalSpaces = 100;
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(2, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
@@ -51,7 +51,7 @@ void TestAddAndRetrieveValidVehicleForMember()
     cout << "------------------------------------------------------" << "\n";
 
     int totalSpaces = 100;
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 3);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/memberCustomer.txt");
