@@ -2,6 +2,9 @@
 #define AutomatedParkingStructure_H
 
 #include <string>
+
+using namespace std;
+
 #include <vector>
 #include "AutomatedParkingStructure.h"
 #include "Models/Customer.h"
@@ -14,11 +17,11 @@ class AutomatedParkingStructure
 {
     private:
         int totalSpaces;
-        vector<Vehicle> storedVehicles;
+        Vehicle*** storedVehicles;
         bool IsCorrectLicensePlate(string, Vehicle);
     public:
-        AutomatedParkingStructure(int);
-        void StoreVehicle(Customer*, Vehicle*);
+        AutomatedParkingStructure(int, int);
+        void StoreVehicle(Vehicle*);
         Vehicle& RetrieveVehicle(Ticket);
         int GetTotalSpaces();
         int GetAvailableSpaces();

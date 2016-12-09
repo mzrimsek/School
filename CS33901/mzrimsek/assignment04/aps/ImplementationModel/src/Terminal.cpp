@@ -26,7 +26,7 @@ Ticket& Terminal::StoreCurrentVehicle(int timeToStore)
     }
     else
     {
-        aps->StoreVehicle(currentCustomer, currentVehicle);
+        aps->StoreVehicle(currentVehicle);
         string customerName = currentCustomer->GetName();
         string licensePlate = currentVehicle->GetLicensePlate();
         return *(new Ticket(customerName, licensePlate, timeToStore));

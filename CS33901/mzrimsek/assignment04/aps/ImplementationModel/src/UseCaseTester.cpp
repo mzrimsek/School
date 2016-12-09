@@ -25,7 +25,7 @@ void TestAddAndRetrieveValidVehicleForNonMember()
     cout << "----------------------------------------------------------" << "\n";
 
     int totalSpaces = 100;
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(totalSpaces);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
@@ -51,7 +51,7 @@ void TestAddAndRetrieveValidVehicleForMember()
     cout << "------------------------------------------------------" << "\n";
 
     int totalSpaces = 100;
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(totalSpaces);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/memberCustomer.txt");
@@ -77,7 +77,7 @@ void TestRejectInvalidVehicle()
     cout << "---------------------------------------------" << "\n";
 
     int totalSpaces = 100;
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(totalSpaces);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/invalidVehicle.txt", "inputs/nonMemberCustomer.txt");
@@ -96,7 +96,7 @@ void TestNoSpaceToStoreVehicle()
     cout << "---------------------------------" << "\n";
 
     int totalSpaces = 0;
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(totalSpaces);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
@@ -114,7 +114,7 @@ void TestUpgradeNonMemberToMember()
     cout << "Testing upgrade non member to member" << "\n";
     cout << "------------------------------------" << "\n";
 
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(0);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(0, 0);
     Terminal* terminal = new Terminal(aps);
     Customer* customer = testObjectGetter->GetCustomer("inputs/nonMemberCustomer.txt");
     terminal->SetCurrentCustomer(customer);
@@ -126,7 +126,7 @@ void TestNotUpgradeMember()
     cout << "Testing not upgrade member" << "\n";
     cout << "--------------------------" << "\n";
 
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(0);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(0, 0);
     Terminal* terminal = new Terminal(aps);
     Customer* customer = testObjectGetter->GetCustomer("inputs/memberCustomer.txt");
     terminal->SetCurrentCustomer(customer);

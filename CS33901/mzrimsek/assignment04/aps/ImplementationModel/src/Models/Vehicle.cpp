@@ -1,6 +1,16 @@
 #include <string>
 #include "Vehicle.h"
 
+Vehicle::Vehicle()
+{
+    licensePlate = "";
+    make = "";
+    model = "";
+    year = 0;
+    weight = 0;
+    wheels = 0;
+}
+
 Vehicle::Vehicle(string tLicensePlate, string tMake, string tModel, int tYear, double tWeight, int tWheels)
 {
     licensePlate = tLicensePlate;
