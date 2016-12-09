@@ -16,7 +16,7 @@ using namespace std;
 class AutomatedParkingStructure
 {
     private:
-        int totalSpaces;
+        int availableSpaces;
         int floors;
         int dimension;
         Vehicle*** storedVehicles;
@@ -26,7 +26,6 @@ class AutomatedParkingStructure
         AutomatedParkingStructure(int, int);
         void StoreVehicle(Vehicle*);
         Vehicle& RetrieveVehicle(Ticket);
-        int GetTotalSpaces();
         int GetAvailableSpaces();
 };
 

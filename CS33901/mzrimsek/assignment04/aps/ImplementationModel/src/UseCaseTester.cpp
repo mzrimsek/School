@@ -24,12 +24,12 @@ void TestAddAndRetrieveValidVehicleForNonMember()
     cout << "Testing adding and retrieving valid vehicle for non member" << "\n";
     cout << "----------------------------------------------------------" << "\n";
 
-    int totalSpaces = 100;
     AutomatedParkingStructure* aps = new AutomatedParkingStructure(2, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
-    
+
+    int totalSpaces = aps->GetAvailableSpaces();
     Ticket ticket = terminal->StoreCurrentVehicle(10);
     int availableSpaces = aps->GetAvailableSpaces();
     if(availableSpaces == totalSpaces-1)
@@ -50,12 +50,12 @@ void TestAddAndRetrieveValidVehicleForMember()
     cout << "Testing adding and retrieving valid vehicle for member" << "\n";
     cout << "------------------------------------------------------" << "\n";
 
-    int totalSpaces = 100;
     AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 3);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/memberCustomer.txt");
     
+    int totalSpaces = aps->GetAvailableSpaces();
     Ticket ticket = terminal->StoreCurrentVehicle(10);
     int availableSpaces = aps->GetAvailableSpaces();
     if(availableSpaces == totalSpaces-1)
@@ -76,15 +76,15 @@ void TestRejectInvalidVehicle()
     cout << "Testing adding and retrieving invalid vehicle" << "\n";
     cout << "---------------------------------------------" << "\n";
 
-    int totalSpaces = 100;
     AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/invalidVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    terminal->StoreCurrentVehicle(10);
+    int totalSpaces = aps->GetAvailableSpaces();
+    Ticket ticket = terminal->StoreCurrentVehicle(10);
     int availableSpaces = aps->GetAvailableSpaces();
-    if(availableSpaces == totalSpaces)
+    if(totalSpaces == availableSpaces)
     {
         cout << "Vehicle rejected!\n";
     }
@@ -94,14 +94,14 @@ void TestNoSpaceToStoreVehicle()
 {
     cout << "Testing no space to store vehicle" << "\n";
     cout << "---------------------------------" << "\n";
-
-    int totalSpaces = 0;
+    
     AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    terminal->StoreCurrentVehicle(10);
+    int totalSpaces = aps->GetAvailableSpaces();
+    Ticket ticket = terminal->StoreCurrentVehicle(10);
     int availableSpaces = aps->GetAvailableSpaces();
     if(availableSpaces == totalSpaces)
     {
