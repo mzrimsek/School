@@ -161,6 +161,10 @@ void TestAddAndRetrieveTwoValidVehicleForNonMember()
 
     terminal->RetrieveVehicle(ticket2);
     availableSpaces = aps->GetAvailableSpaces();
+    if(availableSpaces == totalSpaces-1)
+    {
+        cout << "Vehicle retrieved!\n";
+    }
 
     terminal->RetrieveVehicle(ticket1);
     availableSpaces = aps->GetAvailableSpaces();

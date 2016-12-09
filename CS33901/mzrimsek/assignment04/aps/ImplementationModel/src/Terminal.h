@@ -16,8 +16,6 @@ class Terminal
         Customer* currentCustomer;
         Vehicle* currentVehicle;
         bool CanBeStored(Vehicle*);
-        bool IsCorrectTicket(Customer*, Ticket);
-        bool IsCorrectLicensePlate(string, Vehicle);
         double GetCostForStorage(int);
     public:
         Terminal(AutomatedParkingStructure*);

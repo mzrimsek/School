@@ -36,14 +36,6 @@ Ticket& Terminal::StoreCurrentVehicle(int timeToStore)
 
 Vehicle& Terminal::RetrieveVehicle(Ticket ticket)
 {
-    bool doNamesMatch = IsCorrectTicket(currentCustomer, ticket);
-
-    if(!doNamesMatch)
-    {
-        printf("Customer does not have correct ticket!\n");
-        return *(new Vehicle("", "", "", 0, 0, 0));
-    }
-    
     if(currentCustomer->GetIsMember())
     {
         printf("Customer is a member - not billed!\n");
@@ -63,19 +55,6 @@ bool Terminal::CanBeStored(Vehicle* vehicle)
     int vehicleWheels = vehicle->GetWheels();
 
     return vehicleWeight < 1000.0 && vehicleWheels == 4;
-}
-
-bool Terminal::IsCorrectTicket(Customer* customer, Ticket ticket)
-{
-    string customerName = customer->GetName();
-    string ticketName = ticket.GetCustomerName();
-    return customerName.compare(ticketName) == 0;
-}
-
-bool Terminal::IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
-{
-    string vehicleLicensePlate = vehicle.GetLicensePlate();
-    return vehicleLicensePlate.compare(licensePlate) == 0;
 }
 
 double Terminal::GetCostForStorage(int timeStored)

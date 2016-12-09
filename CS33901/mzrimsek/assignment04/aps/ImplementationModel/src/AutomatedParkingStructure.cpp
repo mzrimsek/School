@@ -73,8 +73,8 @@ Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
                     storedVehicles[floor][row][column] = *(new Vehicle("", "", "", 0, 0, 0));
                     availableSpaces++;
                     Print();
+                    return spot;
                 }
-                return spot;
             }
         }
     }
