@@ -21,7 +21,7 @@ Ticket& AutomatedParkingStructure::StoreVehicle(Customer* customer, Vehicle* veh
     return *(new Ticket(customerName, licensePlate));
 }
 
-Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
+Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
 {
     string vehicleLicensePlate = ticket.GetVehicleLicensePlate();
     for(int i = 0; i < storedVehicles.size(); i++)
@@ -36,7 +36,7 @@ Vehicle AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
         }
     }
     printf("Vehicle not found!");
-    throw;
+    return *(new Vehicle("", "", "", 0, 0, 0));
 }
 
 int AutomatedParkingStructure::GetTotalSpaces()

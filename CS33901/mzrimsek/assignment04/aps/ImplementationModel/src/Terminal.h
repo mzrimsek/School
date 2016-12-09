@@ -20,8 +20,8 @@ class Terminal
         bool IsCorrectLicensePlate(string, Vehicle);
     public:
         Terminal(AutomatedParkingStructure*);
-        Ticket StoreCurrentVehicle();
-        Vehicle RetrieveVehicle(Ticket);
+        Ticket& StoreCurrentVehicle();
+        Vehicle& RetrieveVehicle(Ticket);
         void SetCurrentCustomer(Customer*);
         void SetCurrentVehicle(Vehicle*);
 };

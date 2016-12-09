@@ -11,7 +11,7 @@ Terminal::Terminal(AutomatedParkingStructure* tAps)
     aps = tAps;
 }
 
-Ticket Terminal::StoreCurrentVehicle()
+Ticket& Terminal::StoreCurrentVehicle()
 {
     bool canBeStored = CanBeStored(currentVehicle);
     int availableSpaces = aps->GetAvailableSpaces();
@@ -28,10 +28,10 @@ Ticket Terminal::StoreCurrentVehicle()
     {
         return aps->StoreVehicle(currentCustomer, currentVehicle);
     }
-    throw;
+    return *(new Ticket("", ""));
 }
 
-Vehicle Terminal::RetrieveVehicle(Ticket ticket)
+Vehicle& Terminal::RetrieveVehicle(Ticket ticket)
 {
     bool doNamesMatch = IsCorrectTicket(currentCustomer, ticket);
 
@@ -43,7 +43,7 @@ Vehicle Terminal::RetrieveVehicle(Ticket ticket)
     {
         return aps->RetrieveVehicle(ticket);
     }
-    throw;
+    return *(new Vehicle("", "", "", 0, 0, 0));
 }
 
 bool Terminal::CanBeStored(Vehicle* vehicle)
