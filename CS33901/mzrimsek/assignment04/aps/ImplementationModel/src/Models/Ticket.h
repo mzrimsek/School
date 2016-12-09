@@ -10,10 +10,12 @@ class Ticket
     private:
         string customerName;
         string vehicleLicensePlate;
+        int timeToStore;
     public:
-        Ticket(string, string);
+        Ticket(string, string, int);
         string GetCustomerName();
         string GetVehicleLicensePlate();
+        int GetTimeToStore();
 };
 
 #endif

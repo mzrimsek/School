@@ -28,16 +28,16 @@ void testAddAndRetrieveValidVehicle()
 
     loadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    Ticket ticket = terminal->StoreCurrentVehicle();
+    Ticket ticket = terminal->StoreCurrentVehicle(0);
     int availableSpaces = aps->GetAvailableSpaces();
-    if(availableSpaces == 99)
+    if(availableSpaces == totalSpaces-1)
     {
         cout << "Vehicle added!" << "\n";
     }
 
     terminal->RetrieveVehicle(ticket);
     availableSpaces = aps->GetAvailableSpaces();
-    if(availableSpaces == 100)
+    if(availableSpaces == totalSpaces)
     {
         cout << "Vehicle retrieved!" << "\n";
     }
@@ -53,9 +53,9 @@ void testRejectInvalidVehicle()
 
     loadVehicleAndCustomer(terminal, "inputs/invalidVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    terminal->StoreCurrentVehicle();
+    terminal->StoreCurrentVehicle(0);
     int availableSpaces = aps->GetAvailableSpaces();
-    if(availableSpaces == 100)
+    if(availableSpaces == totalSpaces)
     {
         cout << "Vehicle correctly rejected!" << "\n";
     }

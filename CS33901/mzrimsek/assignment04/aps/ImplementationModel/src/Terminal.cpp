@@ -11,7 +11,7 @@ Terminal::Terminal(AutomatedParkingStructure* tAps)
     aps = tAps;
 }
 
-Ticket& Terminal::StoreCurrentVehicle()
+Ticket& Terminal::StoreCurrentVehicle(int timeToStore)
 {
     bool canBeStored = CanBeStored(currentVehicle);
     int availableSpaces = aps->GetAvailableSpaces();
@@ -26,9 +26,12 @@ Ticket& Terminal::StoreCurrentVehicle()
     }
     else
     {
-        return aps->StoreVehicle(currentCustomer, currentVehicle);
+        aps->StoreVehicle(currentCustomer, currentVehicle);
+        string customerName = currentCustomer->GetName();
+        string licensePlate = currentVehicle->GetLicensePlate();
+        return *(new Ticket(customerName, licensePlate, timeToStore));
     }
-    return *(new Ticket("", ""));
+    return *(new Ticket("", "", 0));
 }
 
 Vehicle& Terminal::RetrieveVehicle(Ticket ticket)
@@ -39,6 +42,7 @@ Vehicle& Terminal::RetrieveVehicle(Ticket ticket)
     {
         printf("Customer does not have correct ticket!\n");
     }
+    //add paymemt stuff
     else
     {
         return aps->RetrieveVehicle(ticket);

@@ -1,10 +1,11 @@
 #include <string>
 #include "Ticket.h"
 
-Ticket::Ticket(string tCustomerName, string tVehicleLicensePlate)
+Ticket::Ticket(string tCustomerName, string tVehicleLicensePlate, int tTimeToStore)
 {
     customerName = tCustomerName;
     vehicleLicensePlate = tVehicleLicensePlate;
+    timeToStore = tTimeToStore;
 }
 
 string Ticket::GetCustomerName()
@@ -15,4 +16,9 @@ string Ticket::GetCustomerName()
 string Ticket::GetVehicleLicensePlate()
 {
     return vehicleLicensePlate;
+}
+
+int Ticket::GetTimeToStore()
+{
+    return timeToStore;
 }
