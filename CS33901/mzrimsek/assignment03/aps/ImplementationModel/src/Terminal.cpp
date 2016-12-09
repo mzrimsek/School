@@ -66,3 +66,13 @@ bool Terminal::IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
     string vehicleLicensePlate = vehicle.GetLicensePlate();
     return vehicleLicensePlate.compare(licensePlate) == 0;
 }
+
+void Terminal::SetCurrentCustomer(Customer* customer)
+{
+    currentCustomer = customer;
+}
+
+void Terminal::SetCurrentVehicle(Vehicle* vehicle)
+{
+    currentVehicle = vehicle;
+}

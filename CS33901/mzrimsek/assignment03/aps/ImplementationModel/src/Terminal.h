@@ -22,8 +22,8 @@ class Terminal
         Terminal(AutomatedParkingStructure*);
         Ticket StoreCurrentVehicle();
         Vehicle RetrieveVehicle(Ticket);
-        void SetCurrentCustomer(Customer);
-        void SetCurrentVehicle(Vehicle);
+        void SetCurrentCustomer(Customer*);
+        void SetCurrentVehicle(Vehicle*);
 };
 
 #endif
