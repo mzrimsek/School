@@ -25,6 +25,7 @@ class Terminal
         Vehicle& RetrieveVehicle(Ticket);
         void SetCurrentCustomer(Customer*);
         void SetCurrentVehicle(Vehicle*);
+        void UpgradeToMember();
 };
 
 #endif

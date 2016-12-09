@@ -92,3 +92,16 @@ void Terminal::SetCurrentVehicle(Vehicle* vehicle)
 {
     currentVehicle = vehicle;
 }
+
+void Terminal::UpgradeToMember()
+{
+    if(currentCustomer->GetIsMember())
+    {
+        printf("Customer is already member!\n");
+    }
+    else
+    {
+        currentCustomer->SetIsMember(true);
+        printf("Customer is now a member and has been billed $20 for first month's subscription!\n");
+    }
+}
