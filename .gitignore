@@ -10,3 +10,4 @@ kern
 *.txt
 .vscode
 *.png
+*.doc*
