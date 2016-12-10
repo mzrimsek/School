@@ -127,14 +127,15 @@ Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
                 storedVehicles[foundFloor][dimension][leftColumn] = *(new Vehicle(RESERVED, "", "", 0, 0, 0));
                 availableSpaces++;
                 vehicleFound = true;
+                Print();
                 return spot;
             }
             else
             {
                 storedVehicles[foundFloor][dimension-1][rightColumn] = spot;
                 storedVehicles[foundFloor][dimension][leftColumn] = *(new Vehicle(RESERVED, "", "", 0, 0, 0));
+                Print();  
             }
-            Print();
         }
     }
     
