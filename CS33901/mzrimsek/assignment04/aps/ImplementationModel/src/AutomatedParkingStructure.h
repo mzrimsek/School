@@ -20,7 +20,6 @@ class AutomatedParkingStructure
         int floors;
         int dimension;
         Vehicle*** storedVehicles;
-        bool IsCorrectLicensePlate(string, Vehicle);
         void Print();
     public:
         AutomatedParkingStructure(int, int);

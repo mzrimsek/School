@@ -146,12 +146,6 @@ int AutomatedParkingStructure::GetAvailableSpaces()
     return availableSpaces;
 }
 
-bool AutomatedParkingStructure::IsCorrectLicensePlate(string licensePlate, Vehicle vehicle)
-{
-    string vehicleLicensePlate = vehicle.GetLicensePlate();
-    return vehicleLicensePlate.compare(licensePlate) == 0;
-}
-
 void AutomatedParkingStructure::Print()
 {
     for(int floor = 0; floor < floors; floor++)
