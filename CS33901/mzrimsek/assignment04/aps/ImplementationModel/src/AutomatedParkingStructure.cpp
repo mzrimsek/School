@@ -102,9 +102,8 @@ Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
             leftColumn = foundColumn-1;
             rightColumn = foundColumn;
         }
-
-        bool vehicleFound = false;
-        while(!vehicleFound)
+        
+        while(true)
         {
             for(int row = 0; row < dimension; row++)
             {
@@ -126,7 +125,6 @@ Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
             {
                 storedVehicles[foundFloor][dimension][leftColumn] = *(new Vehicle(RESERVED, "", "", 0, 0, 0));
                 availableSpaces++;
-                vehicleFound = true;
                 Print();
                 return spot;
             }
