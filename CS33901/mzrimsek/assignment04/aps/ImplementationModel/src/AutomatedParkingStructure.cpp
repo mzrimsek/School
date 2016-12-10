@@ -158,7 +158,7 @@ void AutomatedParkingStructure::Print()
 {
     for(int floor = 0; floor < floors; floor++)
     {
-        cout << "floor " << floor << "\n";
+        cout << "floor " << floor+1 << "\n";
         for(int row = 0; row < dimension+1; row++)
         {
             for(int column = 0; column < dimension; column++)

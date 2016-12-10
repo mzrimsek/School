@@ -2,8 +2,8 @@
 #define TestObjectGetter_H
 
 #include <string>
-#include "Models/Customer.h"
-#include "Models/Vehicle.h"
+#include "../Models/Customer.h"
+#include "../Models/Vehicle.h"
 
 using namespace std;
 
