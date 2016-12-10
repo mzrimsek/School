@@ -3,39 +3,15 @@
 #include "Models/Vehicle.h"
 #include "Models/Customer.h"
 #include "Models/Ticket.h"
-#include "TestObjectGetter.h"
+#include "TestHelpers/TestObjectGetter.h"
+#include "TestHelpers/TestHelper.h"
 #include <string>
 #include <iostream>
 
 using namespace std;
 
 TestObjectGetter* testObjectGetter = new TestObjectGetter();
-
-void LoadVehicleAndCustomer(Terminal* terminal, string vehicleFile, string customerFile)
-{
-    Vehicle* vehicle = testObjectGetter->GetVehicle(vehicleFile);
-    Customer* customer = testObjectGetter->GetCustomer(customerFile);
-    terminal->SetCurrentVehicle(vehicle);
-    terminal->SetCurrentCustomer(customer);
-}
-
-Ticket StoreTestVehicle(Terminal* terminal, AutomatedParkingStructure* aps, int& availableSpaces)
-{
-    Ticket ticket = terminal->StoreCurrentVehicle(10);
-    availableSpaces = aps->GetAvailableSpaces();
-    return ticket;
-}
-
-void RetrieveTestVehicle(Terminal* terminal, AutomatedParkingStructure* aps, Ticket ticket, int& availableSpaces)
-{
-    terminal->RetrieveVehicle(ticket);
-    availableSpaces = aps->GetAvailableSpaces();
-}
-
-bool AssertSpaces(int expectedSpaces, int actualSpaces)
-{
-    return expectedSpaces == actualSpaces;
-}
+TestHelper* testHelper = new TestHelper(testObjectGetter);
 
 bool TestAddAndRetrieveValidVehicleForNonMember()
 {
@@ -48,13 +24,13 @@ bool TestAddAndRetrieveValidVehicleForNonMember()
     int totalSpaces = aps->GetAvailableSpaces();
     int availableSpaces = totalSpaces;
 
-    LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    Ticket ticket = StoreTestVehicle(terminal, aps, availableSpaces);
-    bool vehicleWasStored = AssertSpaces(totalSpaces-1, availableSpaces);
+    Ticket ticket = testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    bool vehicleWasStored = testHelper->AssertSpaces(totalSpaces-1, availableSpaces);
     
-    RetrieveTestVehicle(terminal, aps, ticket, availableSpaces);
-    bool vehicleWasRetrieved = AssertSpaces(totalSpaces, availableSpaces);
+    testHelper->RetrieveTestVehicle(terminal, aps, ticket, availableSpaces);
+    bool vehicleWasRetrieved = testHelper->AssertSpaces(totalSpaces, availableSpaces);
     
     return vehicleWasStored && vehicleWasRetrieved;
 }
@@ -70,13 +46,13 @@ bool TestAddAndRetrieveValidVehicleForMember()
     int totalSpaces = aps->GetAvailableSpaces();
     int availableSpaces = totalSpaces;
 
-    LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/memberCustomer.txt");
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/memberCustomer.txt");
     
-    Ticket ticket = StoreTestVehicle(terminal, aps, availableSpaces);
-    bool vehicleWasStored = AssertSpaces(totalSpaces-1, availableSpaces);
+    Ticket ticket = testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    bool vehicleWasStored = testHelper->AssertSpaces(totalSpaces-1, availableSpaces);
     
-    RetrieveTestVehicle(terminal, aps, ticket, availableSpaces);
-    bool vehicleWasRetrieved = AssertSpaces(totalSpaces, availableSpaces);
+    testHelper->RetrieveTestVehicle(terminal, aps, ticket, availableSpaces);
+    bool vehicleWasRetrieved = testHelper->AssertSpaces(totalSpaces, availableSpaces);
 
     return vehicleWasStored && vehicleWasRetrieved;
 }
@@ -92,10 +68,10 @@ bool TestRejectInvalidVehicle()
     int totalSpaces = aps->GetAvailableSpaces();
     int availableSpaces = totalSpaces;
 
-    LoadVehicleAndCustomer(terminal, "inputs/invalidVehicle.txt", "inputs/nonMemberCustomer.txt");
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/invalidVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    StoreTestVehicle(terminal, aps, availableSpaces);
-    return AssertSpaces(totalSpaces, availableSpaces);
+    testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    return testHelper->AssertSpaces(totalSpaces, availableSpaces);
 }
 
 bool TestNoSpaceToStoreVehicle()
@@ -109,10 +85,10 @@ bool TestNoSpaceToStoreVehicle()
     int totalSpaces = aps->GetAvailableSpaces();
     int availableSpaces = totalSpaces;
 
-    LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
     
-    StoreTestVehicle(terminal, aps, availableSpaces);
-    return AssertSpaces(totalSpaces, availableSpaces);
+    testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    return testHelper->AssertSpaces(totalSpaces, availableSpaces);
 }
 
 bool TestUpgradeNonMemberToMember()
@@ -162,67 +138,46 @@ bool TestAddAndRetrieveTwoValidVehicleForNonMember()
     int totalSpaces = aps->GetAvailableSpaces();
     int availableSpaces = totalSpaces;
 
-    LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
 
-    Ticket ticket1 = StoreTestVehicle(terminal, aps, availableSpaces);
-    bool vehicle1WasStored = AssertSpaces(totalSpaces-1, availableSpaces);
+    Ticket ticket1 = testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    bool vehicle1WasStored = testHelper->AssertSpaces(totalSpaces-1, availableSpaces);
 
-    LoadVehicleAndCustomer(terminal, "inputs/validVehicle2.txt", "inputs/nonMemberCustomer.txt");
-    Ticket ticket2 = StoreTestVehicle(terminal, aps, availableSpaces);
-    bool vehicle2WasStored = AssertSpaces(totalSpaces-2, availableSpaces);
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle2.txt", "inputs/nonMemberCustomer.txt");
+    Ticket ticket2 = testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    bool vehicle2WasStored = testHelper->AssertSpaces(totalSpaces-2, availableSpaces);
 
-    RetrieveTestVehicle(terminal, aps, ticket2, availableSpaces);
-    bool vehicle2WasRetrieved = AssertSpaces(totalSpaces-1, availableSpaces);
+    testHelper->RetrieveTestVehicle(terminal, aps, ticket2, availableSpaces);
+    bool vehicle2WasRetrieved = testHelper->AssertSpaces(totalSpaces-1, availableSpaces);
 
-    RetrieveTestVehicle(terminal, aps, ticket1, availableSpaces);
-    bool vehicle1WasRetrieved = AssertSpaces(totalSpaces, availableSpaces);
+    testHelper->RetrieveTestVehicle(terminal, aps, ticket1, availableSpaces);
+    bool vehicle1WasRetrieved = testHelper->AssertSpaces(totalSpaces, availableSpaces);
 
     return (vehicle1WasStored && vehicle2WasStored) && (vehicle2WasRetrieved && vehicle1WasRetrieved);
 }
 
-void PrintResults(bool testResults)
-{
-    if(testResults)
-    {
-        cout << "\nPASS" << endl;
-    }
-    else
-    {
-        cout << "\nFAIL" << endl;
-    }
-
-    cout << "\n\n";
-}
-
 int main()
 {
-    cout << "1.";
     bool results = TestAddAndRetrieveValidVehicleForNonMember();
-    PrintResults(results);
+    testHelper->PrintResults(results);
     
-    cout << "2.";
     results = TestAddAndRetrieveValidVehicleForMember();
-    PrintResults(results);
+    testHelper->PrintResults(results);
     
-    cout << "3.";
     results = TestRejectInvalidVehicle();
-    PrintResults(results);
+    testHelper->PrintResults(results);
     
-    cout << "4.";
     results = TestNoSpaceToStoreVehicle();
-    PrintResults(results);
+    testHelper->PrintResults(results);
     
-    cout << "5.";
     results = TestUpgradeNonMemberToMember();
-    PrintResults(results);
+    testHelper->PrintResults(results);
     
-    cout << "6.";
     results = TestNotUpgradeMember();
-    PrintResults(results);
+    testHelper->PrintResults(results);
 
-    cout << "7.";
     results = TestAddAndRetrieveTwoValidVehicleForNonMember();
-    PrintResults(results);
+    testHelper->PrintResults(results);
 
     return 0;
 }

@@ -1,6 +1,8 @@
 #include "TestObjectGetter.h"
 #include <string>
 #include <fstream>
+#include "../Models/Customer.h"
+#include "../Models/Vehicle.h"
 
 TestObjectGetter::TestObjectGetter(){}
 
