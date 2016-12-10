@@ -24,7 +24,7 @@ void TestAddAndRetrieveValidVehicleForNonMember()
     cout << "Testing adding and retrieving valid vehicle for non member" << "\n";
     cout << "----------------------------------------------------------" << "\n";
 
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(2, 2);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 5);
     Terminal* terminal = new Terminal(aps);
 
     LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
