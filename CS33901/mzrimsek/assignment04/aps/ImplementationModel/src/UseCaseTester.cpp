@@ -132,7 +132,7 @@ bool TestAddAndRetrieveTwoValidVehicleForNonMember()
     cout << "Testing adding and retrieving two valid vehicle for non member" << "\n";
     cout << "--------------------------------------------------------------" << "\n";
 
-    AutomatedParkingStructure* aps = new AutomatedParkingStructure(2, 2);
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(1, 2);
     Terminal* terminal = new Terminal(aps);
 
     int totalSpaces = aps->GetAvailableSpaces();
@@ -156,6 +156,35 @@ bool TestAddAndRetrieveTwoValidVehicleForNonMember()
     return (vehicle1WasStored && vehicle2WasStored) && (vehicle2WasRetrieved && vehicle1WasRetrieved);
 }
 
+bool TestRetrieveFromSecondFloor()
+{
+    cout << "Testing retrieving from second floor" << "\n";
+    cout << "------------------------------------" << "\n";
+
+    AutomatedParkingStructure* aps = new AutomatedParkingStructure(2, 2);
+    Terminal* terminal = new Terminal(aps);
+
+    int totalSpaces = aps->GetAvailableSpaces();
+    int availableSpaces = totalSpaces;
+
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle.txt", "inputs/nonMemberCustomer.txt");
+
+    for(int i = 0; i < totalSpaces-2; i++)
+    {
+        testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    }
+    bool vehiclesWereStored = testHelper->AssertSpaces(2, availableSpaces);
+
+    testHelper->LoadVehicleAndCustomer(terminal, "inputs/validVehicle2.txt", "inputs/nonMemberCustomer.txt");
+    Ticket ticket = testHelper->StoreTestVehicle(terminal, aps, availableSpaces);
+    bool desiredVehicleWasStored = testHelper->AssertSpaces(1, availableSpaces);
+
+    testHelper->RetrieveTestVehicle(terminal, aps, ticket, availableSpaces);
+    bool desiredVehicleWasRetrieved = testHelper->AssertSpaces(2, availableSpaces);
+
+    return (vehiclesWereStored && desiredVehicleWasStored) && desiredVehicleWasRetrieved;
+}
+
 int main()
 {
     bool results = TestAddAndRetrieveValidVehicleForNonMember();
@@ -177,6 +206,9 @@ int main()
     testHelper->PrintResults(results);
 
     results = TestAddAndRetrieveTwoValidVehicleForNonMember();
+    testHelper->PrintResults(results);
+    
+    results = TestRetrieveFromSecondFloor();
     testHelper->PrintResults(results);
 
     return 0;
