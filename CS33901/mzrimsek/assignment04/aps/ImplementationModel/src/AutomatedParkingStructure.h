@@ -21,6 +21,9 @@ class AutomatedParkingStructure
         int dimension;
         Vehicle*** storedVehicles;
         void Print();
+        void SetPivotColumns(int&, int&, int);
+        Vehicle& GetEmptySpace();
+        Vehicle& GetReservedSpace();
     public:
         AutomatedParkingStructure(int, int);
         void StoreVehicle(Vehicle*);
