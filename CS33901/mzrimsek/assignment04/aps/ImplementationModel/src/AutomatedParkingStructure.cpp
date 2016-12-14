@@ -159,7 +159,7 @@ Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
     }
     
     printf("Vehicle not found!\n");
-    return *(new Vehicle("", "", "", 0, 0, 0));
+    return GetEmptySpace();
 }
 
 int AutomatedParkingStructure::GetAvailableSpaces()
