@@ -24,6 +24,8 @@ class AutomatedParkingStructure
         void SetPivotColumns(int&, int&, int);
         Vehicle& GetEmptySpace();
         Vehicle& GetReservedSpace();
+        void ShiftLeftColumn(int, int);
+        void ShiftRightColumn(int, int);
     public:
         AutomatedParkingStructure(int, int);
         void StoreVehicle(Vehicle*);

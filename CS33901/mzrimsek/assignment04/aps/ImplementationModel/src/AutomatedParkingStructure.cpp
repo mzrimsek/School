@@ -33,6 +33,24 @@ void AutomatedParkingStructure::SetPivotColumns(int& leftColumn, int& rightColum
     }
 }
 
+void AutomatedParkingStructure::ShiftLeftColumn(int foundFloor, int leftColumn)
+{
+    for(int row = 0; row < dimension; row++)
+    {
+        storedVehicles[foundFloor][row+1][leftColumn] = storedVehicles[foundFloor][row][leftColumn];
+        storedVehicles[foundFloor][row][leftColumn] = GetEmptySpace();
+    }
+}
+
+void AutomatedParkingStructure::ShiftRightColumn(int foundFloor, int rightColumn)
+{
+    for(int row = dimension-1; row > 0; row--)
+    {
+        storedVehicles[foundFloor][row-1][rightColumn] = storedVehicles[foundFloor][row][rightColumn];
+        storedVehicles[foundFloor][row][rightColumn] = GetEmptySpace();
+    }
+}
+
 AutomatedParkingStructure::AutomatedParkingStructure(int tFloors, int tDimension)
 {
     floors = tFloors;
@@ -116,20 +134,12 @@ Vehicle& AutomatedParkingStructure::RetrieveVehicle(Ticket ticket)
         
         while(true)
         {
-            for(int row = 0; row < dimension; row++)
-            {
-                storedVehicles[foundFloor][row+1][leftColumn] = storedVehicles[foundFloor][row][leftColumn];
-                storedVehicles[foundFloor][row][leftColumn] = GetEmptySpace();
-            }
+            ShiftLeftColumn(foundFloor, leftColumn);
 
             storedVehicles[foundFloor][0][leftColumn] = storedVehicles[foundFloor][0][rightColumn];
             storedVehicles[foundFloor][0][rightColumn] = GetEmptySpace();
 
-            for(int row = dimension-1; row > 0; row--)
-            {
-                storedVehicles[foundFloor][row-1][rightColumn] = storedVehicles[foundFloor][row][rightColumn];
-                storedVehicles[foundFloor][row][rightColumn] = GetEmptySpace();
-            }
+            ShiftRightColumn(foundFloor, rightColumn);
 
             Vehicle spot = storedVehicles[foundFloor][dimension][leftColumn];
             if(spot.GetLicensePlate().compare(vehicleLicensePlate) == 0)
