@@ -27,10 +27,6 @@ quit() {
 user_exists ${USERNAME} || adduser ${USERNAME}
 user_exists ${USERNAME} || quit "Error creating user!"
 
-#create sudoers entry
-echo ${SUDOERS}  >> ${SUDOERSFILE}
-chmod 440 ${SUDOERSFILE}
-
 #ssh stuff for new user
 if [ ! -d ${SSHDIR} ]; then
     mkdir -p ${SSHDIR}
@@ -43,5 +39,10 @@ chown ${USERNAME} ${SSHDIR}
 chown ${USERNAME} ${SSHDIR}/authorized_keys
 
 #install required packages
-yum -y install epel-release sudo vim python rpm-python curl wget openssh openssh-clients openssh-server git puppet
+yum -y install epel-release 
+yum -y install sudo vim python rpm-python curl wget openssh openssh-clients openssh-server git puppet
 yum update
+
+#create sudoers entry
+echo ${SUDOERS} >> ${SUDOERSFILE}
+chmod 440 ${SUDOERSFILE}
