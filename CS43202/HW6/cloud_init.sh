@@ -39,7 +39,7 @@ chown ${USERNAME} ${SSHDIR}
 chown ${USERNAME} ${SSHDIR}/authorized_keys
 
 #install required packages
-yum -y install epel-release 
+yum -y install epel-release && yum clean all && yum -y upgrade
 yum -y install sudo vim python rpm-python curl wget openssh openssh-clients openssh-server git puppet
 yum update
 
