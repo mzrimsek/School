@@ -1,0 +1,88 @@
+---
+- hosts: all
+  tasks:
+    - name: CORE - Install Packages
+      yum: name={{ item }} state=latest
+      with_items:
+        - git
+        - python
+        - python-virtualenv
+        - python-pip
+        - python-setuptools
+        - sqlite
+        - nginx
+
+    - name: CORE - Create Deployable Group
+      group: 
+        name: deployable
+
+    - name: CORE - Create Deployable User
+      user:
+        name: deployable
+        createhome: no
+        shell: /bin/bash
+        group: deployable
+        append: yes
+
+    - name: DEPLOYABLE - Create Temporary Deploy Directory
+      file:
+        path: /home/deploy
+        state: directory
+        owner: deployable
+        group: deployable
+        mode: 0750
+
+    - name: DEPLOYABLE - Clone Deployable Application
+      git:
+        repo: https://sysadmin1.cs.kent.edu/CS43202/deployable.git
+        dest: /home/deploy/deployable
+        clone: yes
+        update: yes
+
+    - name: DEPLOYABLE - Create Server Directory
+      file:
+        path: /srv/deployable
+        state: directory
+        owner: deployable
+        group: deployable
+        mode: 0755
+
+    - name: DEPLOYABLE - Copy Temporary Directory to Server Directory
+      command: cp -R /home/deploy/deployable/app /srv/deployable
+
+    - name: DATABASE - Initialize Database
+      command: sqlite3 /srv/deployable/app/quotes.db -init /home/deploy/deployable/fixtures/quotes.sql
+
+    - name: PIP - Update Pip
+      pip:
+        name: pip
+        state: latest
+        virtualenv: /srv/deployable/env
+
+    - name: PIP - Update Setuptools
+      pip:
+        name: setuptools
+        state: latest
+        virtualenv: /srv/deployable/env
+
+    - name: PIP - Install Requirements
+      pip:
+        requirements: /home/deploy/deployable/requirements.txt
+        virtualenv: /srv/deployable/env
+
+    - name: DEPLOYABLE - Copy Service
+      command: cp /home/deploy/deployable/examples/deployable.service /usr/lib/systemd/system/deployable.service
+
+    - name: DEPLOYABLE - Start Service
+      service: name=deployable state=started enabled=yes
+
+    - name: NGINX - Starting Service
+      service: name=nginx state=started enabled=yes
+
+    - name: NGINX - Copying Configuration
+      command: cp /home/deploy/deployable/examples/nginx.conf /etc/nginx/nginx.conf
+      notify: NGINX - Reload Configuration
+
+  handlers:
+    - name: NGINX - Reload Configuration
+      command: nginx -s reload
