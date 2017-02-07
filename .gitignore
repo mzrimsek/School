@@ -11,3 +11,4 @@ kern
 .vscode
 *.png
 *.doc*
+.DS_STORE
