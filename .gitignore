@@ -1,14 +1,33 @@
+# Grade folder
 EVAL
+
+# Version control
 .svn
 .git
+
+# Unwanted file types
 *.pdf
+*.txt
+*.png
+*.doc*
+
+# C/C++ executables
 *.out
 *.o
+
+# OS build files
 kern
 *.elf
 *.iso
-*.txt
+
+# Visual Studio Code debug folder
 .vscode
-*.png
-*.doc*
+
+# Other
 .DS_STORE
+
+# iOS (Swift)
+build/
+xcuserdata/
+timeline.xctimeline
+playground.xcworkspace
