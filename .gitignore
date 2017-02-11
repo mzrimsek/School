@@ -11,9 +11,14 @@ EVAL
 *.png
 *.doc*
 
-# C/C++ executables
+# C/C++
 *.out
 *.o
+*.VC.db
+*.VC.VC.opendb
+*.log
+*.obj
+Debug/
 
 # OS build files
 kern
