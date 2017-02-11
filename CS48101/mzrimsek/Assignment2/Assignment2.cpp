@@ -55,9 +55,9 @@ void TutorialApplication::createScene()
   light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
 
   Ogre::Entity* ninjaEntity = mSceneMgr->createEntity("ninja.mesh");
+  Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
-
-  mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(ninjaEntity);
+  ninjaNode->attachObject(ninjaEntity);
  
   // Fog
  Ogre::ColourValue fadeColour(.9, .9, .9);
