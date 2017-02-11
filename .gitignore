@@ -19,6 +19,7 @@ EVAL
 *.log
 *.obj
 Debug/
+.vs/
 
 # OS build files
 kern
