@@ -145,11 +145,34 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   return ret;
 }
 
-
-
 bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 {
-	return false;
+	static Ogre::Real rotate = .13;
+	static Ogre::Real move = 250;
+
+	mKeyboard->capture();
+	Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
+
+	if (mKeyboard->isKeyDown(OIS::KC_UP))
+	{
+		dirVec.z -= move;
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+	{
+		dirVec.z += move;
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
+	{
+		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(5 * rotate));
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
+	{
+		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(-5 * rotate));
+	}
+
+	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+
+	return true;
 }
  
 void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
