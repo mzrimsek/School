@@ -16,6 +16,7 @@ protected:
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
   virtual void createCamera();
   virtual void createViewports();
+  virtual void rotateHead();
  
 private:
   void defineTerrain(long x, long y);
