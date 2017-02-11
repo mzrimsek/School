@@ -1,0 +1,10 @@
+﻿  Tutorial3.cpp
+c:\users\mike zrimsek\desktop\classenv\classenv\projects\school\cs48101\project1\tutorial3.cpp(18): warning C4305: 'argument': truncation from 'double' to 'Ogre::Real'
+c:\users\mike zrimsek\desktop\classenv\classenv\projects\school\cs48101\project1\tutorial3.cpp(29): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\mike zrimsek\desktop\classenv\classenv\projects\school\cs48101\project1\tutorial3.cpp(31): warning C4305: 'argument': truncation from 'double' to 'const Ogre::Real'
+c:\users\mike zrimsek\desktop\classenv\classenv\projects\school\cs48101\project1\tutorial3.cpp(38): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\mike zrimsek\desktop\classenv\classenv\projects\school\cs48101\project1\tutorial3.cpp(41): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\mike zrimsek\desktop\classenv\classenv\projects\school\cs48101\project1\tutorial3.cpp(44): warning C4305: 'argument': truncation from 'double' to 'Ogre::Real'
+  BaseApplication.cpp
+  Generating Code...
+LINK : fatal error LNK1104: cannot open file 'libboost_thread-vc140-mt-gd-1_60.lib'
