@@ -62,7 +62,7 @@ void TutorialApplication::createScene()
 
   //ogre stuff
   Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
-  Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ogreNode", Ogre::Vector3(1970, 30, 1925));
+  Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ogreNode", Ogre::Vector3(1990, 20, 1925));
   ogreEntity->setCastShadows(true);
   ogreNode->attachObject(ogreEntity);
  
@@ -173,21 +173,19 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
 		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(5 * rotate));
-		//mCamera->yaw(Ogre::Degree(5 * rotate));
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
 		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(-5 * rotate));
-		//mCamera->yaw(Ogre::Degree(-5 * rotate));
 	}
 
 	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
-	//mCamera->move(dirVec);
-
+	
 	return true;
 }
 
-void TutorialApplication::rotateHead() {
+void TutorialApplication::rotateHead() 
+{
 	static Ogre::Real spin = .5;
 
 	static Ogre::Real rotationDistance = 250;
@@ -200,7 +198,6 @@ void TutorialApplication::rotateHead() {
 	Ogre::Real z = rotationDistance * Ogre::Math::Sin(currentRotation.x);
 
 	mSceneMgr->getSceneNode("ogreNode")->lookAt(mSceneMgr->getSceneNode("ninjaNode")->getPosition(), Ogre::Node::TS_PARENT);
-
 	mSceneMgr->getSceneNode("ogreNode")->setPosition(mSceneMgr->getSceneNode("ninjaNode")->getPosition() + Ogre::Vector3(x, 150, z));
 	
 	Ogre::Quaternion q(Ogre::Degree(160), Ogre::Vector3::UNIT_X);
