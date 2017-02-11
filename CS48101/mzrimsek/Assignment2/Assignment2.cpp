@@ -14,9 +14,9 @@ TutorialApplication::~TutorialApplication()
 void TutorialApplication::createCamera()
 {
 	mCamera = mSceneMgr->createCamera("PlayerCam");
-	mCamera->setPosition(Ogre::Vector3(0, 300, 500));
-	mCamera->lookAt(Ogre::Vector3(0, 0, 0));
-	mCamera->setNearClipDistance(5);
+	mCamera->setPosition(Ogre::Vector3(2000, 500, 2600));
+	mCamera->lookAt(Ogre::Vector3(2000, 25, 1660));
+	mCamera->setNearClipDistance(.1);
 	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
 }
 
@@ -25,7 +25,6 @@ void TutorialApplication::createViewports()
 	Ogre::Viewport* vp = mWindow->addViewport(mCamera);
 	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
 	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
-
 }
  
 void TutorialApplication::createScene()
@@ -54,17 +53,19 @@ void TutorialApplication::createScene()
   light->setDiffuseColour(Ogre::ColourValue::White);
   light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
 
+  //ninja stuff
   Ogre::Entity* ninjaEntity = mSceneMgr->createEntity("ninja.mesh");
   Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
   ninjaNode->attachObject(ninjaEntity);
- 
-  // Fog
- Ogre::ColourValue fadeColour(.9, .9, .9);
-  mWindow->getViewport(0)->setBackgroundColour(fadeColour);
- 
-mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
- 
+
+  Ogre::Light* spotLight = mSceneMgr->createLight("SpotLight");
+  spotLight->setDiffuseColour(0, 0, 1.0);
+  spotLight->setSpecularColour(0, 0, 1.0);
+  spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
+  spotLight->setDirection(-1, -1, 0);
+  spotLight->setPosition(Ogre::Vector3(2000, 20, 1925));
+  
   // Terrain
   mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
  
@@ -95,17 +96,12 @@ mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
   }
  
   mTerrainGroup->freeTemporaryResources();
- 
-  // Sky Techniques
-  // mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 300, false);
+
+  //sky
   mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
    Ogre::Plane plane;
    plane.d = 1000;
    plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
- 
-  // mSceneMgr->setSkyPlane(
-  //   true, plane, "Examples/SpaceSkyPlane", 1500, 40, true, 1.5, 150, 150);
- 
 }
  
 void TutorialApplication::createFrameListener()
