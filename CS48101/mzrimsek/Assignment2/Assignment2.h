@@ -21,6 +21,7 @@ private:
   void defineTerrain(long x, long y);
   void initBlendMaps(Ogre::Terrain* terrain);
   void configureTerrainDefaults(Ogre::Light* light);
+  bool processUnbufferedInput(const Ogre::FrameEvent& fe);
  
   bool mTerrainsImported;
   Ogre::TerrainGroup* mTerrainGroup;
