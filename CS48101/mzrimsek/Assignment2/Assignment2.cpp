@@ -118,6 +118,7 @@ void TutorialApplication::destroyScene()
  
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
+  if (!processUnbufferedInput(fe)) return false;
   bool ret = BaseApplication::frameRenderingQueued(fe);
  
   if (mTerrainGroup->isDerivedDataUpdateInProgress())
@@ -164,13 +165,16 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
 		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(5 * rotate));
+		/*mSceneMgr->getSceneNode("PlayerCam")->yaw(Ogre::Degree(5 * rotate));*/
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
 		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(-5 * rotate));
+		/*mSceneMgr->getSceneNode("PlayerCam")->yaw(Ogre::Degree(-5 * rotate));*/
 	}
 
 	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	/*mSceneMgr->getSceneNode("PlayerCam")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);*/
 
 	return true;
 }
