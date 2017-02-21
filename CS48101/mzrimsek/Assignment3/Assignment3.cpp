@@ -151,9 +151,32 @@ mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
  
 void TutorialApplication::createFrameListener()
 {
-  BaseApplication::createFrameListener();
+  //BaseApplication::createFrameListener();
+
+	Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
+	OIS::ParamList pl;
+	size_t windowHnd = 0;
+	std::ostringstream windowHndStr;
+
+	mWindow->getCustomAttribute("WINDOW", &windowHnd);
+	windowHndStr << windowHnd;
+	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+
+	mInputManager = OIS::InputManager::createInputSystem(pl);
+
+	mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, true));
+	mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject(OIS::OISMouse, true));
+
+	mMouse->setEventCallback(this);
+	mKeyboard->setEventCallback(this);
+
+	windowResized(mWindow);
+
+	Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
+
+	mRoot->addFrameListener(this);
  
-  mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TerrainInfo", "", 350);
+  //mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TerrainInfo", "", 350);
 }
  
 void TutorialApplication::destroyScene()
@@ -172,7 +195,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 
   bool ret = BaseApplication::frameRenderingQueued(fe);
  
-  if (mTerrainGroup->isDerivedDataUpdateInProgress())
+  /*if (mTerrainGroup->isDerivedDataUpdateInProgress())
   {
     mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
     mInfoLabel->show();
@@ -192,7 +215,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
       mTerrainGroup->saveAllTerrains(true);
       mTerrainsImported = false;
     }
-  }
+  }*/
  
   return ret;
 }
