@@ -305,6 +305,9 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		blockFlag = 1;
 	}
 
+	Ogre::Vector3 ninjaPos = ninjaNode->getPosition();
+	float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
+	dirVec.y = height - ninjaPos.y;
 	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 	
 	return true;
