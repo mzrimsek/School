@@ -30,6 +30,15 @@ private:
  
   OgreBites::Label* mInfoLabel;
  
+  //animation stuff?
+  std::deque<Ogre::Vector3> mWalkList;
+  Ogre::Real					mDistance;
+  Ogre::Real					mWalkSpd;
+  Ogre::Vector3				mDirection;
+  Ogre::Vector3				mDestination;
+  Ogre::AnimationState*		mAnimationState;
+  Ogre::Entity*				mEntity;
+  Ogre::SceneNode*			mNode;
 };
  
 

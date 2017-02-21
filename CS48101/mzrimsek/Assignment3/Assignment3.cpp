@@ -3,7 +3,14 @@
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
     mTerrainGlobals(0),
-    mInfoLabel(0)
+    mInfoLabel(0),
+	mDistance(0),
+	mWalkSpd(70.0),
+	mDirection(Ogre::Vector3::ZERO),
+	mDestination(Ogre::Vector3::ZERO),
+	mAnimationState(0),
+	mEntity(0),
+	mNode(0)
 {
 }
  
@@ -24,7 +31,6 @@ void TutorialApplication::createViewports()
 	Ogre::Viewport* vp = mWindow->addViewport(mCamera);
 	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
 	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
-
 }
  
 void TutorialApplication::createScene()
