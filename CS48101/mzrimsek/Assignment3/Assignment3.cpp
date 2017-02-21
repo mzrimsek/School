@@ -10,8 +10,7 @@ int attackFlag = 0;
 int blockFlag = 0;
  
 TutorialApplication::TutorialApplication()
-  : minimapSceneMgr(0),
-	mTerrainGroup(0),
+  : mTerrainGroup(0),
     mTerrainGlobals(0),
     mInfoLabel(0),
 	mAnimationState(0),
@@ -26,28 +25,33 @@ TutorialApplication::~TutorialApplication()
 void TutorialApplication::chooseSceneManager()
 {
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "player");
-	minimapSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "minimap");
+}
+
+void TutorialApplication::setupViewport(Ogre::SceneManager * curr)
+{
+	mWindow->removeAllViewports();
+
+	Ogre::Camera *cam = curr->getCamera("PlayerCam");
+	Ogre::Viewport *vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
+	vp->setOverlaysEnabled(false);
+	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+
+	Ogre::Camera *minimapCam = curr->getCamera("MinimapCam");
+	vp = mWindow->addViewport(minimapCam, 1, 0.75, 0, 0.25, 0.25);
+	vp->setOverlaysEnabled(false);
+	minimapCam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
 
 void TutorialApplication::createCamera()
 {
 	mSceneMgr->createCamera("PlayerCam");
-	minimapSceneMgr->createCamera("MinimapCamera");
+	mSceneMgr->createCamera("MinimapCam");
+	setupViewport(mSceneMgr);
 }
 
 void TutorialApplication::createViewports()
 {
-	mWindow->removeAllViewports();
-	Ogre::Viewport *vp = 0;
-	Ogre::Camera *cam = mSceneMgr->getCamera("PlayerCam");
-	vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
-	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
-	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-
-	cam = minimapSceneMgr->getCamera("MinimapCamera");
-	vp = mWindow->addViewport(cam, 1, 0.5, 0, 0.5, 1);
-	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
-	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+	setupViewport(mSceneMgr);
 }
  
 void TutorialApplication::createScene()
@@ -86,7 +90,7 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* minimapCameraParent = mSceneMgr->getSceneNode("minimapCameraParent");
   minimapCameraParent->createChildSceneNode("minimapCameraNode", Ogre::Vector3(0, 200, 0));
   Ogre::SceneNode* minimapCameraNode = mSceneMgr->getSceneNode("minimapCameraNode");
-  Ogre::Camera* minimapCameraObject = minimapSceneMgr->getCamera("MinimapCamera");
+  Ogre::Camera* minimapCameraObject = mSceneMgr->getCamera("MinimapCam");
   minimapCameraObject->lookAt(ninjaNode->getPosition());
   minimapCameraNode->attachObject(minimapCameraObject);
 

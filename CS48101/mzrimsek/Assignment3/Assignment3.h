@@ -19,6 +19,7 @@ protected:
   virtual void rotateHead();
   virtual void handleAnimations(const Ogre::FrameEvent& evt);
   virtual void chooseSceneManager(void);
+  virtual void setupViewport(Ogre::SceneManager *curr);
  
 private:
   void defineTerrain(long x, long y);
@@ -34,8 +35,6 @@ private:
  
   Ogre::AnimationState* mAnimationState;
   Ogre::Entity*	mEntity;
-
-  Ogre::SceneManager* minimapSceneMgr;
 };
  
 
