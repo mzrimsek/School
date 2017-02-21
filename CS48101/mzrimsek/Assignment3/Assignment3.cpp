@@ -2,10 +2,12 @@
 
 int jumpFlag = 0;
 int forwardFlag = 0;
-int winFlag = 0;
-int idleFlag = 1;
-int crouchFlag = 0;
+int stealthFlag = 0;
 int kickFlag = 0;
+int crouchFlag = 0;
+int backflipFlag = 0;
+int attackFlag = 0;
+int blockFlag = 0;
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -180,19 +182,57 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 {
 	if (jumpFlag == 1)
 	{
-
+		jumpFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Jump");
+		mAnimationState->setLoop(false);
+		mAnimationState->setEnabled(true);
 	}
-	else if(forwardFlag == 1)
+	else if(forwardFlag != 0)
 	{
 		forwardFlag = 0;
 		mAnimationState = mEntity->getAnimationState("Walk");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
-	else if (forwardFlag == -1)
+	else if (crouchFlag == 1)
 	{
-		forwardFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Walk");
+		crouchFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Crouch");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+	else if (stealthFlag == 1)
+	{
+		stealthFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Stealth");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+	else if (backflipFlag == 1)
+	{
+		backflipFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Backflip");
+		mAnimationState->setLoop(false);
+		mAnimationState->setEnabled(true);
+	}
+	else if (attackFlag == 1)
+	{
+		attackFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Attack1");
+		mAnimationState->setLoop(false);
+		mAnimationState->setEnabled(true);
+	}
+	else if (kickFlag == 1)
+	{
+		kickFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Kick");
+		mAnimationState->setLoop(false);
+		mAnimationState->setEnabled(true);
+	}
+	else if (blockFlag == 1)
+	{
+		blockFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Block");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
@@ -211,38 +251,58 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 
 	mKeyboard->capture();
 	Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
-
 	Ogre::SceneNode* ninjaNode = mSceneMgr->getSceneNode("ninjaNode");
 
 	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
 		dirVec.z -= move;
-		if (jumpFlag == 0) {
-			forwardFlag = 1;
-			idleFlag = 0;
-		}
+		forwardFlag = 1;
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
 	{
 		dirVec.z += move;
-		if (jumpFlag == 0) {
-			forwardFlag = -1;
-			idleFlag = 0;
-		}
+		forwardFlag = -1;
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
 		ninjaNode->yaw(Ogre::Degree(5 * rotate));
-		if (jumpFlag == 0) {
-			idleFlag = 0;
-		}
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
 		ninjaNode->yaw(Ogre::Degree(-5 * rotate));
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_SPACE)) {
+		jumpFlag = 1;
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_LCONTROL))
+	{
 		if (jumpFlag == 0) {
-			idleFlag = 0;
+			crouchFlag = 1;
 		}
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
+	{
+		if (jumpFlag == 0) {
+			stealthFlag = 1;
+		}
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_B))
+	{
+		if (jumpFlag == 0) {
+			backflipFlag = 1;
+		}
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_E))
+	{
+		attackFlag = 1;
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_K))
+	{
+		kickFlag = 1;
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_X))
+	{
+		blockFlag = 1;
 	}
 
 	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
