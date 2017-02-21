@@ -102,7 +102,7 @@ protected:
     virtual void windowClosed(Ogre::RenderWindow* rw);
 
     Ogre::Root*                 mRoot;
-    Ogre::Camera*               mCamera;
+    //Ogre::Camera*               mCamera;
     Ogre::SceneManager*         mSceneMgr;
     Ogre::RenderWindow*         mWindow;
     Ogre::String                mResourcesCfg;
@@ -113,7 +113,7 @@ protected:
     // OgreBites
     OgreBites::InputContext     mInputContext;
     OgreBites::SdkTrayManager*	mTrayMgr;
-    OgreBites::SdkCameraMan*    mCameraMan;     	// Basic camera controller
+    //OgreBites::SdkCameraMan*    mCameraMan;     	// Basic camera controller
     OgreBites::ParamsPanel*     mDetailsPanel;   	// Sample details panel
     bool                        mCursorWasVisible;	// Was cursor visible before dialog appeared?
     bool                        mShutDown;

@@ -10,16 +10,12 @@ int attackFlag = 0;
 int blockFlag = 0;
  
 TutorialApplication::TutorialApplication()
-  : mTerrainGroup(0),
+  : minimapSceneMgr(0),
+	mTerrainGroup(0),
     mTerrainGlobals(0),
     mInfoLabel(0),
-	mDistance(0),
-	mWalkSpd(70.0),
-	mDirection(Ogre::Vector3::ZERO),
-	mDestination(Ogre::Vector3::ZERO),
 	mAnimationState(0),
-	mEntity(0),
-	mNode(0)
+	mEntity(0)
 {
 }
  
@@ -27,19 +23,31 @@ TutorialApplication::~TutorialApplication()
 {
 }
 
+void TutorialApplication::chooseSceneManager()
+{
+	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "player");
+	minimapSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "minimap");
+}
+
 void TutorialApplication::createCamera()
 {
-	mCamera = mSceneMgr->createCamera("PlayerCam");
-    mCamera->setNearClipDistance(.1);
-	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
-	mCameraMan->setStyle(OgreBites::CS_MANUAL);
+	mSceneMgr->createCamera("PlayerCam");
+	minimapSceneMgr->createCamera("MinimapCamera");
 }
 
 void TutorialApplication::createViewports()
 {
-	Ogre::Viewport* vp = mWindow->addViewport(mCamera);
+	mWindow->removeAllViewports();
+	Ogre::Viewport *vp = 0;
+	Ogre::Camera *cam = mSceneMgr->getCamera("PlayerCam");
+	vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
 	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
-	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
+	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+
+	cam = minimapSceneMgr->getCamera("MinimapCamera");
+	vp = mWindow->addViewport(cam, 1, 0.5, 0, 0.5, 1);
+	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
  
 void TutorialApplication::createScene()
@@ -47,11 +55,6 @@ void TutorialApplication::createScene()
   bool infiniteClip =
     mRoot->getRenderSystem()->getCapabilities()->hasCapability(
       Ogre::RSC_INFINITE_FAR_PLANE);
- 
-  if (infiniteClip)
-    mCamera->setFarClipDistance(0);
-  else
-    mCamera->setFarClipDistance(50000);
  
   mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .2));
  
@@ -69,11 +72,23 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
   ninjaNode->attachObject(ninjaEntity);
+
+  //ninja back camera
   ninjaNode->createChildSceneNode("ninjaCameraParent");
   Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
   ninjaCameraParent->createChildSceneNode("ninjaCamera", Ogre::Vector3(0, 100, 500));
   Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
-  ninjaCamera->attachObject(mCamera);
+  Ogre::Camera* ninjaCameraObject = mSceneMgr->getCamera("PlayerCam");
+  ninjaCamera->attachObject(ninjaCameraObject);
+
+  //ninja top camera
+  ninjaNode->createChildSceneNode("minimapCameraParent");
+  Ogre::SceneNode* minimapCameraParent = mSceneMgr->getSceneNode("minimapCameraParent");
+  minimapCameraParent->createChildSceneNode("minimapCameraNode", Ogre::Vector3(0, 200, 0));
+  Ogre::SceneNode* minimapCameraNode = mSceneMgr->getSceneNode("minimapCameraNode");
+  Ogre::Camera* minimapCameraObject = minimapSceneMgr->getCamera("MinimapCamera");
+  minimapCameraObject->lookAt(ninjaNode->getPosition());
+  minimapCameraNode->attachObject(minimapCameraObject);
 
   //ninja idle animation
   mEntity = ninjaEntity;

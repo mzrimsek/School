@@ -18,6 +18,7 @@ protected:
   virtual void createViewports();
   virtual void rotateHead();
   virtual void handleAnimations(const Ogre::FrameEvent& evt);
+  virtual void chooseSceneManager(void);
  
 private:
   void defineTerrain(long x, long y);
@@ -31,15 +32,10 @@ private:
  
   OgreBites::Label* mInfoLabel;
  
-  //animation stuff?
-  std::deque<Ogre::Vector3> mWalkList;
-  Ogre::Real					mDistance;
-  Ogre::Real					mWalkSpd;
-  Ogre::Vector3				mDirection;
-  Ogre::Vector3				mDestination;
-  Ogre::AnimationState*		mAnimationState;
-  Ogre::Entity*				mEntity;
-  Ogre::SceneNode*			mNode;
+  Ogre::AnimationState* mAnimationState;
+  Ogre::Entity*	mEntity;
+
+  Ogre::SceneManager* minimapSceneMgr;
 };
  
 
