@@ -14,10 +14,9 @@ TutorialApplication::~TutorialApplication()
 void TutorialApplication::createCamera()
 {
 	mCamera = mSceneMgr->createCamera("PlayerCam");
-	mCamera->setPosition(Ogre::Vector3(2000, 500, 2600));
-    mCamera->lookAt(Ogre::Vector3(2000, 25, 1660));
     mCamera->setNearClipDistance(.1);
 	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+	mCameraMan->setStyle(OgreBites::CS_MANUAL);
 }
 
 void TutorialApplication::createViewports()
@@ -30,10 +29,6 @@ void TutorialApplication::createViewports()
  
 void TutorialApplication::createScene()
 {
-  mCamera->setPosition(Ogre::Vector3(1683, 50, 2116));
-  mCamera->lookAt(Ogre::Vector3(1963, 50, 1660));
-  mCamera->setNearClipDistance(.1);
- 
   bool infiniteClip =
     mRoot->getRenderSystem()->getCapabilities()->hasCapability(
       Ogre::RSC_INFINITE_FAR_PLANE);
@@ -59,6 +54,12 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
   ninjaNode->attachObject(ninjaEntity);
+  ninjaNode->createChild("ninjaCameraParent");
+  Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
+  ninjaCameraParent->createChild("ninjaCamera");
+  Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
+  ninjaCamera->attachObject(mCamera);
+
 
   //ogre stuff
   Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
