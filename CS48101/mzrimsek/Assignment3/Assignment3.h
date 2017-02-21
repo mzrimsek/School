@@ -17,6 +17,7 @@ protected:
   virtual void createCamera();
   virtual void createViewports();
   virtual void rotateHead();
+  virtual void handleAnimations(const Ogre::FrameEvent& evt);
  
 private:
   void defineTerrain(long x, long y);

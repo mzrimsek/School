@@ -1,4 +1,10 @@
 #include "Assignment3.h"
+
+int jumpFlag = 0;
+int forwardFlag = 0;
+int jumpAnimationFlag = 0;
+int winFlag = 0;
+int idleFlag = 1;
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -67,7 +73,8 @@ void TutorialApplication::createScene()
   ninjaCamera->attachObject(mCamera);
 
   //ninja idle animation
-  mAnimationState = ninjaEntity->getAnimationState("Idle1");
+  mEntity = ninjaEntity;
+  mAnimationState = mEntity->getAnimationState("Idle1");
   mAnimationState->setLoop(true);
   mAnimationState->setEnabled(true);
 
@@ -138,6 +145,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   if (!processUnbufferedInput(fe)) return false;
 
   rotateHead();
+  handleAnimations(fe);
   mAnimationState->addTime(fe.timeSinceLastFrame);
 
   bool ret = BaseApplication::frameRenderingQueued(fe);
@@ -167,6 +175,34 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   return ret;
 }
 
+void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
+{
+	if (jumpFlag == 1)
+	{
+
+	}
+	else if(forwardFlag == 1)
+	{
+		forwardFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Walk");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+	else if (forwardFlag == -1)
+	{
+		forwardFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Backflip");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+	else
+	{
+		mAnimationState = mEntity->getAnimationState("Idle1");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+}
+
 bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 {
 	static Ogre::Real rotate = .13;
@@ -175,21 +211,39 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	mKeyboard->capture();
 	Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
 
+	Ogre::SceneNode* ninjaNode = mSceneMgr->getSceneNode("ninjaNode");
+
 	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
 		dirVec.z -= move;
+		if (jumpFlag == 0) {
+			forwardFlag = 1;
+			idleFlag = 0;
+		}
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
 	{
 		dirVec.z += move;
+		if (jumpFlag == 0) {
+			forwardFlag = -1;
+			idleFlag = 0;
+		}
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
-		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(5 * rotate));
+		ninjaNode->yaw(Ogre::Degree(5 * rotate));
+		if (jumpFlag == 0) {
+			forwardFlag = 0;
+			idleFlag = 0;
+		}
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
-		mSceneMgr->getSceneNode("ninjaNode")->yaw(Ogre::Degree(-5 * rotate));
+		ninjaNode->yaw(Ogre::Degree(-5 * rotate));
+		if (jumpFlag == 0) {
+			forwardFlag = 0;
+			idleFlag = 0;
+		}
 	}
 
 	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
