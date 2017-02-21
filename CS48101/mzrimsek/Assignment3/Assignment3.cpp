@@ -66,6 +66,11 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
   ninjaCamera->attachObject(mCamera);
 
+  //ninja idle animation
+  mAnimationState = ninjaEntity->getAnimationState("Idle1");
+  mAnimationState->setLoop(true);
+  mAnimationState->setEnabled(true);
+
   //ogre stuff
   Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
   Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ogreNode", Ogre::Vector3(1990, 20, 1925));
@@ -131,7 +136,9 @@ void TutorialApplication::destroyScene()
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   if (!processUnbufferedInput(fe)) return false;
+
   rotateHead();
+  mAnimationState->addTime(fe.timeSinceLastFrame);
 
   bool ret = BaseApplication::frameRenderingQueued(fe);
  

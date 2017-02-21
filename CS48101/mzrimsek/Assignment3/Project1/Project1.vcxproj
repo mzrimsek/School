@@ -17,6 +17,10 @@
   <ItemGroup>
     <ClInclude Include="..\BaseApplication.h" />
     <ClInclude Include="..\Assignment3.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project11.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{89B5DCEE-C4E5-4828-9F9C-7B6777D92CB6}</ProjectGuid>
