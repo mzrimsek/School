@@ -2,9 +2,10 @@
 
 int jumpFlag = 0;
 int forwardFlag = 0;
-int jumpAnimationFlag = 0;
 int winFlag = 0;
 int idleFlag = 1;
+int crouchFlag = 0;
+int kickFlag = 0;
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -191,7 +192,7 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 	else if (forwardFlag == -1)
 	{
 		forwardFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Backflip");
+		mAnimationState = mEntity->getAnimationState("Walk");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
@@ -233,7 +234,6 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	{
 		ninjaNode->yaw(Ogre::Degree(5 * rotate));
 		if (jumpFlag == 0) {
-			forwardFlag = 0;
 			idleFlag = 0;
 		}
 	}
@@ -241,7 +241,6 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	{
 		ninjaNode->yaw(Ogre::Degree(-5 * rotate));
 		if (jumpFlag == 0) {
-			forwardFlag = 0;
 			idleFlag = 0;
 		}
 	}
