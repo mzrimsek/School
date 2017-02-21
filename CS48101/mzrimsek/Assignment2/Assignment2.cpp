@@ -54,12 +54,11 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
   ninjaNode->attachObject(ninjaEntity);
-  ninjaNode->createChild("ninjaCameraParent");
+  ninjaNode->createChildSceneNode("ninjaCameraParent");
   Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
-  ninjaCameraParent->createChild("ninjaCamera");
+  ninjaCameraParent->createChildSceneNode("ninjaCamera", Ogre::Vector3(0, 100, 500));
   Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
   ninjaCamera->attachObject(mCamera);
-
 
   //ogre stuff
   Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
