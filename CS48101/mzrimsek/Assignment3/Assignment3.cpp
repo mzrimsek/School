@@ -75,8 +75,13 @@ void TutorialApplication::createScene()
   ninjaCamera->attachObject(backCamera);
 
   //minimap camera
+  ninjaNode->createChildSceneNode("minimapCamParent");
+  Ogre::SceneNode* minimapCamParent = mSceneMgr->getSceneNode("minimapCamParent");
+  minimapCamParent->createChildSceneNode("minimapCameraNode", Ogre::Vector3(0, 600, 0));
+  Ogre::SceneNode* minimapCameraNode = mSceneMgr->getSceneNode("minimapCameraNode");
   Ogre::Camera* minimapCamera = mSceneMgr->getCamera("MinimapCam");
-  ninjaCamera->attachObject(minimapCamera);
+  minimapCamera->lookAt(Ogre::Vector3(0, 0, 0));
+  minimapCameraNode->attachObject(minimapCamera);
 
   //ninja idle animation
   mEntity = ninjaEntity;
