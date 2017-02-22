@@ -8,6 +8,7 @@ int crouchFlag = 0;
 int backflipFlag = 0;
 int attackFlag = 0;
 int blockFlag = 0;
+int rotateCameraFlag = 0;
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -94,6 +95,13 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ogreNode", Ogre::Vector3(1990, 20, 1925));
   ogreEntity->setCastShadows(true);
   ogreNode->attachObject(ogreEntity);
+
+  //ogre rotating camera
+  ogreNode->createChildSceneNode("ogreCameraParent");
+  Ogre::SceneNode* ogreCameraParent = mSceneMgr->getSceneNode("ogreCameraParent");
+  ogreCameraParent->createChildSceneNode("ogreCamera");
+  ogreCameraParent->yaw(Ogre::Degree(145));
+  ogreCameraParent->roll(Ogre::Degree(270));
  
   // Fog
  Ogre::ColourValue fadeColour(.9, .9, .9);
@@ -311,6 +319,29 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	if (mKeyboard->isKeyDown(OIS::KC_X))
 	{
 		blockFlag = 1;
+	}
+
+
+	if (mKeyboard->isKeyDown(OIS::KC_R))
+	{
+		Ogre::SceneNode* ogreCameraNode = mSceneMgr->getSceneNode("ogreCamera");
+		Ogre::SceneNode* ninjaCameraNode = mSceneMgr->getSceneNode("ninjaCamera");
+		Ogre::Camera* playerCam = mSceneMgr->getCamera("PlayerCam");
+
+		if (rotateCameraFlag == 0)
+		{
+			//set camera to rotate
+			rotateCameraFlag = 1;
+			ninjaCameraNode->detachAllObjects();
+			ogreCameraNode->attachObject(playerCam);
+		}
+		else
+		{
+			//set camera to stay still
+			rotateCameraFlag = 0;
+			ogreCameraNode->detachAllObjects();
+			ninjaCameraNode->attachObject(playerCam);
+		}
 	}
 
 	Ogre::Vector3 ninjaPos = ninjaNode->getPosition();
