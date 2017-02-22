@@ -24,17 +24,17 @@ TutorialApplication::~TutorialApplication()
 
 void TutorialApplication::createCamera()
 {
-	mCamera = mSceneMgr->createCamera("PlayerCam");
-    mCamera->setNearClipDistance(.1);
-	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
-	mCameraMan->setStyle(OgreBites::CS_MANUAL);
+	mSceneMgr->createCamera("PlayerCam");
 }
 
 void TutorialApplication::createViewports()
 {
-	Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
-	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
+	mWindow->removeAllViewports();
+
+	Ogre::Camera *cam = mSceneMgr->getCamera("PlayerCam");
+	Ogre::Viewport *vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
+	vp->setOverlaysEnabled(false);
+	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
  
 void TutorialApplication::createScene()
@@ -43,10 +43,10 @@ void TutorialApplication::createScene()
     mRoot->getRenderSystem()->getCapabilities()->hasCapability(
       Ogre::RSC_INFINITE_FAR_PLANE);
  
-  if (infiniteClip)
+  /*if (infiniteClip)
     mCamera->setFarClipDistance(0);
   else
-    mCamera->setFarClipDistance(50000);
+    mCamera->setFarClipDistance(50000);*/
  
   mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .2));
  
@@ -64,11 +64,14 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
   ninjaNode->attachObject(ninjaEntity);
+
+  //back camera
   ninjaNode->createChildSceneNode("ninjaCameraParent");
   Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
   ninjaCameraParent->createChildSceneNode("ninjaCamera", Ogre::Vector3(0, 100, 500));
   Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
-  ninjaCamera->attachObject(mCamera);
+  Ogre::Camera* backCamera = mSceneMgr->getCamera("PlayerCam");
+  ninjaCamera->attachObject(backCamera);
 
   //ninja idle animation
   mEntity = ninjaEntity;
