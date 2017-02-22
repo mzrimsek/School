@@ -49,11 +49,6 @@ void TutorialApplication::createScene()
     mRoot->getRenderSystem()->getCapabilities()->hasCapability(
       Ogre::RSC_INFINITE_FAR_PLANE);
  
-  /*if (infiniteClip)
-    mCamera->setFarClipDistance(0);
-  else
-    mCamera->setFarClipDistance(50000);*/
- 
   mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .2));
  
   Ogre::Vector3 lightDir(.55, -.3, .75);
