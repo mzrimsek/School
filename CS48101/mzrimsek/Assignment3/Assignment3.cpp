@@ -22,36 +22,19 @@ TutorialApplication::~TutorialApplication()
 {
 }
 
-void TutorialApplication::chooseSceneManager()
-{
-	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "player");
-}
-
-void TutorialApplication::setupViewport(Ogre::SceneManager * curr)
-{
-	mWindow->removeAllViewports();
-
-	Ogre::Camera *cam = curr->getCamera("PlayerCam");
-	Ogre::Viewport *vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
-	vp->setOverlaysEnabled(false);
-	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-
-	Ogre::Camera *minimapCam = curr->getCamera("MinimapCam");
-	vp = mWindow->addViewport(minimapCam, 1, 0.75, 0, 0.25, 0.25);
-	vp->setOverlaysEnabled(false);
-	minimapCam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-}
-
 void TutorialApplication::createCamera()
 {
-	mSceneMgr->createCamera("PlayerCam");
-	mSceneMgr->createCamera("MinimapCam");
-	setupViewport(mSceneMgr);
+	mCamera = mSceneMgr->createCamera("PlayerCam");
+    mCamera->setNearClipDistance(.1);
+	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+	mCameraMan->setStyle(OgreBites::CS_MANUAL);
 }
 
 void TutorialApplication::createViewports()
 {
-	setupViewport(mSceneMgr);
+	Ogre::Viewport* vp = mWindow->addViewport(mCamera);
+	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
 }
  
 void TutorialApplication::createScene()
@@ -59,6 +42,11 @@ void TutorialApplication::createScene()
   bool infiniteClip =
     mRoot->getRenderSystem()->getCapabilities()->hasCapability(
       Ogre::RSC_INFINITE_FAR_PLANE);
+ 
+  if (infiniteClip)
+    mCamera->setFarClipDistance(0);
+  else
+    mCamera->setFarClipDistance(50000);
  
   mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .2));
  
@@ -76,23 +64,11 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
   ninjaEntity->setCastShadows(true);
   ninjaNode->attachObject(ninjaEntity);
-
-  //ninja back camera
   ninjaNode->createChildSceneNode("ninjaCameraParent");
   Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
   ninjaCameraParent->createChildSceneNode("ninjaCamera", Ogre::Vector3(0, 100, 500));
   Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
-  Ogre::Camera* ninjaCameraObject = mSceneMgr->getCamera("PlayerCam");
-  ninjaCamera->attachObject(ninjaCameraObject);
-
-  //ninja top camera
-  ninjaNode->createChildSceneNode("minimapCameraParent");
-  Ogre::SceneNode* minimapCameraParent = mSceneMgr->getSceneNode("minimapCameraParent");
-  minimapCameraParent->createChildSceneNode("minimapCameraNode", Ogre::Vector3(0, 200, 0));
-  Ogre::SceneNode* minimapCameraNode = mSceneMgr->getSceneNode("minimapCameraNode");
-  Ogre::Camera* minimapCameraObject = mSceneMgr->getCamera("MinimapCam");
-  minimapCameraObject->lookAt(ninjaNode->getPosition());
-  minimapCameraNode->attachObject(minimapCameraObject);
+  ninjaCamera->attachObject(mCamera);
 
   //ninja idle animation
   mEntity = ninjaEntity;
@@ -151,32 +127,9 @@ mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
  
 void TutorialApplication::createFrameListener()
 {
-  //BaseApplication::createFrameListener();
-
-	Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
-	OIS::ParamList pl;
-	size_t windowHnd = 0;
-	std::ostringstream windowHndStr;
-
-	mWindow->getCustomAttribute("WINDOW", &windowHnd);
-	windowHndStr << windowHnd;
-	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
-
-	mInputManager = OIS::InputManager::createInputSystem(pl);
-
-	mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, true));
-	mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject(OIS::OISMouse, true));
-
-	mMouse->setEventCallback(this);
-	mKeyboard->setEventCallback(this);
-
-	windowResized(mWindow);
-
-	Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
-
-	mRoot->addFrameListener(this);
+  BaseApplication::createFrameListener();
  
-  //mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TerrainInfo", "", 350);
+  mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TerrainInfo", "", 350);
 }
  
 void TutorialApplication::destroyScene()
@@ -195,7 +148,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 
   bool ret = BaseApplication::frameRenderingQueued(fe);
  
-  /*if (mTerrainGroup->isDerivedDataUpdateInProgress())
+  if (mTerrainGroup->isDerivedDataUpdateInProgress())
   {
     mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
     mInfoLabel->show();
@@ -215,7 +168,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
       mTerrainGroup->saveAllTerrains(true);
       mTerrainsImported = false;
     }
-  }*/
+  }
  
   return ret;
 }
