@@ -25,6 +25,7 @@ TutorialApplication::~TutorialApplication()
 void TutorialApplication::createCamera()
 {
 	mSceneMgr->createCamera("PlayerCam");
+	mSceneMgr->createCamera("MinimapCam");
 }
 
 void TutorialApplication::createViewports()
@@ -35,6 +36,11 @@ void TutorialApplication::createViewports()
 	Ogre::Viewport *vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
 	vp->setOverlaysEnabled(false);
 	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+
+	Ogre::Camera *minimapCam = mSceneMgr->getCamera("MinimapCam");
+	vp = mWindow->addViewport(minimapCam, 1, 0.75, 0, 0.25, 0.25);
+	vp->setOverlaysEnabled(false);
+	minimapCam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
  
 void TutorialApplication::createScene()
@@ -72,6 +78,10 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
   Ogre::Camera* backCamera = mSceneMgr->getCamera("PlayerCam");
   ninjaCamera->attachObject(backCamera);
+
+  //minimap camera
+  Ogre::Camera* minimapCamera = mSceneMgr->getCamera("MinimapCam");
+  ninjaCamera->attachObject(minimapCamera);
 
   //ninja idle animation
   mEntity = ninjaEntity;
