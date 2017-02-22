@@ -33,7 +33,7 @@ void TutorialApplication::createViewports()
 	mWindow->removeAllViewports();
 
 	Ogre::Camera *cam = mSceneMgr->getCamera("PlayerCam");
-	Ogre::Viewport *vp = mWindow->addViewport(cam, 0, 0, 0, 0.5, 1);
+	Ogre::Viewport *vp = mWindow->addViewport(cam, 0, 0, 0, 1, 1);
 	vp->setOverlaysEnabled(false);
 	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 
