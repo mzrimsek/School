@@ -1,4 +1,4 @@
-from socket import *
+from socket import socket, AF_INET, SOCK_STREAM
 
 def main():
     server_socket = socket(AF_INET, SOCK_STREAM)
@@ -20,8 +20,7 @@ def main():
             length_string = 'Content-Length: ' + str(len(output_data)) + '\n'
             connection_socket.send(length_string)
             connection_socket.send('Content-Type: text/html\n')
-            connection_socket.send('\n')
-            connection_socket.send('\n')
+            connection_socket.send('\n\n')
 
             for i in range(0, len(output_data)):
                 connection_socket.send(output_data[i])
