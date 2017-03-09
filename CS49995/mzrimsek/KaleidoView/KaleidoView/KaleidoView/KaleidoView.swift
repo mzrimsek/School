@@ -15,14 +15,17 @@ class KaleidoView : UIView {
     var alphaMin : CGFloat = 0.0
     var alphaMax : CGFloat = 1.0
     
+    var rectMinDimension : CGFloat = 20
+    var rectMaxDimension : CGFloat = 150
+    
     var useAlpha = false
     
-    var delay : TimeInterval = 1.0
+    var delay : TimeInterval = 0.25
     var timer : Timer?
     
     var views : [UIView] = Array()
     var currentView = 0
-    var viewCount = 100
+    var viewCount = 200
     
     func move() {
         if views.count < viewCount {
@@ -33,25 +36,20 @@ class KaleidoView : UIView {
         let newFrames = getFrame()
         let backgroundColor = getRandomColor()
         
-        views[currentView].frame = newFrames.topLeft
-        views[currentView].backgroundColor = backgroundColor
-        currentView += 1
-        
-        views[currentView].frame = newFrames.topRight
-        views[currentView].backgroundColor = backgroundColor
-        currentView += 1
-        
-        views[currentView].frame = newFrames.bottomLeft
-        views[currentView].backgroundColor = backgroundColor
-        currentView += 1
-        
-        views[currentView].frame = newFrames.bottomRight
-        views[currentView].backgroundColor = backgroundColor
-        currentView += 1
+        drawFrame(frame: newFrames.topLeft, color: backgroundColor)
+        drawFrame(frame: newFrames.topRight, color: backgroundColor)
+        drawFrame(frame: newFrames.bottomLeft, color: backgroundColor)
+        drawFrame(frame: newFrames.bottomRight, color: backgroundColor)
         
         if currentView >= views.count {
             currentView = 0
         }
+    }
+    
+    func drawFrame(frame: CGRect, color: UIColor) {
+        views[currentView].frame = frame
+        views[currentView].backgroundColor = color
+        currentView += 1
     }
     
     func startDrawing()
@@ -75,22 +73,22 @@ class KaleidoView : UIView {
     }
     
     func getFrame() -> (topLeft: CGRect, topRight: CGRect, bottomLeft: CGRect, bottomRight: CGRect) {
-        let randWidth = getRandomFrom(min: 20, thruMax: 60)
-        let randHeight = getRandomFrom(min: 20, thruMax: 60)
-        
         let centerX = frame.size.width/2
         let centerY = frame.size.height/2
         
-        let randX = getRandomFrom(min:0.0, thruMax:centerX)
-        let randY = getRandomFrom(min:0.0, thruMax:centerY)
+        let leftX = getRandomFrom(min:0.0, thruMax:centerX)
+        let topY = getRandomFrom(min:0.0, thruMax:centerY)
         
-        let rightX = 2*centerX - randX - randWidth
-        let bottomY = 2*centerY - randY - randHeight
+        let rectWidth = getRandomFrom(min: rectMinDimension, thruMax: rectMaxDimension)
+        let rectHeight = getRandomFrom(min: rectMinDimension, thruMax: rectMaxDimension)
         
-        let topLeft = CGRect(x: randX, y: randY, width: randWidth, height: randHeight)
-        let topRight = CGRect(x: rightX, y: randY, width: randWidth, height: randHeight)
-        let bottomLeft = CGRect(x: randX, y: bottomY, width: randWidth, height: randHeight)
-        let bottomRight = CGRect(x: rightX, y: bottomY, width: randWidth, height: randHeight)
+        let rightX = 2*centerX - leftX - rectWidth
+        let bottomY = 2*centerY - topY - rectHeight
+        
+        let topLeft = CGRect(x: leftX, y: topY, width: rectWidth, height: rectHeight)
+        let topRight = CGRect(x: rightX, y: topY, width: rectWidth, height: rectHeight)
+        let bottomLeft = CGRect(x: leftX, y: bottomY, width: rectWidth, height: rectHeight)
+        let bottomRight = CGRect(x: rightX, y: bottomY, width: rectWidth, height: rectHeight)
         
         return (topLeft, topRight, bottomLeft, bottomRight)
     }
