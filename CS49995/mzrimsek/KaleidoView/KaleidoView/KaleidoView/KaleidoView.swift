@@ -17,12 +17,12 @@ class KaleidoView : UIView {
     
     var useAlpha = false
     
-    var delay : TimeInterval = 1.0
+    var delay : TimeInterval = 0.5
     var timer : Timer?
     
     var views : [UIView] = Array()
     var currentView = 0
-    var viewCount = 4
+    var viewCount = 100
     
     func move() {
         if views.count < viewCount {
@@ -31,9 +31,9 @@ class KaleidoView : UIView {
         }
         
         let newFrame = getFrame()
+        let backgroundColor = getRandomColor()
         views[currentView].frame = newFrame
-        views[currentView].backgroundColor = getRandomColor()
-        
+        views[currentView].backgroundColor = backgroundColor
         currentView += 1
         if currentView >= views.count {
             currentView = 0
@@ -59,12 +59,13 @@ class KaleidoView : UIView {
     }
     
     func getFrame() -> (CGRect) {
-        let randX = getRandomFrom(min:0.0, thruMax:frame.size.width - 40)
-        let randY = getRandomFrom(min:0.0, thruMax:frame.size.height - 40)
+        let randX = getRandomFrom(min:0.0, thruMax:frame.size.width/2)
+        let randY = getRandomFrom(min:0.0, thruMax:frame.size.height/2)
         let randWidth = getRandomFrom(min: 20, thruMax: 60)
-        let randHeight = getRandomFrom(min: 30, thruMax: 80)
+        let randHeight = getRandomFrom(min: 20, thruMax: 60)
         
         let newFrame = CGRect(x: randX, y: randY, width: randWidth, height: randHeight)
+        
         
         return (ul:newFrame)
     }
