@@ -84,10 +84,13 @@ class KaleidoView : UIView {
         let randX = getRandomFrom(min:0.0, thruMax:centerX)
         let randY = getRandomFrom(min:0.0, thruMax:centerY)
         
+        let rightX = 2*centerX - randX - randWidth
+        let bottomY = 2*centerY - randY - randHeight
+        
         let topLeft = CGRect(x: randX, y: randY, width: randWidth, height: randHeight)
-        let topRight = CGRect(x: 2*centerX - randX, y: randY, width: randWidth, height: randHeight)
-        let bottomLeft = CGRect(x: randX, y: 2*centerY - randY, width: randWidth, height: randHeight)
-        let bottomRight = CGRect(x: 2*centerX - randX, y: 2*centerY - randY, width: randWidth, height: randHeight)
+        let topRight = CGRect(x: rightX, y: randY, width: randWidth, height: randHeight)
+        let bottomLeft = CGRect(x: randX, y: bottomY, width: randWidth, height: randHeight)
+        let bottomRight = CGRect(x: rightX, y: bottomY, width: randWidth, height: randHeight)
         
         return (topLeft, topRight, bottomLeft, bottomRight)
     }
