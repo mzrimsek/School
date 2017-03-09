@@ -73,6 +73,17 @@ class KaleidoView : UIView {
     }
     
     func getFrame() -> (topLeft: CGRect, topRight: CGRect, bottomLeft: CGRect, bottomRight: CGRect) {
+        let rectAttrs = getRectAttributes()
+        
+        let topLeft = CGRect(x: rectAttrs.leftX, y: rectAttrs.topY, width: rectAttrs.width, height: rectAttrs.height)
+        let topRight = CGRect(x: rectAttrs.rightX, y: rectAttrs.topY, width: rectAttrs.width, height: rectAttrs.height)
+        let bottomLeft = CGRect(x: rectAttrs.leftX, y: rectAttrs.bottomY, width: rectAttrs.width, height: rectAttrs.height)
+        let bottomRight = CGRect(x: rectAttrs.rightX, y: rectAttrs.bottomY, width: rectAttrs.width, height: rectAttrs.height)
+        
+        return (topLeft, topRight, bottomLeft, bottomRight)
+    }
+    
+    func getRectAttributes() -> (leftX: CGFloat, rightX: CGFloat, topY: CGFloat, bottomY: CGFloat, width: CGFloat, height: CGFloat) {
         let centerX = frame.size.width/2
         let centerY = frame.size.height/2
         
@@ -85,12 +96,7 @@ class KaleidoView : UIView {
         let rightX = 2*centerX - leftX - rectWidth
         let bottomY = 2*centerY - topY - rectHeight
         
-        let topLeft = CGRect(x: leftX, y: topY, width: rectWidth, height: rectHeight)
-        let topRight = CGRect(x: rightX, y: topY, width: rectWidth, height: rectHeight)
-        let bottomLeft = CGRect(x: leftX, y: bottomY, width: rectWidth, height: rectHeight)
-        let bottomRight = CGRect(x: rightX, y: bottomY, width: rectWidth, height: rectHeight)
-        
-        return (topLeft, topRight, bottomLeft, bottomRight)
+        return (leftX: leftX, rightX: rightX, topY: topY, bottomY: bottomY, width: rectWidth, height: rectHeight)
     }
     
     func getRandomColor() -> UIColor
