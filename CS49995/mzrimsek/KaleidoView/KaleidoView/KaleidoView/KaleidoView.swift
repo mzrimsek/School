@@ -17,7 +17,7 @@ class KaleidoView : UIView {
     
     var useAlpha = false
     
-    var delay : TimeInterval = 0.5
+    var delay : TimeInterval = 1.0
     var timer : Timer?
     
     var views : [UIView] = Array()
@@ -26,15 +26,29 @@ class KaleidoView : UIView {
     
     func move() {
         if views.count < viewCount {
-            addNewView()
-            currentView = views.count - 1
+            addNewViews()
+            currentView = views.count - 4
         }
         
-        let newFrame = getFrame()
+        let newFrames = getFrame()
         let backgroundColor = getRandomColor()
-        views[currentView].frame = newFrame
+        
+        views[currentView].frame = newFrames.topLeft
         views[currentView].backgroundColor = backgroundColor
         currentView += 1
+        
+        views[currentView].frame = newFrames.topRight
+        views[currentView].backgroundColor = backgroundColor
+        currentView += 1
+        
+        views[currentView].frame = newFrames.bottomLeft
+        views[currentView].backgroundColor = backgroundColor
+        currentView += 1
+        
+        views[currentView].frame = newFrames.bottomRight
+        views[currentView].backgroundColor = backgroundColor
+        currentView += 1
+        
         if currentView >= views.count {
             currentView = 0
         }
@@ -52,22 +66,30 @@ class KaleidoView : UIView {
         runLoop.add(timer!, forMode:RunLoopMode(rawValue:"NSDefaultRunLoopMode"))
     }
     
-    func addNewView() {
-        let kaleidoSubview = UIView()
-        views.append(kaleidoSubview)
-        self.addSubview(kaleidoSubview)
+    func addNewViews() {
+        for _ in 0...4 {
+            let kaleidoSubview = UIView()
+            views.append(kaleidoSubview)
+            self.addSubview(kaleidoSubview)
+        }
     }
     
-    func getFrame() -> (CGRect) {
-        let randX = getRandomFrom(min:0.0, thruMax:frame.size.width/2)
-        let randY = getRandomFrom(min:0.0, thruMax:frame.size.height/2)
+    func getFrame() -> (topLeft: CGRect, topRight: CGRect, bottomLeft: CGRect, bottomRight: CGRect) {
         let randWidth = getRandomFrom(min: 20, thruMax: 60)
         let randHeight = getRandomFrom(min: 20, thruMax: 60)
         
-        let newFrame = CGRect(x: randX, y: randY, width: randWidth, height: randHeight)
+        let centerX = frame.size.width/2
+        let centerY = frame.size.height/2
         
+        let randX = getRandomFrom(min:0.0, thruMax:centerX)
+        let randY = getRandomFrom(min:0.0, thruMax:centerY)
         
-        return (ul:newFrame)
+        let topLeft = CGRect(x: randX, y: randY, width: randWidth, height: randHeight)
+        let topRight = CGRect(x: centerX - randX, y: randY, width: randWidth, height: randHeight)
+        let bottomLeft = CGRect(x: randX, y: centerY - randY, width: randWidth, height: randHeight)
+        let bottomRight = CGRect(x: centerX - randX, y: centerY - randY, width: randWidth, height: randHeight)
+        
+        return (topLeft, topRight, bottomLeft, bottomRight)
     }
     
     func getRandomColor() -> UIColor
