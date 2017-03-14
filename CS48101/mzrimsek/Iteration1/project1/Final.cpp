@@ -95,6 +95,19 @@ void TutorialApplication::createScene()
   Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ogreNode", Ogre::Vector3(1990, 20, 1925));
   ogreEntity->setCastShadows(true);
   ogreNode->attachObject(ogreEntity);
+  
+  Ogre::SceneNode *nodeArray[20];
+
+  for (int i = 0; i < (sizeof(nodeArray) / sizeof(nodeArray[0])); i++) // Loop through the nodes
+  {
+	  Ogre::String number = Ogre::StringConverter::toString(i + 1);
+
+	  nodeArray[i] = mSceneMgr->getRootSceneNode()->createChildSceneNode("OgreNode" + number, Ogre::Vector3(1990, 20, 1925));
+	  nodeArray[i]->setPosition(i * 100, 0, 0);
+	  Ogre::Entity *newEntity;
+	  newEntity = mSceneMgr->createEntity("ogrehead.mesh");
+	  nodeArray[i]->attachObject(newEntity);
+  }
 
   //ogre rotating camera
   ogreNode->createChildSceneNode("ogreCameraParent");
@@ -102,7 +115,7 @@ void TutorialApplication::createScene()
   ogreCameraParent->createChildSceneNode("ogreCamera");
   ogreCameraParent->yaw(Ogre::Degree(145));
   ogreCameraParent->roll(Ogre::Degree(270));
- 
+
   // Fog
  Ogre::ColourValue fadeColour(.9, .9, .9);
   mWindow->getViewport(0)->setBackgroundColour(fadeColour);
