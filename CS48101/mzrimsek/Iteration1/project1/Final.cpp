@@ -96,9 +96,10 @@ void TutorialApplication::createScene()
   ogreEntity->setCastShadows(true);
   ogreNode->attachObject(ogreEntity);
   
+  //draw ogre heads
   Ogre::SceneNode *nodeArray[20];
 
-  for (int i = 0; i < (sizeof(nodeArray) / sizeof(nodeArray[0])); i++) // Loop through the nodes
+  for (int i = 0; i < (sizeof(nodeArray) / sizeof(nodeArray[0])); i++)
   {
 	  Ogre::String number = Ogre::StringConverter::toString(i + 1);
 
