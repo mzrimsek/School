@@ -97,17 +97,19 @@ void TutorialApplication::createScene()
   ogreNode->attachObject(ogreEntity);
   
   //draw ogre heads
-  Ogre::SceneNode *nodeArray[20];
+  int numEnemies = 20;
+  std::vector<Ogre::SceneNode *> ogreEnemies;
 
-  for (int i = 0; i < (sizeof(nodeArray) / sizeof(nodeArray[0])); i++)
-  {
-	  Ogre::String number = Ogre::StringConverter::toString(i + 1);
+  for (int i = 0; i < numEnemies; i++) {
+	  Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
+	  Ogre::Real enemyX = 1600 + (i * 70);
 
-	  nodeArray[i] = mSceneMgr->getRootSceneNode()->createChildSceneNode("OgreNode" + number, Ogre::Vector3(1990, 20, 1925));
-	  nodeArray[i]->setPosition(i * 100, 0, 0);
-	  Ogre::Entity *newEntity;
-	  newEntity = mSceneMgr->createEntity("ogrehead.mesh");
-	  nodeArray[i]->attachObject(newEntity);
+	  Ogre::Entity* ogreEnemy = mSceneMgr->createEntity("ogrehead.mesh");
+	  Ogre::SceneNode* ogreEnemyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(enemyName, Ogre::Vector3(enemyX, 70, 1625));
+	  ogreEnemy->setCastShadows(true);
+	  ogreEnemyNode->attachObject(ogreEnemy);
+
+	  ogreEnemies.push_back(ogreEnemyNode);
   }
 
   //ogre rotating camera
@@ -121,7 +123,7 @@ void TutorialApplication::createScene()
  Ogre::ColourValue fadeColour(.9, .9, .9);
   mWindow->getViewport(0)->setBackgroundColour(fadeColour);
  
-mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
+mSceneMgr->setFog(Ogre::FOG_NONE, fadeColour, 0.002);
  
   // Terrain
   mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
