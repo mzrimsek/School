@@ -89,12 +89,6 @@ void TutorialApplication::createScene()
   mAnimationState = mEntity->getAnimationState("Idle1");
   mAnimationState->setLoop(true);
   mAnimationState->setEnabled(true);
-
-  //ogre stuff
-  Ogre::Entity* ogreEntity = mSceneMgr->createEntity("ogrehead.mesh");
-  Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ogreNode", Ogre::Vector3(1990, 20, 1925));
-  ogreEntity->setCastShadows(true);
-  ogreNode->attachObject(ogreEntity);
   
   //draw ogre heads
   int numEnemies = 20;
@@ -111,13 +105,6 @@ void TutorialApplication::createScene()
 
 	  ogreEnemies.push_back(ogreEnemyNode);
   }
-
-  //ogre rotating camera
-  ogreNode->createChildSceneNode("ogreCameraParent");
-  Ogre::SceneNode* ogreCameraParent = mSceneMgr->getSceneNode("ogreCameraParent");
-  ogreCameraParent->createChildSceneNode("ogreCamera");
-  ogreCameraParent->yaw(Ogre::Degree(145));
-  ogreCameraParent->roll(Ogre::Degree(270));
 
   // Fog
  Ogre::ColourValue fadeColour(.9, .9, .9);
@@ -179,7 +166,6 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   if (!processUnbufferedInput(fe)) return false;
 
-  rotateHead();
   handleAnimations(fe);
   mAnimationState->addTime(fe.timeSinceLastFrame);
 
@@ -337,57 +323,12 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		blockFlag = 1;
 	}
 
-
-	if (mKeyboard->isKeyDown(OIS::KC_R))
-	{
-		Ogre::SceneNode* ogreCameraNode = mSceneMgr->getSceneNode("ogreCamera");
-		Ogre::SceneNode* ninjaCameraNode = mSceneMgr->getSceneNode("ninjaCamera");
-		Ogre::Camera* playerCam = mSceneMgr->getCamera("PlayerCam");
-
-		if (rotateCameraFlag == 0)
-		{
-			//set camera to rotate
-			rotateCameraFlag = 1;
-			ninjaCameraNode->detachAllObjects();
-			ogreCameraNode->attachObject(playerCam);
-		}
-		else
-		{
-			//set camera to stay still
-			rotateCameraFlag = 0;
-			ogreCameraNode->detachAllObjects();
-			ninjaCameraNode->attachObject(playerCam);
-		}
-	}
-
 	Ogre::Vector3 ninjaPos = ninjaNode->getPosition();
 	float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
 	dirVec.y = height - ninjaPos.y;
 	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 	
 	return true;
-}
-
-void TutorialApplication::rotateHead() 
-{
-	static Ogre::Real spin = .5;
-
-	static Ogre::Real rotationDistance = 250;
-	Ogre::Quaternion currentRotation = Ogre::Quaternion::ZERO;
-
-	Ogre::Real current = Ogre::ControllerManager::getSingleton().getElapsedTime();
-	currentRotation.x = current;
-
-	Ogre::Real x = rotationDistance * Ogre::Math::Cos(currentRotation.x);
-	Ogre::Real z = rotationDistance * Ogre::Math::Sin(currentRotation.x);
-
-	mSceneMgr->getSceneNode("ogreNode")->lookAt(mSceneMgr->getSceneNode("ninjaNode")->getPosition(), Ogre::Node::TS_PARENT);
-	mSceneMgr->getSceneNode("ogreNode")->setPosition(mSceneMgr->getSceneNode("ninjaNode")->getPosition() + Ogre::Vector3(x, 150, z));
-	
-	Ogre::Quaternion q(Ogre::Degree(160), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion i(Ogre::Degree(-1.8721), Ogre::Vector3::UNIT_Z);
-
-	mSceneMgr->getSceneNode("ogreNode")->rotate(q);
 }
  
 void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)

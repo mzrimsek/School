@@ -16,7 +16,6 @@ protected:
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
   virtual void createCamera();
   virtual void createViewports();
-  virtual void rotateHead();
   virtual void handleAnimations(const Ogre::FrameEvent& evt);
  
 private:
