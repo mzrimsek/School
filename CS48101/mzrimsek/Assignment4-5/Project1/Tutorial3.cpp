@@ -1,4 +1,9 @@
 #include "Tutorial3.h"
+
+#define ROWS 3
+#define COLS 2
+#define CUBE_SIDE 40
+
 class MyMotionState : public btMotionState {
 public:
 	MyMotionState(const btTransform &initialpos, Ogre::SceneNode *node) {
@@ -40,7 +45,7 @@ TutorialApplication::~TutorialApplication()
 {
 }
  
-void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, char * name){
+void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, Ogre::String name){
 	// empty ogre vectors for the cubes size and position
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
 	Ogre::Vector3 pos = Ogre::Vector3::ZERO;
@@ -143,10 +148,22 @@ void TutorialApplication::createBulletSim(void) {
 
 		dynamicsWorld->addRigidBody(mGroundBody);
 		collisionShapes.push_back(groundShape);
+
 		//do cube stuff
-		CreateCube(btVector3(2000, 40, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube0");
-		CreateCube(btVector3(2000, 80, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube1");
-		CreateCube(btVector3(2000, 120, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube2");
+		int baseX = 2000;
+		int cubeCount = 0;
+		for (int i = 0; i < COLS; i++) {
+			int x = baseX + (CUBE_SIDE/2 * (COLS*i));
+			for (int j = 0; j < ROWS; j++) {
+				Ogre::String name = "Cube" + std::to_string(cubeCount);
+				int y = CUBE_SIDE * (j + 1);
+				CreateCube(btVector3(x, y, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), name);
+				cubeCount++;
+			}
+		}
+		//CreateCube(btVector3(2000, 40, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube0");
+		//CreateCube(btVector3(2000, 80, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube1");
+		//CreateCube(btVector3(2000, 120, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube2");
 	}
   }
 
