@@ -4,6 +4,7 @@
 #define COLS 3
 #define CUBE_WIDTH 40
 #define STARTING_X 2000
+#define VELOCITY 10
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -78,41 +79,50 @@ void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, c
 	// empty ogre vectors for the cubes size and position
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
 	Ogre::Vector3 pos = Ogre::Vector3::ZERO;
-	Ogre::SceneNode *boxNode;
-	Ogre::Entity *boxentity;
 	// Convert the bullet physics vector to the ogre vector
+	ptrToOgreObject = new ogreObject;
 	pos.x = Position.getX();
 	pos.y = Position.getY();
 	pos.z = Position.getZ();
-	boxentity = mSceneMgr->createEntity(name, "cube.mesh");
-	//boxentity->setScale(Vector3(scale.x,scale.y,scale.z));
-	boxentity->setCastShadows(true);
-	boxNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	boxNode->attachObject(boxentity);
-	boxNode->scale(Ogre::Vector3(scale.getX(), scale.getY(), scale.getZ()));
+	ptrToOgreObject->entityObject = mSceneMgr->createEntity(name, "cube.mesh");
+	ptrToOgreObject->entityObject->setCastShadows(true);
+	try {
+		ptrToOgreObject->sceneNodeObject = mSceneMgr->getSceneNode(name);
+	}
+	catch (Ogre::Exception& e) {
+		ptrToOgreObject->sceneNodeObject = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
+	}
+	ptrToOgreObject->sceneNodeObject->attachObject(ptrToOgreObject->entityObject);
+	ptrToOgreObject->sceneNodeObject->scale(Ogre::Vector3(scale.getX(), scale.getY(), scale.getZ()));
+
 	//boxNode->setScale(Vector3(0.1,0.1,0.1));
-	Ogre::AxisAlignedBox boundingB = boxentity->getBoundingBox();
+	Ogre::AxisAlignedBox boundingB = ptrToOgreObject->entityObject->getBoundingBox();
 	//Ogre::AxisAlignedBox boundingB = boxNode->_getWorldAABB();
 	boundingB.scale(Ogre::Vector3(scale.getX(), scale.getY(), scale.getZ()));
 	size = boundingB.getSize()*0.95f;
 	btTransform Transform;
 	Transform.setIdentity();
 	Transform.setOrigin(Position);
-	MyMotionState *MotionState = new MyMotionState(Transform, boxNode);
+	ptrToOgreObject->myMotionStateObject = new MyMotionState(Transform, ptrToOgreObject->sceneNodeObject);
 	//Give the rigid body half the size
 	// of our cube and tell it to create a BoxShape (cube)
-	btVector3 HalfExtents(size.x*0.5f, size.y*0.5f, size.z*0.5f);
-	btCollisionShape *Shape = new btBoxShape(HalfExtents);
+	btVector3 HalfExtents(size.x * 0.5f, size.y * 0.5f, size.z * 0.5f);
+	ptrToOgreObject->btCollisionShapeObject = new btBoxShape(HalfExtents);
 	btVector3 LocalInertia;
-	Shape->calculateLocalInertia(Mass, LocalInertia);
-	btRigidBody *RigidBody = new btRigidBody(Mass, MotionState, Shape, LocalInertia);
+	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(Mass, LocalInertia);
+	ptrToOgreObject->btRigidBodyObject = new btRigidBody(Mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
 
 	// Store a pointer to the Ogre Node so we can update it later
-	RigidBody->setUserPointer((void *)(boxNode));
+	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject->sceneNodeObject));
+
+	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
+	ptrToOgreObject->objectDelete = false;
+	ptrToOgreObject->objectType = name;
+	ptrToOgreObjects.push_back(ptrToOgreObject);
 
 	// Add it to the physics world
-	dynamicsWorld->addRigidBody(RigidBody);
-	collisionShapes.push_back(Shape);
+	dynamicsWorld->addRigidBody(ptrToOgreObject->btRigidBodyObject);
+	collisionShapes.push_back(ptrToOgreObject->btCollisionShapeObject);
 }
 
 void TutorialApplication::CreateCubes(int startingX, int rows, int columns, int cubeWidth) {
@@ -353,12 +363,6 @@ void TutorialApplication::createScene()
   light->setDiffuseColour(Ogre::ColourValue::White);
   light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
  
-  // Fog
- Ogre::ColourValue fadeColour(.9, .9, .9);
-  mWindow->getViewport(0)->setBackgroundColour(fadeColour);
- 
-//mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
- 
   // Terrain
   mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
  
@@ -563,7 +567,6 @@ void TutorialApplication::getContactPairs(std::vector<contactPair> &contactPairs
 				pushToVec.positionObject2.z = ptB.getZ();
 
 				contactPairs.push_back(pushToVec);
-
 			}
 		}
 	}
@@ -580,9 +583,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 	  time->setText(CEGUI::String(str.c_str()));
   }
 
-  // this should hold collision information, is this in the right place?
   getContactPairs(contactPairs);
-
   handleCollisions(contactPairs);
 
   processUnbufferedInput(fe);
@@ -605,7 +606,6 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_SPACE)){
 		fire = true;
-		power += (fe.timeSinceLastFrame*4);
 	}
 	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire){
 		fire = false; 
@@ -615,8 +615,7 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 		char *projName = (char*)malloc(strlen(projNum) + strlen("Projectile") + 1);
 		strcpy(projName, "Projectile");
 		strcat(projName, projNum);
-		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projName, power);
-		power = 0;
+		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projName, VELOCITY);
 		numOfSpheres++;
 	}
 }
