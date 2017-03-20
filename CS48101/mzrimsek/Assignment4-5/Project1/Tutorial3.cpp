@@ -1,8 +1,9 @@
 #include "Tutorial3.h"
 
-#define ROWS 3
-#define COLS 2
-#define CUBE_SIDE 40
+#define ROWS 5
+#define COLS 3
+#define CUBE_WIDTH 40
+#define STARTING_X 2000
 
 class MyMotionState : public btMotionState {
 public:
@@ -85,6 +86,20 @@ void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, c
 	dynamicsWorld->addRigidBody(RigidBody);
 	collisionShapes.push_back(Shape);
 }
+
+void TutorialApplication::CreateCubes(int startingX, int rows, int columns, int cubeWidth) {
+	int cubeCount = 0;
+	for (int i = 0; i < columns; i++) {
+		int x = startingX + (cubeWidth / 2 * (columns*i));
+		for (int j = 0; j < rows; j++) {
+			Ogre::String name = "Cube" + std::to_string(cubeCount);
+			int y = cubeWidth * (j + 1);
+			CreateCube(btVector3(x, y, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), name);
+			cubeCount++;
+		}
+	}
+}
+
 void TutorialApplication::createBulletSim(void) {
 	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
 	collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -149,21 +164,7 @@ void TutorialApplication::createBulletSim(void) {
 		dynamicsWorld->addRigidBody(mGroundBody);
 		collisionShapes.push_back(groundShape);
 
-		//do cube stuff
-		int baseX = 2000;
-		int cubeCount = 0;
-		for (int i = 0; i < COLS; i++) {
-			int x = baseX + (CUBE_SIDE/2 * (COLS*i));
-			for (int j = 0; j < ROWS; j++) {
-				Ogre::String name = "Cube" + std::to_string(cubeCount);
-				int y = CUBE_SIDE * (j + 1);
-				CreateCube(btVector3(x, y, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), name);
-				cubeCount++;
-			}
-		}
-		//CreateCube(btVector3(2000, 40, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube0");
-		//CreateCube(btVector3(2000, 80, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube1");
-		//CreateCube(btVector3(2000, 120, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube2");
+		CreateCubes(STARTING_X, ROWS, COLS, CUBE_WIDTH);
 	}
   }
 
