@@ -103,7 +103,6 @@ protected:
 
     Ogre::Root*                 mRoot;
 	Ogre::Camera*               mCamera;
-	Ogre::Camera*				mCamera2;
     Ogre::SceneManager*         mSceneMgr;
     Ogre::RenderWindow*         mWindow;
     Ogre::String                mResourcesCfg;
@@ -115,7 +114,6 @@ protected:
     OgreBites::InputContext     mInputContext;
     //OgreBites::SdkTrayManager*	mTrayMgr;
     OgreBites::SdkCameraMan*    mCameraMan;     	// Basic camera controller
-	OgreBites::SdkCameraMan*    mCameraMan2;     	// Basic camera controller
     bool                        mCursorWasVisible;	// Was cursor visible before dialog appeared?
     bool                        mShutDown;
 

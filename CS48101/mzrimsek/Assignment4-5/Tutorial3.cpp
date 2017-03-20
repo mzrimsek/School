@@ -329,8 +329,8 @@ void TutorialApplication::createScene()
   addLocations();
   addSizes();
 
-  mCamera->setPosition(Ogre::Vector3(1500, 30, 1650));
-  mCamera->lookAt(Ogre::Vector3(1963, 30, 1685));
+  mCamera->setPosition(Ogre::Vector3(2100, 60, 1650));
+  mCamera->lookAt(Ogre::Vector3(2050, 50, 1200));
   mCamera->setNearClipDistance(.1);
  
   bool infiniteClip =
@@ -390,16 +390,9 @@ void TutorialApplication::createScene()
  
   mTerrainGroup->freeTemporaryResources();
  
-  // Sky Techniques
-  // mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 300, false);
   mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-
-
-  mCamera2->setPosition(Ogre::Vector3(1500, 1500, 1650));
-  mCamera2->pitch(Ogre::Radian(4.71F));
-  mCamera2->rotate(Ogre::Vector3::NEGATIVE_UNIT_Y, Ogre::Degree(90.0f));
+  
   createBulletSim();
-
 
   mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
   CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
@@ -412,6 +405,8 @@ void TutorialApplication::createScene()
 
   CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
   CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+
+  CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
   CEGUI::Window *Rebuild = wmgr.createWindow("TaharezLook/Button", "Button");
   Rebuild->setText("Y To Restart");
