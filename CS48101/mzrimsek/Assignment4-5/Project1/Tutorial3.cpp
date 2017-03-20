@@ -144,11 +144,12 @@ void TutorialApplication::createBulletSim(void) {
 		dynamicsWorld->addRigidBody(mGroundBody);
 		collisionShapes.push_back(groundShape);
 		//do cube stuff
-		CreateCube(btVector3(2223, 500, 750), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube0");
-		CreateCube(btVector3(2223, 550, 750), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube1");
-		CreateCube(btVector3(2223, 600, 750), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube2");
+		CreateCube(btVector3(2000, 40, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube0");
+		CreateCube(btVector3(2000, 80, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube1");
+		CreateCube(btVector3(2000, 120, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), "Cube2");
 	}
   }
+
 Ogre::ManualObject* TutorialApplication::createCubeMesh(Ogre::String name, Ogre::String matName) {
 
 	Ogre::ManualObject* cube = new Ogre::ManualObject(name);
