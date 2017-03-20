@@ -94,7 +94,8 @@ void TutorialApplication::CreateCubes(int startingX, int rows, int columns, int 
 		for (int j = 0; j < rows; j++) {
 			Ogre::String name = "Cube" + std::to_string(cubeCount);
 			int y = cubeWidth * (j + 1);
-			CreateCube(btVector3(x, y, 1400), 1.0f, btVector3(0.3, 0.3, 0.3), name);
+			double cubeDimension = 12.0 / cubeWidth;
+			CreateCube(btVector3(x, y, 1400), 1.0f, btVector3(cubeDimension, cubeDimension, cubeDimension), name);
 			cubeCount++;
 		}
 	}
