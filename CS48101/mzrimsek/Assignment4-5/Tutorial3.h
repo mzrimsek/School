@@ -39,7 +39,6 @@ protected:
 private:
   CEGUI::OgreRenderer* mRenderer;
   void resetTargets();
-  double timeInt = 0;
   void defineTerrain(long x, long y);
   void processUnbufferedInput(const Ogre::FrameEvent& fe);
   bool fire = false;
@@ -48,6 +47,8 @@ private:
   bool mouseMoved(const OIS::MouseEvent & arg);
   bool mousePressed(const OIS::MouseEvent & arg, OIS::MouseButtonID id);
   bool mouseReleased(const OIS::MouseEvent & arg, OIS::MouseButtonID id);
+  bool keyPressed(const OIS::KeyEvent & arg);
+  bool keyReleased(const OIS::KeyEvent & arg);
   void getContactPairs(std::vector<contactPair> &contactPairs);
   void handleCollisions(std::vector<contactPair> pairs);
   ogreObject* getOgreObject(const btCollisionObject * obj);
@@ -58,8 +59,6 @@ private:
  
   bool isDown = false;
   int numOfSpheres = 0;
-  int numOfCubes = 0;
-  float power = 0;
   OgreBites::Label* mInfoLabel;
   btDefaultCollisionConfiguration* collisionConfiguration;
   btCollisionDispatcher* dispatcher;
@@ -69,11 +68,10 @@ private:
   btCollisionShape* groundShape;
   btAlignedObjectArray<btCollisionShape*> collisionShapes; 
   void removeObject(ogreObject *object);
-  int itemsLeftOver = 0;
-  CEGUI::DefaultWindow *itemsLeft;
-  CEGUI::DefaultWindow *time;
-  CEGUI::DefaultWindow *pointsWindow;
-  int points = 0;
+  CEGUI::DefaultWindow *rows;
+  CEGUI::DefaultWindow *columns;
+  CEGUI::DefaultWindow *size;
+  CEGUI::DefaultWindow *velocity;
 
   ogreObject* ptrToOgreObject;
   std::vector<ogreObject *> ptrToOgreObjects;

@@ -212,18 +212,9 @@ void TutorialApplication::resetTargets() {
 		removeObject(ptrToOgreObjects[i]);
 		i--;
 	}
-	numOfCubes = 0;
-	numOfSpheres = 0;
 	collisionShapes.clear();
 	delete dynamicsWorld;
-	itemsLeftOver = 0;
-	timeInt = 0;
-	points = 0;
 	createBulletSim();
-	char* targetsLeft = (char*)malloc(3 + strlen(" items left") + 1);
-	itoa(itemsLeftOver, targetsLeft, 10);
-	strcat(targetsLeft, " items left");
-	itemsLeft->setText(CEGUI::String(targetsLeft));
 }
 
 void TutorialApplication::removeObject(ogreObject *object) {
@@ -367,34 +358,35 @@ void TutorialApplication::createScene()
 
   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
+  rows = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
+  rows->setText(std::to_string(ROWS));
+  rows->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+
+  columns = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
+  columns->setText(std::to_string(COLS));
+  columns->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  columns->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
+
+  size = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
+  size->setText(std::to_string(CUBE_WIDTH));
+  size->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  size->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.15, 0)));
+
+  velocity = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
+  velocity->setText(std::to_string(VELOCITY));
+  velocity->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  velocity->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.20, 0)));
+
   CEGUI::Window *Rebuild = wmgr.createWindow("TaharezLook/Button", "Button");
   Rebuild->setText("Y To Restart");
   Rebuild->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  Rebuild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
+  Rebuild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.25, 0)));
 
-  //Creates the textbox for the program
-  itemsLeft = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox"); 
-  char* targetsLeft = (char*)malloc(3 + strlen(" items left") + 1);
-  itoa(itemsLeftOver, targetsLeft, 10);
-  strcat(targetsLeft, " items left");
-  itemsLeft->setText(CEGUI::String(targetsLeft));
-  itemsLeft->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-
-  //Creates the textbox for the program
-  time = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
-  time->setText("");
-  time->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  time->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.05, 0)));
-
-  pointsWindow = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
-  pointsWindow->setText("0 Points");
-  pointsWindow->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  pointsWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0.4, 0), CEGUI::UDim(0, 0)));
-
+  sheet->addChild(rows);
+  sheet->addChild(columns);
+  sheet->addChild(size);
+  sheet->addChild(velocity);
   sheet->addChild(Rebuild);
-  sheet->addChild(itemsLeft);
-  sheet->addChild(time);
-  sheet->addChild(pointsWindow);
   CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 }
  
@@ -439,19 +431,9 @@ void TutorialApplication::handleCollisions(std::vector<contactPair> pairs){
 			i--;
 		}
 		else{
-			if (pairs[i].ptrToOgreObject1->bounced || pairs[i].ptrToOgreObject2->bounced){
-				points += 300;
-			}
-			else{
-				points += 500;
-			}
+			
 			//removeObject(pairs[i].ptrToOgreObject1);
 			//removeObject(pairs[i].ptrToOgreObject2);
-			char* targetsLeft = (char*)malloc(3 + strlen(" items left") + 1);
-			itemsLeftOver--;
-			itoa(itemsLeftOver, targetsLeft, 10);
-			strcat(targetsLeft, " items left");
-			itemsLeft->setText(CEGUI::String(targetsLeft));
 			pairs.erase(pairs.begin() + i);
 			i--;
 		}
@@ -530,23 +512,11 @@ void TutorialApplication::getContactPairs(std::vector<contactPair> &contactPairs
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
-  if (itemsLeftOver > 0){
-	  timeInt += fe.timeSinceLastFrame;
-	  std::ostringstream ss;
-	  ss << timeInt;
-	  std::string str = ss.str();
-	  time->setText(CEGUI::String(str.c_str()));
-  }
 
   getContactPairs(contactPairs);
   handleCollisions(contactPairs);
 
   processUnbufferedInput(fe);
-
-  char *pointsVal = (char*)malloc(10 + strlen(" Points"));
-  itoa(points, pointsVal, 10);
-  strcat(pointsVal, " Points");
-  pointsWindow->setText(CEGUI::String(pointsVal));
 
   return ret;
 }
@@ -564,7 +534,6 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 	}
 	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire){
 		fire = false; 
-		points -= 50;
 		
 		std::string projectileName = "Projectile" + std::to_string(numOfSpheres);
 		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, VELOCITY);
@@ -717,6 +686,29 @@ bool TutorialApplication::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseBu
 	mCameraMan->injectMouseUp(arg, id);
 	return true;
 }
+
+bool TutorialApplication::keyPressed(const OIS::KeyEvent &arg)
+{
+	CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
+	context.injectKeyDown((CEGUI::Key::Scan)arg.key);
+	context.injectChar((CEGUI::Key::Scan)arg.text);
+	return true;
+
+	if (arg.key == OIS::KC_ESCAPE)
+	{
+		mShutDown = true;
+	}
+
+	mCameraMan->injectKeyDown(arg);
+	return true;
+}
+
+bool TutorialApplication::keyReleased(const OIS::KeyEvent &arg)
+{
+	CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan)arg.key);
+	return true;
+}
+
  
 #if Ogre_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
