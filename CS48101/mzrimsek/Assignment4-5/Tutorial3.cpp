@@ -55,7 +55,7 @@ void TutorialApplication::CreateSphere(const btVector3 &Position, btScalar Mass,
 	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(Mass, LocalInertia);
 	ptrToOgreObject->btRigidBodyObject = new btRigidBody(Mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
 
-	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject->sceneNodeObject));
+	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
 
 	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
 	ptrToOgreObject->objectDelete = false;
@@ -118,7 +118,7 @@ void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, c
 	ptrToOgreObject->btRigidBodyObject = new btRigidBody(Mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
 
 	// Store a pointer to the Ogre Node so we can update it later
-	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject->sceneNodeObject));
+	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
 
 	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
 	ptrToOgreObject->objectDelete = false;
@@ -213,9 +213,9 @@ void TutorialApplication::createBulletSim(void) {
   }
 
 void TutorialApplication::resetTargets() {
+	//clean up old cubes
 	for (int i = 0; i < ptrToOgreObjects.size(); i++){
-		removeObject(ptrToOgreObjects[i]);
-		i--;
+		ptrToOgreObjects[i]->objectDelete = true;
 	}
 
 	//set global variables from ui inputs
@@ -227,34 +227,6 @@ void TutorialApplication::resetTargets() {
 	collisionShapes.clear();
 	delete dynamicsWorld;
 	createBulletSim();
-}
-
-void TutorialApplication::removeObject(ogreObject *object) {
-	for (int i = 0; i < ptrToOgreObjects.size(); i++){
-		if (ptrToOgreObjects[i] == object){
-			ptrToOgreObjects.erase(ptrToOgreObjects.begin() + i);
-		}
-	}
-	object->entityObject->detachFromParent();
-	mSceneMgr->destroyEntity(object->entityObject);
-	object->entityObject = NULL;
-	mSceneMgr->destroySceneNode(object->sceneNodeObject);
-	object->sceneNodeObject = NULL;
-	object->objectDelete = true;
-
-	if (object->btRigidBodyObject && object->btRigidBodyObject->getMotionState())
-		delete object->btRigidBodyObject->getMotionState();
-	object->myMotionStateObject = NULL;
-	dynamicsWorld->removeCollisionObject(object->btCollisionObjectObject);
-	delete object->btCollisionObjectObject;
-	object->btCollisionObjectObject = NULL;
-	object->btRigidBodyObject = NULL;
-	delete object->btCollisionShapeObject;
-	object->btCollisionShapeObject = NULL;
-
-	// now need to clean up the memory and set the pointer to NULL for that memory
-	delete object;
-	object = NULL;
 }
 
 Ogre::ManualObject* TutorialApplication::createCubeMesh(Ogre::String name, Ogre::String matName) {
@@ -447,47 +419,65 @@ void TutorialApplication::destroyScene()
 
 bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 {
-
-	for (int i = 0; i < ptrToOgreObjects.size(); i++){
+	/*for (int i = 0; i < ptrToOgreObjects.size(); i++){
 		if (ptrToOgreObjects[i]->objectType.substr(0, 10) == "Projectile"){
 			ptrToOgreObjects[i]->timeAlive += evt.timeSinceLastFrame;
 			if (ptrToOgreObjects[i]->timeAlive >= 5){
 				removeObject(ptrToOgreObjects[i]);
 			}
 		}
-	}
+	}*/
 
 	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
+	CheckCollisions();
 	return true;
 }
 
 bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
+	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
+		ogreObject* currentObject = ptrToOgreObjects[i];
+		if (isProjectile(currentObject->objectType)) {
+			std::vector<ogreObject*> collidedObjects = currentObject->objectCollisions;
+
+			for (int j = 0; j < collidedObjects.size(); j++) {
+				//collision logic
+				collidedObjects[j]->objectDelete = true;
+			}
+
+			//currentObject->objectDelete = true;
+		}
+
+		//delete logic
+		if (currentObject->objectDelete) {
+			currentObject->entityObject->detachFromParent();
+			mSceneMgr->destroyEntity(currentObject->entityObject);
+			currentObject->entityObject = NULL;
+			mSceneMgr->destroySceneNode(currentObject->sceneNodeObject);
+			currentObject->sceneNodeObject = NULL;
+
+			dynamicsWorld->removeRigidBody(currentObject->btRigidBodyObject);
+			if (currentObject->btRigidBodyObject && currentObject->btRigidBodyObject->getMotionState())
+				delete currentObject->btRigidBodyObject->getMotionState();
+			currentObject->myMotionStateObject = NULL;
+			dynamicsWorld->removeCollisionObject(currentObject->btCollisionObjectObject);
+			delete currentObject->btCollisionObjectObject;
+			currentObject->btCollisionObjectObject = NULL;
+			currentObject->btRigidBodyObject = NULL;
+			delete currentObject->btCollisionShapeObject;
+			currentObject->btCollisionShapeObject = NULL;
+
+			ptrToOgreObjects.erase(ptrToOgreObjects.begin() + i);
+		}
+	}
 	return true;
 }
 
-void TutorialApplication::handleCollisions(std::vector<contactPair> pairs){
+bool TutorialApplication::isProjectile(std::string name) {
+	return name.substr(0, 10) == "Projectile";
+}
 
-	for (int i = 0; i < pairs.size(); i++) {
-		if (!((pairs[i].ptrToOgreObject1->objectType.substr(0, 10) == "Projectile" && pairs[i].ptrToOgreObject2->objectType.substr(0, 4) == "Cube") || (pairs[i].ptrToOgreObject2->objectType.substr(0, 10) == "Projectile" && pairs[i].ptrToOgreObject1->objectType.substr(0, 4) == "Cube"))) {
-			if (pairs[i].ptrToOgreObject1->objectType.substr(0, 10) == "Projectile"){
-				pairs[i].ptrToOgreObject1->bounced = true;
-			}
-			else if (pairs[i].ptrToOgreObject2->objectType.substr(0, 10) == "Projectile"){
-				pairs[i].ptrToOgreObject1->bounced = true;
-			}
-			pairs.erase(pairs.begin() + i);
-			i--;
-		}
-		else{
-			
-			//removeObject(pairs[i].ptrToOgreObject1);
-			//removeObject(pairs[i].ptrToOgreObject2);
-			pairs.erase(pairs.begin() + i);
-			i--;
-		}
-	}
-
-	contactPairs.clear();
+bool TutorialApplication::isCube(std::string name) {
+	return name.substr(0, 4) == "Cube";
 }
 
 // Called in getCollisionPairs function
@@ -503,7 +493,7 @@ ogreObject* TutorialApplication::getOgreObject(const btCollisionObject * obj) {
 
 }
 
-void TutorialApplication::getContactPairs(std::vector<contactPair> &contactPairs) {
+void TutorialApplication::CheckCollisions() {
 
 	//dynamicsworld->stepsimulation called in frameStarted function
 	int numManifolds = dynamicsWorld->getDispatcher()->getNumManifolds();
@@ -514,44 +504,28 @@ void TutorialApplication::getContactPairs(std::vector<contactPair> &contactPairs
 		const btCollisionObject* obA = contactManifold->getBody0();
 		const btCollisionObject* obB = contactManifold->getBody1();
 
+		ogreObject* ogreA = (ogreObject*)obA->getUserPointer();
+		ogreObject* ogreB = (ogreObject*)obB->getUserPointer();
+
 		int numContacts = contactManifold->getNumContacts();
 		for (int j = 0; j < numContacts; j++) {
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
 			if (pt.getDistance() < 0.f) {
-				// really, all we need to keep is the 1st time an object contacts because we want to deal with contact as soon as it happens
-				// so subsequent contacts can be ignored
+				if (ogreA == NULL || ogreB == NULL) {
+					continue;
+				}
+				
+				if (isProjectile(ogreA->objectType) && isCube(ogreB->objectType)) {
+					if (!ogreB->objectDelete) {
+						ogreA->objectCollisions.push_back(ogreB);
+					}
+				}
 
-				// temporary to hold extracted 1st contact pair information
-				contactPair pushToVec;
-
-				// get the pointers to the pair of contact objects
-				pushToVec.collisionObject1 = contactManifold->getBody0();
-				pushToVec.collisionObject2 = contactManifold->getBody1();
-
-				// up cast those pointers to get the pair of rigidbodypointers
-				pushToVec.rigidBodyObject1 = ((btRigidBody*)contactManifold->getBody0());
-				pushToVec.rigidBodyObject2 = ((btRigidBody*)contactManifold->getBody1());
-
-				pushToVec.ptrToOgreObject1 = getOgreObject(contactManifold->getBody0());
-				pushToVec.ptrToOgreObject2 = getOgreObject(contactManifold->getBody1());
-
-				pushToVec.ptrToOgreObject1Ptr = &(pushToVec.ptrToOgreObject1);
-				pushToVec.ptrToOgreObject2Ptr = &(pushToVec.ptrToOgreObject2);
-
-				const btVector3& ptA = pt.getPositionWorldOnA();
-				const btVector3& ptB = pt.getPositionWorldOnB();
-				// not using the normal
-				const btVector3& normalOnB = pt.m_normalWorldOnB;
-
-				// get the contact position out of bullet and put it in an ogre vector
-				pushToVec.positionObject1.x = ptA.getX();
-				pushToVec.positionObject1.y = ptA.getY();
-				pushToVec.positionObject1.z = ptA.getZ();
-				pushToVec.positionObject2.x = ptB.getX();
-				pushToVec.positionObject2.y = ptB.getY();
-				pushToVec.positionObject2.z = ptB.getZ();
-
-				contactPairs.push_back(pushToVec);
+				if (isProjectile(ogreB->objectType) && isCube(ogreA->objectType)) {
+					if (!ogreA->objectDelete) {
+						ogreB->objectCollisions.push_back(ogreA);
+					}
+				}
 			}
 		}
 	}
@@ -560,9 +534,6 @@ void TutorialApplication::getContactPairs(std::vector<contactPair> &contactPairs
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
   bool ret = BaseApplication::frameRenderingQueued(fe);
-
-  getContactPairs(contactPairs);
-  handleCollisions(contactPairs);
 
   processUnbufferedInput(fe);
 

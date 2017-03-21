@@ -41,6 +41,8 @@ protected:
 private:
   CEGUI::OgreRenderer* mRenderer;
   void resetTargets();
+  bool isProjectile(std::string name);
+  bool isCube(std::string name);
   void defineTerrain(long x, long y);
   void processUnbufferedInput(const Ogre::FrameEvent& fe);
   bool fire = false;
@@ -51,9 +53,8 @@ private:
   bool mouseReleased(const OIS::MouseEvent & arg, OIS::MouseButtonID id);
   bool keyPressed(const OIS::KeyEvent & arg);
   bool keyReleased(const OIS::KeyEvent & arg);
-  void getContactPairs(std::vector<contactPair> &contactPairs);
-  void handleCollisions(std::vector<contactPair> pairs);
   ogreObject* getOgreObject(const btCollisionObject * obj);
+  void CheckCollisions();
   void createBulletSim(void);
   bool mTerrainsImported;
   Ogre::TerrainGroup* mTerrainGroup;
@@ -69,7 +70,6 @@ private:
   btDiscreteDynamicsWorld* dynamicsWorld;
   btCollisionShape* groundShape;
   btAlignedObjectArray<btCollisionShape*> collisionShapes; 
-  void removeObject(ogreObject *object);
   CEGUI::DefaultWindow *rows;
   CEGUI::DefaultWindow *columns;
   CEGUI::DefaultWindow *size;
@@ -81,7 +81,6 @@ private:
 
   ogreObject* ptrToOgreObject;
   std::vector<ogreObject *> ptrToOgreObjects;
-  std::vector<contactPair> contactPairs;
 };
  
 

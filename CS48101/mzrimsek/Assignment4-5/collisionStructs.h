@@ -53,32 +53,7 @@ struct ogreObject {
 	bool objectDelete;
 	bool bounced = false;
 	double timeAlive = 0;
-
-};
-
-
-// struct to hold contact pairs from contact manifold
-struct contactPair {
-	const   btCollisionObject * collisionObject1;
-	const   btCollisionObject * collisionObject2;
-	const   btRigidBody * rigidBodyObject1;
-	const   btRigidBody * rigidBodyObject2;
-	const Ogre::SceneNode * sceneNodeObject1;
-	const Ogre::SceneNode * sceneNodeObject2;
-	Ogre::SceneNode ** ptrToSceneNodeObject1;
-	Ogre::SceneNode ** ptrToSceneNodeObject2;
-	ogreObject * ptrToOgreObject1;
-	ogreObject * ptrToOgreObject2;
-	ogreObject ** ptrToOgreObject1Ptr;
-	ogreObject ** ptrToOgreObject2Ptr;
-	std::string typeObject1;
-	std::string typeObject2;
-	Ogre::Vector3 positionObject1;
-	Ogre::Vector3 positionObject2;
-	// Added
-	const btCollisionShape* collisionShape1;
-	const btCollisionShape* collisionShape2;
-
+	std::vector<ogreObject *> objectCollisions;
 };
 
 #endif
