@@ -370,20 +370,24 @@ void TutorialApplication::createScene()
 
   rows = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   rows->setText(std::to_string(numRows));
+  rows->setTooltipText("Change the number of rows");
   rows->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 
   columns = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   columns->setText(std::to_string(numCols));
+  columns->setTooltipText("Change the number of columns");
   columns->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   columns->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
 
   size = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   size->setText(std::to_string(cube_size));
+  size->setTooltipText("Change Cube Size (Larger means small cubes)");
   size->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   size->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.15, 0)));
 
   velocity = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   velocity->setText(std::to_string(velocity_magnitude));
+  velocity->setTooltipText("Change Ball Velocity");
   velocity->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   velocity->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.20, 0)));
 
