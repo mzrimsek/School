@@ -367,6 +367,7 @@ void TutorialApplication::createScene()
 
   CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
   CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+  CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
@@ -392,7 +393,7 @@ void TutorialApplication::createScene()
   columns->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.20, 0)));
 
   CEGUI::Window *sizeLabel = wmgr.createWindow("TaharezLook/StaticText");
-  sizeLabel->setText("Width - BigNum=Small");
+  sizeLabel->setText("Width (BigNum=Small)");
   sizeLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   sizeLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.25, 0)));
 
@@ -415,6 +416,7 @@ void TutorialApplication::createScene()
   Rebuild->setText("Y To Restart");
   Rebuild->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   Rebuild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.45, 0)));
+  Rebuild->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&TutorialApplication::resetButton, this));
 
   sheet->addChild(rowLabel);
   sheet->addChild(rows);
@@ -425,7 +427,11 @@ void TutorialApplication::createScene()
   sheet->addChild(velocityLabel);
   sheet->addChild(velocity);
   sheet->addChild(Rebuild);
-  CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+}
+
+bool TutorialApplication::resetButton(const CEGUI::EventArgs& args) {
+	resetTargets();
+	return true;
 }
  
 void TutorialApplication::createFrameListener()
@@ -452,6 +458,10 @@ bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 	}
 
 	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
+	return true;
+}
+
+bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 	return true;
 }
 

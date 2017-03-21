@@ -27,10 +27,12 @@ public:
  
 protected:
   virtual void createScene();
+  bool resetButton(const CEGUI::EventArgs& args);
   virtual void createFrameListener();
   virtual void destroyScene();
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
   bool frameStarted(const Ogre::FrameEvent &evt);
+  bool frameEnded(const Ogre::FrameEvent & evt);
   void CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, std::string name);
   void CreateCubes(int startingX, int rows, int columns, int cubeWidth);
   void CreateSphere(const btVector3 &Position, btScalar Mass, const btVector3 &scale, std::string name, float velocity);
