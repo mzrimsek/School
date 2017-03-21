@@ -11,6 +11,7 @@ TutorialApplication::TutorialApplication()
     mTerrainGlobals(0),
     mInfoLabel(0)
 {
+	//init globals from defines
 	numRows = ROWS;
 	numCols = COLS;
 	cube_size = CUBE_WIDTH;
@@ -217,6 +218,7 @@ void TutorialApplication::resetTargets() {
 		i--;
 	}
 
+	//set global variables from ui inputs
 	numRows = std::stoi(rows->getText().c_str());
 	numCols = std::stoi(columns->getText().c_str());
 	cube_size = std::stoi(size->getText().c_str());
@@ -368,6 +370,7 @@ void TutorialApplication::createScene()
 
   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
+  //ui inputs
   CEGUI::Window *rowLabel = wmgr.createWindow("TaharezLook/StaticText");
   rowLabel->setText("Rows");
   rowLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
