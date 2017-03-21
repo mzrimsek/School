@@ -31,9 +31,9 @@ protected:
   virtual void destroyScene();
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
   bool frameStarted(const Ogre::FrameEvent &evt);
-  void CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, Ogre::String name);
+  void CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, std::string name);
   void CreateCubes(int startingX, int rows, int columns, int cubeWidth);
-  void CreateSphere(const btVector3 &Position, btScalar Mass, const btVector3 &scale, char * name, float velocity);
+  void CreateSphere(const btVector3 &Position, btScalar Mass, const btVector3 &scale, std::string name, float velocity);
   Ogre::ManualObject *createCubeMesh(Ogre::String name, Ogre::String matName);
  
 private:
@@ -67,8 +67,6 @@ private:
   btDiscreteDynamicsWorld* dynamicsWorld;
   btCollisionShape* groundShape;
   btAlignedObjectArray<btCollisionShape*> collisionShapes; 
-  void addLocations();
-  void addSizes();
   void removeObject(ogreObject *object);
   int itemsLeftOver = 0;
   CEGUI::DefaultWindow *itemsLeft;
@@ -76,12 +74,9 @@ private:
   CEGUI::DefaultWindow *pointsWindow;
   int points = 0;
 
-
-  std::vector<btVector3> targetLocations;
   ogreObject* ptrToOgreObject;
   std::vector<ogreObject *> ptrToOgreObjects;
   std::vector<contactPair> contactPairs;
-  std::vector<btVector3> sizes;
 };
  
 

@@ -17,7 +17,7 @@ TutorialApplication::~TutorialApplication()
 {
 }
  
-void TutorialApplication::CreateSphere(const btVector3 &Position, btScalar Mass, const btVector3 &scale, char * name, float velocity){
+void TutorialApplication::CreateSphere(const btVector3 &Position, btScalar Mass, const btVector3 &scale, std::string name, float velocity){
 	// empty ogre vectors for the sphere size and position
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
 	Ogre::Vector3 pos = Ogre::Vector3::ZERO;
@@ -75,7 +75,7 @@ void TutorialApplication::CreateSphere(const btVector3 &Position, btScalar Mass,
 	ptrToOgreObject->btRigidBodyObject->setLinearVelocity(FireVelocity * 1);
 }
 
-void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, Ogre::String name) {
+void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, const btVector3 &scale, std::string name) {
 	// empty ogre vectors for the cubes size and position
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
 	Ogre::Vector3 pos = Ogre::Vector3::ZERO;
@@ -130,7 +130,7 @@ void TutorialApplication::CreateCubes(int startingX, int rows, int columns, int 
 	for (int i = 0; i < columns; i++) {
 		int x = startingX + (cubeWidth / 2 * (columns*i));
 		for (int j = 0; j < rows; j++) {
-			Ogre::String name = "Cube" + std::to_string(cubeCount);
+			std::string name = "Cube" + std::to_string(cubeCount);
 			int y = cubeWidth * (j + 1);
 			double cubeDimension = 12.0 / cubeWidth;
 			CreateCube(btVector3(x, y, 1400), 1.0f, btVector3(cubeDimension, cubeDimension, cubeDimension), name);
@@ -207,14 +207,6 @@ void TutorialApplication::createBulletSim(void) {
 	CreateCubes(STARTING_X, ROWS, COLS, CUBE_WIDTH);
   }
 
-btVector3 TutorialApplication::sizeRandomize() {
-	std::random_device seeder;
-	std::mt19937 engine(seeder());
-	std::uniform_int_distribution<int> dist(0, 4);
-	int randNum = dist(engine);
-	return sizes[randNum];
-}
-
 bool TutorialApplication::randomize() {
 	std::random_device seeder;
 	std::mt19937 engine(seeder());
@@ -236,8 +228,6 @@ void TutorialApplication::resetTargets() {
 	numOfSpheres = 0;
 	collisionShapes.clear();
 	delete dynamicsWorld;
-	targetLocations.clear();
-	addLocations();
 	itemsLeftOver = 0;
 	timeInt = 0;
 	points = 0;
@@ -314,31 +304,8 @@ Ogre::ManualObject* TutorialApplication::createCubeMesh(Ogre::String name, Ogre:
 	return cube;
 }
 
-void TutorialApplication::addSizes() {
-	sizes.push_back(btVector3(0.1, 0.1, 0.1));
-	sizes.push_back(btVector3(0.5, 0.5, 0.5));
-	sizes.push_back(btVector3(0.1, 0.5, 0.5));
-	sizes.push_back(btVector3(0.5, 0.1, 0.5));
-	sizes.push_back(btVector3(0.2, 0.3, 0.2));
-}
-
-void TutorialApplication::addLocations(){
-	targetLocations.push_back(btVector3(1500, 30, 1800)); // right of camera
-	targetLocations.push_back(btVector3(1150, 90, 1650)); // behind camera
-	targetLocations.push_back(btVector3(1500, 60, 1200)); // left of camera
-	targetLocations.push_back(btVector3(2000, 30, 1880));
-	targetLocations.push_back(btVector3(2200, 30, 1700));
-	targetLocations.push_back(btVector3(2100, 30, 1500));
-	targetLocations.push_back(btVector3(2400, 30, 1550));
-	targetLocations.push_back(btVector3(3500, 200, 1975));
-	targetLocations.push_back(btVector3(2263, 30, 2000));
-}
-
 void TutorialApplication::createScene()
 {
-  addLocations();
-  addSizes();
-
   mCamera->setPosition(Ogre::Vector3(2100, 60, 1650));
   mCamera->lookAt(Ogre::Vector3(2050, 50, 1200));
   mCamera->setNearClipDistance(.1);
@@ -490,8 +457,8 @@ void TutorialApplication::handleCollisions(std::vector<contactPair> pairs){
 			else{
 				points += 500;
 			}
-			removeObject(pairs[i].ptrToOgreObject1);
-			removeObject(pairs[i].ptrToOgreObject2);
+			//removeObject(pairs[i].ptrToOgreObject1);
+			//removeObject(pairs[i].ptrToOgreObject2);
 			char* targetsLeft = (char*)malloc(3 + strlen(" items left") + 1);
 			itemsLeftOver--;
 			itoa(itemsLeftOver, targetsLeft, 10);
@@ -610,12 +577,9 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire){
 		fire = false; 
 		points -= 50;
-		char *projNum = (char*)malloc(3);
-		itoa(numOfSpheres, projNum, 10);
-		char *projName = (char*)malloc(strlen(projNum) + strlen("Projectile") + 1);
-		strcpy(projName, "Projectile");
-		strcat(projName, projNum);
-		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projName, VELOCITY);
+		
+		std::string projectileName = "Projectile" + std::to_string(numOfSpheres);
+		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, VELOCITY);
 		numOfSpheres++;
 	}
 }
