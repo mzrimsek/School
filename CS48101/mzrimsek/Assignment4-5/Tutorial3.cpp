@@ -557,6 +557,11 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 }
 
 void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
+	static Ogre::Real rotate = .13;
+	static Ogre::Real move = 10;
+
+	Ogre::Vector3 currentPos = mCamera->getPosition();
+	
 	if (!mKeyboard->isKeyDown(OIS::KC_Y) && isDown) {
 		isDown = false;
 	}
@@ -567,6 +572,22 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 	if (mKeyboard->isKeyDown(OIS::KC_SPACE)){
 		fire = true;
 	}
+	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT) || mKeyboard->isKeyDown(OIS::KC_RSHIFT)) {
+		if (mKeyboard->isKeyDown(OIS::KC_LEFT)) {
+			currentPos.x -= move;
+		}
+		else if (mKeyboard->isKeyDown(OIS::KC_RIGHT)) {
+			currentPos.x += move;
+		}
+		else if (mKeyboard->isKeyDown(OIS::KC_DOWN)) {
+			if (currentPos.y > 20) {
+				currentPos.y -= move;
+			}
+		}
+		else if (mKeyboard->isKeyDown(OIS::KC_UP)) {
+			currentPos.y += move;
+		}
+	}
 	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire){
 		fire = false; 
 		
@@ -574,6 +595,8 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, velocity_magnitude);
 		numOfSpheres++;
 	}
+
+	mCamera->setPosition(currentPos);
 }
  
 void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
