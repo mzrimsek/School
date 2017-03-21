@@ -368,37 +368,58 @@ void TutorialApplication::createScene()
 
   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
+  CEGUI::Window *rowLabel = wmgr.createWindow("TaharezLook/StaticText");
+  rowLabel->setText("Rows");
+  rowLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  rowLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.05, 0)));
+
   rows = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   rows->setText(std::to_string(numRows));
-  rows->setTooltipText("Change the number of rows");
   rows->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  rows->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
+
+  CEGUI::Window *colLabel = wmgr.createWindow("TaharezLook/StaticText");
+  colLabel->setText("Columns");
+  colLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  colLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.15, 0)));
 
   columns = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   columns->setText(std::to_string(numCols));
-  columns->setTooltipText("Change the number of columns");
   columns->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  columns->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
+  columns->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.20, 0)));
+
+  CEGUI::Window *sizeLabel = wmgr.createWindow("TaharezLook/StaticText");
+  sizeLabel->setText("Width - BigNum=Small");
+  sizeLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  sizeLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.25, 0)));
 
   size = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   size->setText(std::to_string(cube_size));
-  size->setTooltipText("Change Cube Size (Larger means small cubes)");
   size->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  size->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.15, 0)));
+  size->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.30, 0)));
+
+  CEGUI::Window *velocityLabel = wmgr.createWindow("TaharezLook/StaticText");
+  velocityLabel->setText("Sphere velocity");
+  velocityLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+  velocityLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.35, 0)));
 
   velocity = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
   velocity->setText(std::to_string(velocity_magnitude));
-  velocity->setTooltipText("Change Ball Velocity");
   velocity->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  velocity->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.20, 0)));
+  velocity->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.40, 0)));
 
   CEGUI::Window *Rebuild = wmgr.createWindow("TaharezLook/Button", "Button");
   Rebuild->setText("Y To Restart");
   Rebuild->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
-  Rebuild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.25, 0)));
+  Rebuild->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.45, 0)));
 
+  sheet->addChild(rowLabel);
   sheet->addChild(rows);
+  sheet->addChild(colLabel);
   sheet->addChild(columns);
+  sheet->addChild(sizeLabel);
   sheet->addChild(size);
+  sheet->addChild(velocityLabel);
   sheet->addChild(velocity);
   sheet->addChild(Rebuild);
   CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
