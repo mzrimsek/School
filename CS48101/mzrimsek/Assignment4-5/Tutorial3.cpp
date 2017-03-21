@@ -207,18 +207,6 @@ void TutorialApplication::createBulletSim(void) {
 	CreateCubes(STARTING_X, ROWS, COLS, CUBE_WIDTH);
   }
 
-bool TutorialApplication::randomize() {
-	std::random_device seeder;
-	std::mt19937 engine(seeder());
-	std::uniform_int_distribution<int> dist(0, 10);
-	int randNum = dist(engine);
-	if (randNum >= 5)
-		return true;
-	else
-		return false;
-
-}
-
 void TutorialApplication::resetTargets() {
 	for (int i = 0; i < ptrToOgreObjects.size(); i++){
 		removeObject(ptrToOgreObjects[i]);
@@ -687,7 +675,48 @@ void TutorialApplication::configureTerrainDefaults(Ogre::Light* light)
     "growth_weirdfungus-03_normalheight.dds");
  
 }
- 
+
+CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
+{
+	switch (buttonID)
+	{
+	case OIS::MB_Left:
+		return CEGUI::LeftButton;
+
+	case OIS::MB_Right:
+		return CEGUI::RightButton;
+
+	case OIS::MB_Middle:
+		return CEGUI::MiddleButton;
+
+	default:
+		return CEGUI::LeftButton;
+	}
+}
+
+bool TutorialApplication::mouseMoved(const OIS::MouseEvent &arg)
+{
+	if (CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseMove(arg.state.X.rel, arg.state.Y.rel)) return true;
+	CEGUI::System &sys = CEGUI::System::getSingleton();
+	if (arg.state.Z.rel)
+		sys.getDefaultGUIContext().injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+	mCameraMan->injectMouseMove(arg);
+	return true;
+}
+
+bool TutorialApplication::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+	if (CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(convertButton(id))) return true;
+	mCameraMan->injectMouseDown(arg, id);
+	return true;
+}
+
+bool TutorialApplication::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+	if (CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(convertButton(id))) return true;
+	mCameraMan->injectMouseUp(arg, id);
+	return true;
+}
  
 #if Ogre_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

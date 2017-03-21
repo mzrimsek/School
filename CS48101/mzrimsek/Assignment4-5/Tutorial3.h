@@ -39,14 +39,15 @@ protected:
 private:
   CEGUI::OgreRenderer* mRenderer;
   void resetTargets();
-  bool randomize();
-  btVector3 sizeRandomize();
   double timeInt = 0;
   void defineTerrain(long x, long y);
   void processUnbufferedInput(const Ogre::FrameEvent& fe);
   bool fire = false;
   void initBlendMaps(Ogre::Terrain* terrain);
   void configureTerrainDefaults(Ogre::Light* light);
+  bool mouseMoved(const OIS::MouseEvent & arg);
+  bool mousePressed(const OIS::MouseEvent & arg, OIS::MouseButtonID id);
+  bool mouseReleased(const OIS::MouseEvent & arg, OIS::MouseButtonID id);
   void getContactPairs(std::vector<contactPair> &contactPairs);
   void handleCollisions(std::vector<contactPair> pairs);
   ogreObject* getOgreObject(const btCollisionObject * obj);
