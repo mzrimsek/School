@@ -72,6 +72,10 @@ private:
   CEGUI::DefaultWindow *columns;
   CEGUI::DefaultWindow *size;
   CEGUI::DefaultWindow *velocity;
+  int numRows;
+  int numCols;
+  int cube_size;
+  int velocity_magnitude;
 
   ogreObject* ptrToOgreObject;
   std::vector<ogreObject *> ptrToOgreObjects;

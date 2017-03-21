@@ -11,6 +11,10 @@ TutorialApplication::TutorialApplication()
     mTerrainGlobals(0),
     mInfoLabel(0)
 {
+	numRows = ROWS;
+	numCols = COLS;
+	cube_size = CUBE_WIDTH;
+	velocity_magnitude = VELOCITY;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -204,7 +208,7 @@ void TutorialApplication::createBulletSim(void) {
 		collisionShapes.push_back(groundShape);
 	}
 
-	CreateCubes(STARTING_X, ROWS, COLS, CUBE_WIDTH);
+	CreateCubes(STARTING_X, numRows, numCols, cube_size);
   }
 
 void TutorialApplication::resetTargets() {
@@ -212,6 +216,12 @@ void TutorialApplication::resetTargets() {
 		removeObject(ptrToOgreObjects[i]);
 		i--;
 	}
+
+	numRows = std::stoi(rows->getText().c_str());
+	numCols = std::stoi(columns->getText().c_str());
+	cube_size = std::stoi(size->getText().c_str());
+	velocity_magnitude = std::stoi(velocity->getText().c_str());
+
 	collisionShapes.clear();
 	delete dynamicsWorld;
 	createBulletSim();
@@ -359,21 +369,21 @@ void TutorialApplication::createScene()
   CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
   rows = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
-  rows->setText(std::to_string(ROWS));
+  rows->setText(std::to_string(numRows));
   rows->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 
   columns = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
-  columns->setText(std::to_string(COLS));
+  columns->setText(std::to_string(numCols));
   columns->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   columns->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
 
   size = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
-  size->setText(std::to_string(CUBE_WIDTH));
+  size->setText(std::to_string(cube_size));
   size->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   size->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.15, 0)));
 
   velocity = (CEGUI::DefaultWindow*)wmgr.createWindow("TaharezLook/Editbox");
-  velocity->setText(std::to_string(VELOCITY));
+  velocity->setText(std::to_string(velocity_magnitude));
   velocity->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
   velocity->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.20, 0)));
 
@@ -536,7 +546,7 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 		fire = false; 
 		
 		std::string projectileName = "Projectile" + std::to_string(numOfSpheres);
-		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, VELOCITY);
+		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, velocity_magnitude);
 		numOfSpheres++;
 	}
 }
