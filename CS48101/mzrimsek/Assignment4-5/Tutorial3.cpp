@@ -569,9 +569,18 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 		resetTargets();
 		isDown = true;
 	}
+
 	if (mKeyboard->isKeyDown(OIS::KC_SPACE)){
 		fire = true;
 	}
+	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire) {
+		fire = false;
+
+		std::string projectileName = "Projectile" + std::to_string(numOfSpheres);
+		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, velocity_magnitude);
+		numOfSpheres++;
+	}
+
 	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT) || mKeyboard->isKeyDown(OIS::KC_RSHIFT)) {
 		if (mKeyboard->isKeyDown(OIS::KC_LEFT)) {
 			currentPos.x -= move;
@@ -588,12 +597,17 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 			currentPos.y += move;
 		}
 	}
-	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire){
-		fire = false; 
-		
-		std::string projectileName = "Projectile" + std::to_string(numOfSpheres);
-		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, velocity_magnitude);
-		numOfSpheres++;
+	else if (mKeyboard->isKeyDown(OIS::KC_LEFT)) {
+		mCamera->yaw(Ogre::Degree(5 * rotate));
+	}
+	else if (mKeyboard->isKeyDown(OIS::KC_RIGHT)) {
+		mCamera->yaw(Ogre::Degree(-5 * rotate));
+	}
+	else if (mKeyboard->isKeyDown(OIS::KC_DOWN)) {
+		mCamera->pitch(Ogre::Degree(-5 * rotate));
+	}
+	else if (mKeyboard->isKeyDown(OIS::KC_UP)) {
+		mCamera->pitch(Ogre::Degree(5 * rotate));
 	}
 
 	mCamera->setPosition(currentPos);
