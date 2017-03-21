@@ -100,9 +100,7 @@ void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, c
 	ptrToOgreObject->sceneNodeObject->attachObject(ptrToOgreObject->entityObject);
 	ptrToOgreObject->sceneNodeObject->scale(Ogre::Vector3(scale.getX(), scale.getY(), scale.getZ()));
 
-	//boxNode->setScale(Vector3(0.1,0.1,0.1));
 	Ogre::AxisAlignedBox boundingB = ptrToOgreObject->entityObject->getBoundingBox();
-	//Ogre::AxisAlignedBox boundingB = boxNode->_getWorldAABB();
 	boundingB.scale(Ogre::Vector3(scale.getX(), scale.getY(), scale.getZ()));
 	size = boundingB.getSize()*0.95f;
 	btTransform Transform;
@@ -131,7 +129,6 @@ void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, c
 }
 
 void TutorialApplication::CreateCubes(int startingX, int rows, int columns, int cubeWidth) {
-	int cubeCount = 0;
 	for (int i = 0; i < columns; i++) {
 		int x = startingX + (cubeWidth / 2 * (columns*i));
 		for (int j = 0; j < rows; j++) {
@@ -215,7 +212,7 @@ void TutorialApplication::createBulletSim(void) {
 void TutorialApplication::resetTargets() {
 	//clean up old cubes
 	for (int i = 0; i < ptrToOgreObjects.size(); i++){
-		ptrToOgreObjects[i]->objectDelete = true;
+		RemoveObject(ptrToOgreObjects[i], i);
 	}
 
 	//set global variables from ui inputs
@@ -419,15 +416,6 @@ void TutorialApplication::destroyScene()
 
 bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 {
-	/*for (int i = 0; i < ptrToOgreObjects.size(); i++){
-		if (ptrToOgreObjects[i]->objectType.substr(0, 10) == "Projectile"){
-			ptrToOgreObjects[i]->timeAlive += evt.timeSinceLastFrame;
-			if (ptrToOgreObjects[i]->timeAlive >= 5){
-				removeObject(ptrToOgreObjects[i]);
-			}
-		}
-	}*/
-
 	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
 	CheckCollisions();
 	return true;
@@ -449,27 +437,31 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 
 		//delete logic
 		if (currentObject->objectDelete) {
-			currentObject->entityObject->detachFromParent();
-			mSceneMgr->destroyEntity(currentObject->entityObject);
-			currentObject->entityObject = NULL;
-			mSceneMgr->destroySceneNode(currentObject->sceneNodeObject);
-			currentObject->sceneNodeObject = NULL;
-
-			dynamicsWorld->removeRigidBody(currentObject->btRigidBodyObject);
-			if (currentObject->btRigidBodyObject && currentObject->btRigidBodyObject->getMotionState())
-				delete currentObject->btRigidBodyObject->getMotionState();
-			currentObject->myMotionStateObject = NULL;
-			dynamicsWorld->removeCollisionObject(currentObject->btCollisionObjectObject);
-			delete currentObject->btCollisionObjectObject;
-			currentObject->btCollisionObjectObject = NULL;
-			currentObject->btRigidBodyObject = NULL;
-			delete currentObject->btCollisionShapeObject;
-			currentObject->btCollisionShapeObject = NULL;
-
-			ptrToOgreObjects.erase(ptrToOgreObjects.begin() + i);
+			RemoveObject(currentObject, i);
 		}
 	}
 	return true;
+}
+
+void TutorialApplication::RemoveObject(ogreObject* object, int index) {
+	object->entityObject->detachFromParent();
+	mSceneMgr->destroyEntity(object->entityObject);
+	object->entityObject = NULL;
+	mSceneMgr->destroySceneNode(object->sceneNodeObject);
+	object->sceneNodeObject = NULL;
+
+	dynamicsWorld->removeRigidBody(object->btRigidBodyObject);
+	if (object->btRigidBodyObject && object->btRigidBodyObject->getMotionState())
+		delete object->btRigidBodyObject->getMotionState();
+	object->myMotionStateObject = NULL;
+	dynamicsWorld->removeCollisionObject(object->btCollisionObjectObject);
+	delete object->btCollisionObjectObject;
+	object->btCollisionObjectObject = NULL;
+	object->btRigidBodyObject = NULL;
+	delete object->btCollisionShapeObject;
+	object->btCollisionShapeObject = NULL;
+
+	ptrToOgreObjects.erase(ptrToOgreObjects.begin() + index);
 }
 
 bool TutorialApplication::isProjectile(std::string name) {
@@ -560,9 +552,9 @@ void TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent& fe){
 	else if (!mKeyboard->isKeyDown(OIS::KC_SPACE) && fire) {
 		fire = false;
 
-		std::string projectileName = "Projectile" + std::to_string(numOfSpheres);
+		std::string projectileName = "Projectile" + std::to_string(sphereCount);
 		CreateSphere(btVector3(mCamera->getPosition().x, mCamera->getPosition().y, mCamera->getPosition().z), 1.0f, btVector3(0.05, 0.05, 0.05), projectileName, velocity_magnitude);
-		numOfSpheres++;
+		sphereCount++;
 	}
 
 	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT) || mKeyboard->isKeyDown(OIS::KC_RSHIFT)) {
