@@ -416,6 +416,14 @@ void TutorialApplication::destroyScene()
 
 bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 {
+	for (int i = 0; i < ptrToOgreObjects.size(); i++){
+		if (isProjectile(ptrToOgreObjects[i]->objectType)){
+			ptrToOgreObjects[i]->timeAlive += evt.timeSinceLastFrame;
+			if (ptrToOgreObjects[i]->timeAlive >= 5){
+				RemoveObject(ptrToOgreObjects[i], i);
+			}
+		}
+	}
 	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
 	CheckCollisions();
 	return true;
@@ -427,15 +435,19 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 		if (isProjectile(currentObject->objectType)) {
 			std::vector<ogreObject*> collidedObjects = currentObject->objectCollisions;
 
-			for (int j = 0; j < collidedObjects.size(); j++) {
+			if (collidedObjects.size() == 1) {
+				collidedObjects[0]->objectDelete = true;
+				currentObject->objectDelete = true;
+			}
+			
+			/*for (int j = 0; j < collidedObjects.size(); j++) {
 				//collision logic
 				collidedObjects[j]->objectDelete = true;
-			}
+			}*/
 
 			//currentObject->objectDelete = true;
 		}
 
-		//delete logic
 		if (currentObject->objectDelete) {
 			RemoveObject(currentObject, i);
 		}
