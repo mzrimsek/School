@@ -121,6 +121,7 @@ void TutorialApplication::CreateCube(const btVector3 &Position, btScalar Mass, c
 	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
 	ptrToOgreObject->objectDelete = false;
 	ptrToOgreObject->objectType = name;
+	ptrToOgreObject->isRed = false;
 	ptrToOgreObjects.push_back(ptrToOgreObject);
 
 	// Add it to the physics world
@@ -435,17 +436,24 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 		if (isProjectile(currentObject->objectType)) {
 			std::vector<ogreObject*> collidedObjects = currentObject->objectCollisions;
 
+			//collision logic
 			if (collidedObjects.size() == 1) {
 				collidedObjects[0]->objectDelete = true;
 				currentObject->objectDelete = true;
 			}
-			
-			/*for (int j = 0; j < collidedObjects.size(); j++) {
-				//collision logic
-				collidedObjects[j]->objectDelete = true;
-			}*/
-
-			//currentObject->objectDelete = true;
+			else {
+				for (int j = 0; j < collidedObjects.size(); j++) {
+					ogreObject* currentCollisionObject = collidedObjects[j];
+					if (currentCollisionObject->isRed) {
+						currentCollisionObject->objectDelete = true;
+					}
+					else {
+						currentCollisionObject->entityObject->setMaterialName("Custom/Red");
+						currentCollisionObject->isRed = true;
+					}
+					currentObject->objectDelete = true;
+				}
+			}
 		}
 
 		if (currentObject->objectDelete) {

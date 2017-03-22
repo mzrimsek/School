@@ -53,6 +53,7 @@ struct ogreObject {
 	bool objectDelete;
 	bool bounced = false;
 	double timeAlive = 0;
+	bool isRed;
 	std::vector<ogreObject *> objectCollisions;
 };
 
