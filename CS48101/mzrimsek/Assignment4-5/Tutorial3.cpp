@@ -213,7 +213,7 @@ void TutorialApplication::createBulletSim(void) {
 void TutorialApplication::resetTargets() {
 	//clean up old cubes
 	for (int i = 0; i < ptrToOgreObjects.size(); i++){
-		RemoveObject(ptrToOgreObjects[i], i);
+		ptrToOgreObjects[i]->objectDelete = true;
 	}
 
 	//set global variables from ui inputs
