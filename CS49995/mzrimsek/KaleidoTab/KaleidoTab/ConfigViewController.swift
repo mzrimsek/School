@@ -40,11 +40,12 @@ class ConfigViewController: UIViewController {
     }
     
     @IBAction func updateSpeed(_ sender: UISlider) {
-        let newDelay = TimeInterval(sender.value)
+        let displayValue = (sender.value*100).rounded()/100
+        let newDelay = TimeInterval(1-sender.value)
         
         let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
         
-        speedLabel.text = "(" + String(newDelay) + ")"
+        speedLabel.text = "(" + String(displayValue) + ")"
         kaleidoView.delay = newDelay
         kaleidoView.stopDrawing()
         kaleidoView.startDrawing()
