@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		DA87C2F91E835BBE0074042E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2F81E835BBE0074042E /* AppDelegate.swift */; };
 		DA87C2FB1E835BBE0074042E /* KaleidoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */; };
-		DA87C2FD1E835BBE0074042E /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2FC1E835BBE0074042E /* SecondViewController.swift */; };
+		DA87C2FD1E835BBE0074042E /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2FC1E835BBE0074042E /* ConfigViewController.swift */; };
 		DA87C3001E835BBE0074042E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA87C2FE1E835BBE0074042E /* Main.storyboard */; };
 		DA87C3021E835BBF0074042E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA87C3011E835BBF0074042E /* Assets.xcassets */; };
 		DA87C3051E835BBF0074042E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */; };
@@ -20,7 +20,7 @@
 		DA87C2F51E835BBE0074042E /* KaleidoTab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaleidoTab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA87C2F81E835BBE0074042E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaleidoViewController.swift; sourceTree = "<group>"; };
-		DA87C2FC1E835BBE0074042E /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		DA87C2FC1E835BBE0074042E /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		DA87C2FF1E835BBE0074042E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DA87C3011E835BBF0074042E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA87C3041E835BBF0074042E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,7 +60,7 @@
 			children = (
 				DA87C2F81E835BBE0074042E /* AppDelegate.swift */,
 				DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */,
-				DA87C2FC1E835BBE0074042E /* SecondViewController.swift */,
+				DA87C2FC1E835BBE0074042E /* ConfigViewController.swift */,
 				DA87C2FE1E835BBE0074042E /* Main.storyboard */,
 				DA87C3011E835BBF0074042E /* Assets.xcassets */,
 				DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */,
@@ -143,7 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA87C30D1E835C1C0074042E /* KaleidoView.swift in Sources */,
-				DA87C2FD1E835BBE0074042E /* SecondViewController.swift in Sources */,
+				DA87C2FD1E835BBE0074042E /* ConfigViewController.swift in Sources */,
 				DA87C2F91E835BBE0074042E /* AppDelegate.swift in Sources */,
 				DA87C2FB1E835BBE0074042E /* KaleidoViewController.swift in Sources */,
 			);
