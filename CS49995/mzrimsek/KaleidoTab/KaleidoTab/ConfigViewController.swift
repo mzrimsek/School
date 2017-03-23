@@ -12,6 +12,10 @@ class ConfigViewController: UIViewController {
     
     @IBOutlet var rectangleCountLabel: UILabel!
     @IBOutlet var speedLabel: UILabel!
+    @IBOutlet var minDimensionLabel: UILabel!
+    @IBOutlet var minDimensionStepper: UIStepper!
+    @IBOutlet var maxDimensionLabel: UILabel!
+    @IBOutlet var maxDimensionStepper: UIStepper!
     
     var kaleidoViewContoller : KaleidoViewController?
     
@@ -19,11 +23,6 @@ class ConfigViewController: UIViewController {
         super.viewDidLoad()
         
         kaleidoViewContoller = tabBarController?.viewControllers?[0] as? KaleidoViewController
-        
-        let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
-        
-        rectangleCountLabel.text = String(kaleidoView.viewCount)
-        speedLabel.text = String(kaleidoView.delay)
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -49,6 +48,26 @@ class ConfigViewController: UIViewController {
         kaleidoView.delay = newDelay
         kaleidoView.stopDrawing()
         kaleidoView.startDrawing()
+    }
+    
+    @IBAction func updateMinDimension(_ sender: UIStepper) {
+        let newMin = CGFloat(sender.value)
+        
+        let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
+        
+        minDimensionLabel.text = "(" + String(Int(newMin)) + ")"
+        maxDimensionStepper.minimumValue = Double(newMin)
+        kaleidoView.rectMinDimension = newMin
+    }
+    
+    @IBAction func updateMaxDimension(_ sender: UIStepper) {
+        let newMax = CGFloat(sender.value)
+        
+        let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
+        
+        maxDimensionLabel.text = "(" + String(Int(newMax)) + ")"
+        minDimensionStepper.maximumValue = Double(newMax)
+        kaleidoView.rectMaxDimension = newMax
     }
 }
 
