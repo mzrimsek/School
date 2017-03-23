@@ -20,7 +20,7 @@ class KaleidoView : UIView {
     
     var useAlpha = false
     
-    var delay : TimeInterval = 0.25
+    var delay : TimeInterval = 0.5
     var timer : Timer?
     
     var views : [UIView] = Array()
