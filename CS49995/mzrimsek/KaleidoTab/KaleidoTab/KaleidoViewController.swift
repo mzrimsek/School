@@ -10,6 +10,8 @@ import UIKit
 
 class KaleidoViewController: UIViewController {
     
+    var isPaused = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let view = self.view as! KaleidoView
@@ -22,5 +24,17 @@ class KaleidoViewController: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    @IBAction func handleTouch(_ sender: UITapGestureRecognizer) {
+        let view = self.view as! KaleidoView
+        if(isPaused) {
+            view.startDrawing()
+            isPaused = false
+        }
+        else {
+            view.stopDrawing()
+            isPaused = true
+        }
     }
 }

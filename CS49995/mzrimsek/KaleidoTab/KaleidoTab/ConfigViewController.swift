@@ -9,9 +9,8 @@
 import UIKit
 
 class ConfigViewController: UIViewController {
-    
-    @IBOutlet var rectangleCountLabel: UILabel!
     @IBOutlet var speedLabel: UILabel!
+    @IBOutlet var rectangleCountLabel: UILabel!
     @IBOutlet var minDimensionLabel: UILabel!
     @IBOutlet var minDimensionStepper: UIStepper!
     @IBOutlet var maxDimensionLabel: UILabel!
@@ -29,16 +28,6 @@ class ConfigViewController: UIViewController {
         return true
     }
     
-    @IBAction func updateRectangleCount(_ sender: UISlider) {
-        let newCount = Int(sender.value)*4
-        
-        let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
-        
-        rectangleCountLabel.text = "(" + String(newCount) + ")"
-        kaleidoView.viewCount = newCount
-        kaleidoView.removeSubviews()
-    }
-    
     @IBAction func updateSpeed(_ sender: UISlider) {
         let displayValue = (sender.value*100).rounded()/100
         let newDelay = TimeInterval(1-sender.value)
@@ -47,8 +36,20 @@ class ConfigViewController: UIViewController {
         
         speedLabel.text = "(" + String(displayValue) + ")"
         kaleidoView.delay = newDelay
-        kaleidoView.stopDrawing()
-        kaleidoView.startDrawing()
+        if !(kaleidoViewContoller?.isPaused)! {
+            kaleidoView.stopDrawing()
+            kaleidoView.startDrawing()
+        }
+    }
+    
+    @IBAction func updateRectangleCount(_ sender: UISlider) {
+        let newCount = Int(sender.value)*4
+        
+        let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
+        
+        rectangleCountLabel.text = "(" + String(newCount) + ")"
+        kaleidoView.viewCount = newCount
+        kaleidoView.removeSubviews()
     }
     
     @IBAction func updateMinDimension(_ sender: UIStepper) {
