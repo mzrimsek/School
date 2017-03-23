@@ -7,25 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA52BCC31E8356080074973C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52BCC21E8356080074973C /* AppDelegate.swift */; };
-		DA52BCC51E8356090074973C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52BCC41E8356090074973C /* ViewController.swift */; };
-		DA52BCC81E8356090074973C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA52BCC61E8356090074973C /* Main.storyboard */; };
-		DA52BCCA1E8356090074973C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA52BCC91E8356090074973C /* Assets.xcassets */; };
-		DA52BCCD1E83560A0074973C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA52BCCB1E83560A0074973C /* LaunchScreen.storyboard */; };
+		DA87C2F91E835BBE0074042E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2F81E835BBE0074042E /* AppDelegate.swift */; };
+		DA87C2FB1E835BBE0074042E /* KaleidoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */; };
+		DA87C2FD1E835BBE0074042E /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C2FC1E835BBE0074042E /* SecondViewController.swift */; };
+		DA87C3001E835BBE0074042E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA87C2FE1E835BBE0074042E /* Main.storyboard */; };
+		DA87C3021E835BBF0074042E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA87C3011E835BBF0074042E /* Assets.xcassets */; };
+		DA87C3051E835BBF0074042E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */; };
+		DA87C30D1E835C1C0074042E /* KaleidoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C30C1E835C1C0074042E /* KaleidoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DA52BCBF1E8356080074973C /* KaleidoTab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaleidoTab.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA52BCC21E8356080074973C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DA52BCC41E8356090074973C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		DA52BCC71E8356090074973C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		DA52BCC91E8356090074973C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DA52BCCC1E83560A0074973C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		DA52BCCE1E83560A0074973C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA87C2F51E835BBE0074042E /* KaleidoTab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaleidoTab.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA87C2F81E835BBE0074042E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaleidoViewController.swift; sourceTree = "<group>"; };
+		DA87C2FC1E835BBE0074042E /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		DA87C2FF1E835BBE0074042E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DA87C3011E835BBF0074042E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DA87C3041E835BBF0074042E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		DA87C3061E835BBF0074042E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA87C30C1E835C1C0074042E /* KaleidoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaleidoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DA52BCBC1E8356060074973C /* Frameworks */ = {
+		DA87C2F21E835BBE0074042E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -35,31 +39,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA52BCB61E8356050074973C = {
+		DA87C2EC1E835BBE0074042E = {
 			isa = PBXGroup;
 			children = (
-				DA52BCC11E8356080074973C /* KaleidoTab */,
-				DA52BCC01E8356080074973C /* Products */,
+				DA87C2F71E835BBE0074042E /* KaleidoTab */,
+				DA87C2F61E835BBE0074042E /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		DA52BCC01E8356080074973C /* Products */ = {
+		DA87C2F61E835BBE0074042E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA52BCBF1E8356080074973C /* KaleidoTab.app */,
+				DA87C2F51E835BBE0074042E /* KaleidoTab.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DA52BCC11E8356080074973C /* KaleidoTab */ = {
+		DA87C2F71E835BBE0074042E /* KaleidoTab */ = {
 			isa = PBXGroup;
 			children = (
-				DA52BCC21E8356080074973C /* AppDelegate.swift */,
-				DA52BCC41E8356090074973C /* ViewController.swift */,
-				DA52BCC61E8356090074973C /* Main.storyboard */,
-				DA52BCC91E8356090074973C /* Assets.xcassets */,
-				DA52BCCB1E83560A0074973C /* LaunchScreen.storyboard */,
-				DA52BCCE1E83560A0074973C /* Info.plist */,
+				DA87C2F81E835BBE0074042E /* AppDelegate.swift */,
+				DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */,
+				DA87C2FC1E835BBE0074042E /* SecondViewController.swift */,
+				DA87C2FE1E835BBE0074042E /* Main.storyboard */,
+				DA87C3011E835BBF0074042E /* Assets.xcassets */,
+				DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */,
+				DA87C3061E835BBF0074042E /* Info.plist */,
+				DA87C30C1E835C1C0074042E /* KaleidoView.swift */,
 			);
 			path = KaleidoTab;
 			sourceTree = "<group>";
@@ -67,13 +73,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DA52BCBE1E8356060074973C /* KaleidoTab */ = {
+		DA87C2F41E835BBE0074042E /* KaleidoTab */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA52BCD11E83560A0074973C /* Build configuration list for PBXNativeTarget "KaleidoTab" */;
+			buildConfigurationList = DA87C3091E835BBF0074042E /* Build configuration list for PBXNativeTarget "KaleidoTab" */;
 			buildPhases = (
-				DA52BCBB1E8356060074973C /* Sources */,
-				DA52BCBC1E8356060074973C /* Frameworks */,
-				DA52BCBD1E8356060074973C /* Resources */,
+				DA87C2F11E835BBE0074042E /* Sources */,
+				DA87C2F21E835BBE0074042E /* Frameworks */,
+				DA87C2F31E835BBE0074042E /* Resources */,
 			);
 			buildRules = (
 			);
@@ -81,26 +87,26 @@
 			);
 			name = KaleidoTab;
 			productName = KaleidoTab;
-			productReference = DA52BCBF1E8356080074973C /* KaleidoTab.app */;
+			productReference = DA87C2F51E835BBE0074042E /* KaleidoTab.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		DA52BCB71E8356060074973C /* Project object */ = {
+		DA87C2ED1E835BBE0074042E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Mike Zrimsek";
 				TargetAttributes = {
-					DA52BCBE1E8356060074973C = {
+					DA87C2F41E835BBE0074042E = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = DA52BCBA1E8356060074973C /* Build configuration list for PBXProject "KaleidoTab" */;
+			buildConfigurationList = DA87C2F01E835BBE0074042E /* Build configuration list for PBXProject "KaleidoTab" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -108,54 +114,56 @@
 				en,
 				Base,
 			);
-			mainGroup = DA52BCB61E8356050074973C;
-			productRefGroup = DA52BCC01E8356080074973C /* Products */;
+			mainGroup = DA87C2EC1E835BBE0074042E;
+			productRefGroup = DA87C2F61E835BBE0074042E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DA52BCBE1E8356060074973C /* KaleidoTab */,
+				DA87C2F41E835BBE0074042E /* KaleidoTab */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		DA52BCBD1E8356060074973C /* Resources */ = {
+		DA87C2F31E835BBE0074042E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA52BCCD1E83560A0074973C /* LaunchScreen.storyboard in Resources */,
-				DA52BCCA1E8356090074973C /* Assets.xcassets in Resources */,
-				DA52BCC81E8356090074973C /* Main.storyboard in Resources */,
+				DA87C3051E835BBF0074042E /* LaunchScreen.storyboard in Resources */,
+				DA87C3021E835BBF0074042E /* Assets.xcassets in Resources */,
+				DA87C3001E835BBE0074042E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		DA52BCBB1E8356060074973C /* Sources */ = {
+		DA87C2F11E835BBE0074042E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA52BCC51E8356090074973C /* ViewController.swift in Sources */,
-				DA52BCC31E8356080074973C /* AppDelegate.swift in Sources */,
+				DA87C30D1E835C1C0074042E /* KaleidoView.swift in Sources */,
+				DA87C2FD1E835BBE0074042E /* SecondViewController.swift in Sources */,
+				DA87C2F91E835BBE0074042E /* AppDelegate.swift in Sources */,
+				DA87C2FB1E835BBE0074042E /* KaleidoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		DA52BCC61E8356090074973C /* Main.storyboard */ = {
+		DA87C2FE1E835BBE0074042E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				DA52BCC71E8356090074973C /* Base */,
+				DA87C2FF1E835BBE0074042E /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		DA52BCCB1E83560A0074973C /* LaunchScreen.storyboard */ = {
+		DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				DA52BCCC1E83560A0074973C /* Base */,
+				DA87C3041E835BBF0074042E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -163,7 +171,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DA52BCCF1E83560A0074973C /* Debug */ = {
+		DA87C3071E835BBF0074042E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -213,7 +221,7 @@
 			};
 			name = Debug;
 		};
-		DA52BCD01E83560A0074973C /* Release */ = {
+		DA87C3081E835BBF0074042E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -256,7 +264,7 @@
 			};
 			name = Release;
 		};
-		DA52BCD21E83560A0074973C /* Debug */ = {
+		DA87C30A1E835BBF0074042E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -268,7 +276,7 @@
 			};
 			name = Debug;
 		};
-		DA52BCD31E83560A0074973C /* Release */ = {
+		DA87C30B1E835BBF0074042E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -283,24 +291,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DA52BCBA1E8356060074973C /* Build configuration list for PBXProject "KaleidoTab" */ = {
+		DA87C2F01E835BBE0074042E /* Build configuration list for PBXProject "KaleidoTab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA52BCCF1E83560A0074973C /* Debug */,
-				DA52BCD01E83560A0074973C /* Release */,
+				DA87C3071E835BBF0074042E /* Debug */,
+				DA87C3081E835BBF0074042E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DA52BCD11E83560A0074973C /* Build configuration list for PBXNativeTarget "KaleidoTab" */ = {
+		DA87C3091E835BBF0074042E /* Build configuration list for PBXNativeTarget "KaleidoTab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA52BCD21E83560A0074973C /* Debug */,
-				DA52BCD31E83560A0074973C /* Release */,
+				DA87C30A1E835BBF0074042E /* Debug */,
+				DA87C30B1E835BBF0074042E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = DA52BCB71E8356060074973C /* Project object */;
+	rootObject = DA87C2ED1E835BBE0074042E /* Project object */;
 }
