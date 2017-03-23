@@ -33,15 +33,15 @@ class KaleidoView : UIView {
             currentView = views.count - 4
         }
         
-        let newFrames = getFrame()
-        let backgroundColor = getRandomColor()
-        
-        drawFrame(frame: newFrames.topLeft, color: backgroundColor)
-        drawFrame(frame: newFrames.topRight, color: backgroundColor)
-        drawFrame(frame: newFrames.bottomLeft, color: backgroundColor)
-        drawFrame(frame: newFrames.bottomRight, color: backgroundColor)
-        
-        if currentView >= views.count {
+        if currentView < viewCount {
+            let newFrames = getFrame()
+            let backgroundColor = getRandomColor()
+            drawFrame(frame: newFrames.topLeft, color: backgroundColor)
+            drawFrame(frame: newFrames.topRight, color: backgroundColor)
+            drawFrame(frame: newFrames.bottomLeft, color: backgroundColor)
+            drawFrame(frame: newFrames.bottomRight, color: backgroundColor)
+        }
+        else {
             currentView = 0
         }
     }
