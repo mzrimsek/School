@@ -1,5 +1,5 @@
 //
-//  FirstViewController.swift
+//  KaleidoViewController.swift
 //  KaleidoTab
 //
 //  Created by Mike Zrimsek on 3/22/17.

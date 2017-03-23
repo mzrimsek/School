@@ -64,12 +64,33 @@ class KaleidoView : UIView {
         runLoop.add(timer!, forMode:RunLoopMode(rawValue:"NSDefaultRunLoopMode"))
     }
     
+    func stopDrawing() {
+        if let timer2 = timer
+        {
+            timer2.invalidate()
+        }
+        self.timer = nil
+    }
+    
     func addNewViews() {
         for _ in 0...4 {
             let kaleidoSubview = UIView()
             views.append(kaleidoSubview)
             self.addSubview(kaleidoSubview)
         }
+    }
+    
+    func removeSubviews() {
+        
+        while views.count > viewCount {
+            removeSubview()
+        }
+        currentView = 0
+    }
+    
+    func removeSubview() {
+        let last = views.popLast()
+        last?.removeFromSuperview()
     }
     
     func getFrame() -> (topLeft: CGRect, topRight: CGRect, bottomLeft: CGRect, bottomRight: CGRect) {
