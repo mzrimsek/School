@@ -19,6 +19,11 @@ class ConfigViewController: UIViewController {
         super.viewDidLoad()
         
         kaleidoViewContoller = tabBarController?.viewControllers?[0] as? KaleidoViewController
+        
+        let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
+        
+        rectangleCountLabel.text = String(kaleidoView.viewCount)
+        speedLabel.text = String(kaleidoView.delay)
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -26,14 +31,15 @@ class ConfigViewController: UIViewController {
     }
     
     @IBAction func updateRectangleCount(_ sender: UISlider) {
-        let newCount = Int(sender.value)
+        let newCount = Int(sender.value)*4
         
         let kaleidoView = kaleidoViewContoller?.view as! KaleidoView
         
         rectangleCountLabel.text = "(" + String(newCount) + ")"
-        //kaleidoView.viewCount = newCount
-        //kaleidoView.removeSubviews()
+        kaleidoView.viewCount = newCount
+        kaleidoView.removeSubviews()
     }
+    
     @IBAction func updateSpeed(_ sender: UISlider) {
         let newDelay = TimeInterval(sender.value)
         
