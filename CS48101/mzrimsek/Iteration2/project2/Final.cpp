@@ -1,14 +1,6 @@
 #include "Final.h"
 
-int jumpFlag = 0;
 int forwardFlag = 0;
-int stealthFlag = 0;
-int kickFlag = 0;
-int crouchFlag = 0;
-int backflipFlag = 0;
-int attackFlag = 0;
-int blockFlag = 0;
-int rotateCameraFlag = 0;
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -179,7 +171,7 @@ void TutorialApplication::createScene()
 void TutorialApplication::createNinja() {
 	std::string name = "ninjaNode";
 	btVector3 Position = btVector3(2000, 10, 1925);
-	btScalar mass = 0.1f;
+	btScalar mass = 1.0f;
 	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
 	Ogre::SceneNode *ninjaNode;
 
@@ -217,7 +209,6 @@ void TutorialApplication::createNinja() {
 	ptrToOgreObject->btRigidBodyObject = new btRigidBody(mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
 	ptrToOgreObject->btRigidBodyObject->setAngularFactor(btVector3(0, 0, 0));
 	ptrToOgreObject->btRigidBodyObject->setLinearFactor(btVector3(0, 0, 0));
-	ptrToOgreObject->btRigidBodyObject->setLinearVelocity(btVector3(0, 0, 0));
 	// Store a pointer to the Ogre Node so we can update it later
 	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
 
@@ -425,59 +416,10 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 
 void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 {
-	if (jumpFlag == 1)
-	{
-		jumpFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Jump");
-		mAnimationState->setLoop(false);
-		mAnimationState->setEnabled(true);
-	}
-	else if(forwardFlag != 0)
+	if(forwardFlag != 0)
 	{
 		forwardFlag = 0;
 		mAnimationState = mEntity->getAnimationState("Walk");
-		mAnimationState->setLoop(true);
-		mAnimationState->setEnabled(true);
-	}
-	else if (crouchFlag == 1)
-	{
-		crouchFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Crouch");
-		mAnimationState->setLoop(true);
-		mAnimationState->setEnabled(true);
-	}
-	else if (stealthFlag == 1)
-	{
-		stealthFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Stealth");
-		mAnimationState->setLoop(true);
-		mAnimationState->setEnabled(true);
-	}
-	else if (backflipFlag == 1)
-	{
-		backflipFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Backflip");
-		mAnimationState->setLoop(false);
-		mAnimationState->setEnabled(true);
-	}
-	else if (attackFlag == 1)
-	{
-		attackFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Attack1");
-		mAnimationState->setLoop(false);
-		mAnimationState->setEnabled(true);
-	}
-	else if (kickFlag == 1)
-	{
-		kickFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Kick");
-		mAnimationState->setLoop(false);
-		mAnimationState->setEnabled(true);
-	}
-	else if (blockFlag == 1)
-	{
-		blockFlag = 0;
-		mAnimationState = mEntity->getAnimationState("Block");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
@@ -495,60 +437,26 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	static Ogre::Real move = 250;
 
 	mKeyboard->capture();
-	Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
-	Ogre::SceneNode* ninjaNode = ptrToNinja->sceneNodeObject;
+	btRigidBody* ninjaBody = ptrToNinja->btRigidBodyObject;
 
 	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
-		dirVec.z -= move;
+		ninjaBody->applyCentralForce(btVector3(0, 0, 1000));
+		ninjaBody->setLinearVelocity(btVector3(0, 0, 1000));
 		forwardFlag = 1;
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
 	{
-		dirVec.z += move;
 		forwardFlag = -1;
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
-		ninjaNode->yaw(Ogre::Degree(5 * rotate));
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
-		ninjaNode->yaw(Ogre::Degree(-5 * rotate));
 	}
-	if (mKeyboard->isKeyDown(OIS::KC_SPACE)) {
-		jumpFlag = 1;
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_LCONTROL))
-	{
-		if (jumpFlag == 0) {
-			crouchFlag = 1;
-		}
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
-	{
-		if (jumpFlag == 0) {
-			stealthFlag = 1;
-		}
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_B))
-	{
-		if (jumpFlag == 0) {
-			backflipFlag = 1;
-		}
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_E))
-	{
-		attackFlag = 1;
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_K))
-	{
-		kickFlag = 1;
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_X))
-	{
-		blockFlag = 1;
-	}
+
+	//ninjaBody->setLinearVelocity(btVector3(0, 0, 0));
 
 	/*Ogre::Vector3 ninjaPos = ptrToNinja->objectPosition;
 	float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
