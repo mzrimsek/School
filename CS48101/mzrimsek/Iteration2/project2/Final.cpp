@@ -213,6 +213,8 @@ mSceneMgr->setFog(Ogre::FOG_NONE, fadeColour, 0.002);
    Ogre::Plane plane;
    plane.d = 1000;
    plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
+
+   createBulletSim();
 }
  
 void TutorialApplication::createFrameListener()
