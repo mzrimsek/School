@@ -113,84 +113,73 @@ void TutorialApplication::createBulletSim(void) {
  
 void TutorialApplication::createScene()
 {
-  bool infiniteClip =
-    mRoot->getRenderSystem()->getCapabilities()->hasCapability(
-      Ogre::RSC_INFINITE_FAR_PLANE);
- 
-  mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .2));
- 
-  Ogre::Vector3 lightDir(.55, -.3, .75);
-  lightDir.normalise();
- 
-  Ogre::Light* light = mSceneMgr->createLight("TestLight");
-  light->setType(Ogre::Light::LT_DIRECTIONAL);
-  light->setDirection(lightDir);
-  light->setDiffuseColour(Ogre::ColourValue::White);
-  light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(.2, .2, .2));
 
-  //ninja
-  
-  //draw ogre heads
-  int numEnemies = 20;
-  std::vector<Ogre::SceneNode *> ogreEnemies;
+	Ogre::Vector3 lightDir(.55, -.3, .75);
+	lightDir.normalise();
 
-  for (int i = 0; i < numEnemies; i++) {
-	  Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
-	  Ogre::Real enemyX = 1600 + (i * 70);
+	Ogre::Light* light = mSceneMgr->createLight("TestLight");
+	light->setType(Ogre::Light::LT_DIRECTIONAL);
+	light->setDirection(lightDir);
+	light->setDiffuseColour(Ogre::ColourValue::White);
+	light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
 
-	  Ogre::Entity* ogreEnemy = mSceneMgr->createEntity("ogrehead.mesh");
-	  Ogre::SceneNode* ogreEnemyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(enemyName, Ogre::Vector3(enemyX, 70, 1625));
-	  ogreEnemy->setCastShadows(true);
-	  ogreEnemyNode->attachObject(ogreEnemy);
+	// Terrain
+	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	  ogreEnemies.push_back(ogreEnemyNode);
-  }
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(
+		mSceneMgr,
+		Ogre::Terrain::ALIGN_X_Z,
+		513, 12000.0);
+	mTerrainGroup->setFilenameConvention(Ogre::String("terrain"), Ogre::String("dat"));
+	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
-  // Fog
- Ogre::ColourValue fadeColour(.9, .9, .9);
-  mWindow->getViewport(0)->setBackgroundColour(fadeColour);
- 
-mSceneMgr->setFog(Ogre::FOG_NONE, fadeColour, 0.002);
- 
-  // Terrain
-  mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
- 
-  mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(
-    mSceneMgr,
-    Ogre::Terrain::ALIGN_X_Z,
-    513, 12000.0);
-  mTerrainGroup->setFilenameConvention(Ogre::String("terrain"), Ogre::String("dat"));
-  mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
- 
-  configureTerrainDefaults(light);
- 
-  for (long x = 0; x <= 0; ++x)
-    for (long y = 0; y <= 0; ++y)
-      defineTerrain(x, y);
- 
-  mTerrainGroup->loadAllTerrains(true);
- 
-  if (mTerrainsImported)
-  {
-    Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
- 
-    while (ti.hasMoreElements())
-    {
-      Ogre::Terrain* t = ti.getNext()->instance;
-      initBlendMaps(t);
-    }
-  }
- 
-  mTerrainGroup->freeTemporaryResources();
+	configureTerrainDefaults(light);
 
-  mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
+	for (long x = 0; x <= 0; ++x)
+		for (long y = 0; y <= 0; ++y)
+			defineTerrain(x, y);
 
-   createBulletSim();
+	mTerrainGroup->loadAllTerrains(true);
+
+	if (mTerrainsImported)
+	{
+		Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
+
+		while (ti.hasMoreElements())
+		{
+			Ogre::Terrain* t = ti.getNext()->instance;
+			initBlendMaps(t);
+		}
+	}
+
+	mTerrainGroup->freeTemporaryResources();
+
+	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
+
+	//draw ogre heads
+	int numEnemies = 20;
+	std::vector<Ogre::SceneNode *> ogreEnemies;
+
+	for (int i = 0; i < numEnemies; i++) {
+		Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
+		Ogre::Real enemyX = 1600 + (i * 70);
+
+		Ogre::Entity* ogreEnemy = mSceneMgr->createEntity("ogrehead.mesh");
+		Ogre::SceneNode* ogreEnemyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(enemyName, Ogre::Vector3(enemyX, 70, 1625));
+		ogreEnemy->setCastShadows(true);
+		ogreEnemyNode->attachObject(ogreEnemy);
+
+		ogreEnemies.push_back(ogreEnemyNode);
+	}
+
+	createBulletSim();
 }
 
 void TutorialApplication::createNinja() {
 	std::string name = "ninjaNode";
 	btVector3 Position = btVector3(2000, 10, 1925);
+	btScalar mass = 0.1f;
 	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
 	Ogre::SceneNode *ninjaNode;
 
@@ -221,13 +210,14 @@ void TutorialApplication::createNinja() {
 	Transform.setOrigin(Position);
 	ptrToOgreObject->myMotionStateObject = new MyMotionState(Transform, ptrToOgreObject->sceneNodeObject);
 	//Give the rigid body half the size
-	// of our cube and tell it to create a BoxShape (cube)
 	btVector3 HalfExtents(size.x, size.y, size.z);
 	ptrToOgreObject->btCollisionShapeObject = new btBoxShape(HalfExtents);
-	btVector3 LocalInertia;
-	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(1.0f, LocalInertia);
-	ptrToOgreObject->btRigidBodyObject = new btRigidBody(1.0f, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
-
+	btVector3 LocalInertia = btVector3(0, 0, 0);
+	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(mass, LocalInertia);
+	ptrToOgreObject->btRigidBodyObject = new btRigidBody(mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
+	ptrToOgreObject->btRigidBodyObject->setAngularFactor(btVector3(0, 0, 0));
+	ptrToOgreObject->btRigidBodyObject->setLinearFactor(btVector3(0, 0, 0));
+	ptrToOgreObject->btRigidBodyObject->setLinearVelocity(btVector3(0, 0, 0));
 	// Store a pointer to the Ogre Node so we can update it later
 	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
 
@@ -263,9 +253,9 @@ void TutorialApplication::assignItems(Ogre::SceneNode *node, Ogre::Entity *entit
 
 	//ninja idle animation
 	mEntity = entity;
-	//mAnimationState = mEntity->getAnimationState("Idle1");
-	//mAnimationState->setLoop(true);
-	//mAnimationState->setEnabled(true);
+	mAnimationState = mEntity->getAnimationState("Idle1");
+	mAnimationState->setLoop(true);
+	mAnimationState->setEnabled(true);
 }
  
 void TutorialApplication::createFrameListener()
@@ -560,11 +550,10 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		blockFlag = 1;
 	}
 
-	Ogre::Vector3 ninjaPos = ptrToNinja->objectPosition;
-	//float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
-	//dirVec.y = height - ninjaPos.y;
-	ninjaPos = dirVec;
-	ninjaNode->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	/*Ogre::Vector3 ninjaPos = ptrToNinja->objectPosition;
+	float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
+	dirVec.y = height - ninjaPos.y;
+	ninjaNode->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);*/
 	
 	return true;
 }
