@@ -108,6 +108,7 @@ void TutorialApplication::createBulletSim(void) {
 		dynamicsWorld->addRigidBody(mGroundBody);
 		collisionShapes.push_back(groundShape);
 	}
+	createNinja();
 }
  
 void TutorialApplication::createScene()
@@ -127,34 +128,7 @@ void TutorialApplication::createScene()
   light->setDiffuseColour(Ogre::ColourValue::White);
   light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
 
-  //ninja stuff
-  Ogre::Entity* ninjaEntity = mSceneMgr->createEntity("ninja.mesh");
-  Ogre::SceneNode* ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaNode", Ogre::Vector3(2000, 10, 1925));
-  ninjaEntity->setCastShadows(true);
-  ninjaNode->attachObject(ninjaEntity);
-
-  //back camera
-  ninjaNode->createChildSceneNode("ninjaCameraParent");
-  Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
-  ninjaCameraParent->createChildSceneNode("ninjaCamera", Ogre::Vector3(0, 100, 500));
-  Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
-  Ogre::Camera* backCamera = mSceneMgr->getCamera("PlayerCam");
-  ninjaCamera->attachObject(backCamera);
-
-  //minimap camera
-  ninjaNode->createChildSceneNode("minimapCamParent");
-  Ogre::SceneNode* minimapCamParent = mSceneMgr->getSceneNode("minimapCamParent");
-  minimapCamParent->createChildSceneNode("minimapCameraNode", Ogre::Vector3(0, 800, 0));
-  Ogre::SceneNode* minimapCameraNode = mSceneMgr->getSceneNode("minimapCameraNode");
-  Ogre::Camera* minimapCamera = mSceneMgr->getCamera("MinimapCam");
-  minimapCameraNode->pitch(Ogre::Degree(270));
-  minimapCameraNode->attachObject(minimapCamera);
-
-  //ninja idle animation
-  mEntity = ninjaEntity;
-  mAnimationState = mEntity->getAnimationState("Idle1");
-  mAnimationState->setLoop(true);
-  mAnimationState->setEnabled(true);
+  //ninja
   
   //draw ogre heads
   int numEnemies = 20;
@@ -215,6 +189,86 @@ mSceneMgr->setFog(Ogre::FOG_NONE, fadeColour, 0.002);
    plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 
    createBulletSim();
+}
+
+void TutorialApplication::createNinja() {
+	std::string name = "ninjaNode";
+	btVector3 Position = btVector3(2000, 10, 1925);
+	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
+	Ogre::SceneNode *ninjaNode;
+
+	Ogre::Vector3 size = Ogre::Vector3::ZERO;
+	Ogre::Vector3 pos = Ogre::Vector3::ZERO;
+	// Convert the bullet physics vector to the ogre vector
+	ptrToOgreObject = new ogreObject;
+	pos.x = Position.getX();
+	pos.y = Position.getY();
+	pos.z = Position.getZ();
+	ptrToOgreObject->entityObject = ninja;
+	ptrToOgreObject->entityObject->setCastShadows(true);
+	try {
+		ninjaNode = mSceneMgr->getSceneNode(name);
+		ptrToOgreObject->sceneNodeObject = ninjaNode;
+	}
+	catch (Ogre::Exception& e) {
+		ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
+		ptrToOgreObject->sceneNodeObject = ninjaNode;
+	}
+	ptrToOgreObject->sceneNodeObject->attachObject(ptrToOgreObject->entityObject);
+	assignItems(ninjaNode, ninja);
+
+	Ogre::AxisAlignedBox boundingB = ptrToOgreObject->entityObject->getBoundingBox();
+	size = boundingB.getSize()*0.95f;
+	btTransform Transform;
+	Transform.setIdentity();
+	Transform.setOrigin(Position);
+	ptrToOgreObject->myMotionStateObject = new MyMotionState(Transform, ptrToOgreObject->sceneNodeObject);
+	//Give the rigid body half the size
+	// of our cube and tell it to create a BoxShape (cube)
+	btVector3 HalfExtents(size.x, size.y, size.z);
+	ptrToOgreObject->btCollisionShapeObject = new btBoxShape(HalfExtents);
+	btVector3 LocalInertia;
+	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(1.0f, LocalInertia);
+	ptrToOgreObject->btRigidBodyObject = new btRigidBody(1.0f, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
+
+	// Store a pointer to the Ogre Node so we can update it later
+	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
+
+	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
+	ptrToOgreObject->objectDelete = false;
+	ptrToOgreObject->objectType = name;
+	ptrToOgreObjects.push_back(ptrToOgreObject);
+
+	// Add it to the physics world
+	dynamicsWorld->addRigidBody(ptrToOgreObject->btRigidBodyObject);
+	collisionShapes.push_back(ptrToOgreObject->btCollisionShapeObject);
+
+	ptrToNinja = ptrToOgreObject;
+}
+
+void TutorialApplication::assignItems(Ogre::SceneNode *node, Ogre::Entity *entity) {
+	//back camera
+	node->createChildSceneNode("ninjaCameraParent");
+	Ogre::SceneNode* ninjaCameraParent = mSceneMgr->getSceneNode("ninjaCameraParent");
+	ninjaCameraParent->createChildSceneNode("ninjaCamera", Ogre::Vector3(0, 100, 500));
+	Ogre::SceneNode* ninjaCamera = mSceneMgr->getSceneNode("ninjaCamera");
+	Ogre::Camera* backCamera = mSceneMgr->getCamera("PlayerCam");
+	ninjaCamera->attachObject(backCamera);
+
+	//minimap camera
+	node->createChildSceneNode("minimapCamParent");
+	Ogre::SceneNode* minimapCamParent = mSceneMgr->getSceneNode("minimapCamParent");
+	minimapCamParent->createChildSceneNode("minimapCameraNode", Ogre::Vector3(0, 800, 0));
+	Ogre::SceneNode* minimapCameraNode = mSceneMgr->getSceneNode("minimapCameraNode");
+	Ogre::Camera* minimapCamera = mSceneMgr->getCamera("MinimapCam");
+	minimapCameraNode->pitch(Ogre::Degree(270));
+	minimapCameraNode->attachObject(minimapCamera);
+
+	//ninja idle animation
+	mEntity = entity;
+	//mAnimationState = mEntity->getAnimationState("Idle1");
+	//mAnimationState->setLoop(true);
+	//mAnimationState->setEnabled(true);
 }
  
 void TutorialApplication::createFrameListener()
@@ -455,7 +509,7 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 
 	mKeyboard->capture();
 	Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
-	Ogre::SceneNode* ninjaNode = mSceneMgr->getSceneNode("ninjaNode");
+	Ogre::SceneNode* ninjaNode = ptrToNinja->sceneNodeObject;
 
 	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
@@ -509,10 +563,11 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		blockFlag = 1;
 	}
 
-	Ogre::Vector3 ninjaPos = ninjaNode->getPosition();
-	float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
-	dirVec.y = height - ninjaPos.y;
-	mSceneMgr->getSceneNode("ninjaNode")->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	Ogre::Vector3 ninjaPos = ptrToNinja->objectPosition;
+	//float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
+	//dirVec.y = height - ninjaPos.y;
+	ninjaPos = dirVec;
+	ninjaNode->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 	
 	return true;
 }

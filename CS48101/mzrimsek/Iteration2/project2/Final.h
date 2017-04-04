@@ -27,6 +27,8 @@ public:
  
 protected:
   virtual void createScene();
+  void createNinja();
+  void assignItems(Ogre::SceneNode * node, Ogre::Entity * entity);
   virtual void createFrameListener();
   virtual void destroyScene();
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
@@ -62,7 +64,9 @@ private:
   btDiscreteDynamicsWorld* dynamicsWorld;
   btCollisionShape* groundShape;
   btAlignedObjectArray<btCollisionShape*> collisionShapes;
+
   ogreObject* ptrToOgreObject;
+  ogreObject* ptrToNinja;
   std::vector<ogreObject *> ptrToOgreObjects;
 };
  
