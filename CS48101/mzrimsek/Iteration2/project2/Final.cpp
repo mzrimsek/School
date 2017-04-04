@@ -43,6 +43,72 @@ void TutorialApplication::createViewports()
 	vp->setOverlaysEnabled(false);
 	minimapCam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
+
+void TutorialApplication::createBulletSim(void) {
+	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+	collisionConfiguration = new btDefaultCollisionConfiguration();
+
+	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+	dispatcher = new   btCollisionDispatcher(collisionConfiguration);
+
+	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+	overlappingPairCache = new btDbvtBroadphase();
+
+	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+	solver = new btSequentialImpulseConstraintSolver;
+
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+	dynamicsWorld->setGravity(btVector3(0, -100, 0));
+	{
+		///create a few basic rigid bodies
+		// start with ground plane, 1500, 1500
+		Ogre::Terrain * pTerrain = mTerrainGroup->getTerrain(0, 0);
+		float* terrainHeightData = pTerrain->getHeightData();
+		Ogre::Vector3 terrainPosition = pTerrain->getPosition();
+		float * pDataConvert = new float[pTerrain->getSize() *pTerrain->getSize()];
+		for (int i = 0; i<pTerrain->getSize(); i++)
+			memcpy(
+				pDataConvert + pTerrain->getSize() * i, // source
+				terrainHeightData + pTerrain->getSize() * (pTerrain->getSize() - i - 1), // target
+				sizeof(float)*(pTerrain->getSize()) // size
+			);
+
+		float metersBetweenVertices = pTerrain->getWorldSize() / (pTerrain->getSize() - 1); //edit: fixed 0 -> 1 on 2010-08-13
+		btVector3 localScaling(metersBetweenVertices, 1, metersBetweenVertices);
+
+		btHeightfieldTerrainShape* groundShape = new btHeightfieldTerrainShape(
+			pTerrain->getSize(),
+			pTerrain->getSize(),
+			pDataConvert,
+			1/*ignore*/,
+			pTerrain->getMinHeight(),
+			pTerrain->getMaxHeight(),
+			1,
+			PHY_FLOAT,
+			true);
+
+		groundShape->setUseDiamondSubdivision(true);
+		groundShape->setLocalScaling(localScaling);
+
+		btRigidBody * mGroundBody = new btRigidBody(0, new btDefaultMotionState(), groundShape);
+
+		mGroundBody->getWorldTransform().setOrigin(
+			btVector3(
+				terrainPosition.x,
+				terrainPosition.y + (pTerrain->getMaxHeight() - pTerrain->getMinHeight()) / 2,
+				terrainPosition.z));
+
+		mGroundBody->getWorldTransform().setRotation(
+			btQuaternion(
+				Ogre::Quaternion::IDENTITY.x,
+				Ogre::Quaternion::IDENTITY.y,
+				Ogre::Quaternion::IDENTITY.z,
+				Ogre::Quaternion::IDENTITY.w));
+
+		dynamicsWorld->addRigidBody(mGroundBody);
+		collisionShapes.push_back(groundShape);
+	}
+}
  
 void TutorialApplication::createScene()
 {
@@ -160,6 +226,130 @@ void TutorialApplication::destroyScene()
 {
   OGRE_DELETE mTerrainGroup;
   OGRE_DELETE mTerrainGlobals;
+}
+
+void TutorialApplication::destroyScene()
+{
+	OGRE_DELETE mTerrainGroup;
+	OGRE_DELETE mTerrainGlobals;
+}
+
+bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
+{
+	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
+		if (isProjectile(ptrToOgreObjects[i]->objectType)) {
+			ptrToOgreObjects[i]->timeAlive += evt.timeSinceLastFrame;
+			if (ptrToOgreObjects[i]->timeAlive >= 5) {
+				RemoveObject(ptrToOgreObjects[i], i);
+			}
+		}
+	}
+	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
+	CheckCollisions();
+	return true;
+}
+
+bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
+	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
+		ogreObject* currentObject = ptrToOgreObjects[i];
+		if (isProjectile(currentObject->objectType)) {
+			std::vector<ogreObject*> collidedObjects = currentObject->objectCollisions;
+
+			//collision logic
+			if (collidedObjects.size() == 1) {
+				collidedObjects[0]->objectDelete = true;
+				currentObject->objectDelete = true;
+			}
+			else {
+				for (int j = 0; j < collidedObjects.size(); j++) {
+					ogreObject* currentCollisionObject = collidedObjects[j];
+					if (currentCollisionObject->isRed) {
+						currentCollisionObject->objectDelete = true;
+					}
+					else {
+						currentCollisionObject->entityObject->setMaterialName("Custom/Red");
+						currentCollisionObject->isRed = true;
+					}
+					currentObject->objectDelete = true;
+				}
+			}
+		}
+
+		if (currentObject->objectDelete) {
+			RemoveObject(currentObject, i);
+		}
+	}
+	return true;
+}
+
+void TutorialApplication::RemoveObject(ogreObject* object, int index) {
+	object->entityObject->detachFromParent();
+	mSceneMgr->destroyEntity(object->entityObject);
+	object->entityObject = NULL;
+	mSceneMgr->destroySceneNode(object->sceneNodeObject);
+	object->sceneNodeObject = NULL;
+
+	dynamicsWorld->removeRigidBody(object->btRigidBodyObject);
+	if (object->btRigidBodyObject && object->btRigidBodyObject->getMotionState())
+		delete object->btRigidBodyObject->getMotionState();
+	object->myMotionStateObject = NULL;
+	dynamicsWorld->removeCollisionObject(object->btCollisionObjectObject);
+	delete object->btCollisionObjectObject;
+	object->btCollisionObjectObject = NULL;
+	object->btRigidBodyObject = NULL;
+	delete object->btCollisionShapeObject;
+	object->btCollisionShapeObject = NULL;
+
+	ptrToOgreObjects.erase(ptrToOgreObjects.begin() + index);
+}
+
+ogreObject* TutorialApplication::getOgreObject(const btCollisionObject * obj) {
+	for (int i = 0; i < ptrToOgreObjects.size(); ++i) {
+		if (ptrToOgreObjects[i]->btCollisionObjectObject == obj)
+			return ptrToOgreObjects[i];
+
+	}
+	ogreObject* ret = new ogreObject;
+	return ret;
+
+}
+
+void TutorialApplication::CheckCollisions() {
+
+	//dynamicsworld->stepsimulation called in frameStarted function
+	int numManifolds = dynamicsWorld->getDispatcher()->getNumManifolds();
+	for (int i = 0; i < numManifolds; i++) {
+
+		btPersistentManifold* contactManifold = dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+
+		const btCollisionObject* obA = contactManifold->getBody0();
+		const btCollisionObject* obB = contactManifold->getBody1();
+
+		ogreObject* ogreA = (ogreObject*)obA->getUserPointer();
+		ogreObject* ogreB = (ogreObject*)obB->getUserPointer();
+
+		int numContacts = contactManifold->getNumContacts();
+		for (int j = 0; j < numContacts; j++) {
+			btManifoldPoint& pt = contactManifold->getContactPoint(j);
+			if (pt.getDistance() < 0.f) {
+				if (ogreA == NULL || ogreB == NULL) {
+					continue;
+				}
+
+				if (isProjectile(ogreA->objectType) && isCube(ogreB->objectType)) {
+					if (!ogreB->objectDelete) {
+						ogreA->objectCollisions.push_back(ogreB);
+					}
+				}
+
+				if (isProjectile(ogreB->objectType) && isCube(ogreA->objectType)) {
+					if (!ogreA->objectDelete) {
+						ogreB->objectCollisions.push_back(ogreA);
+					}
+				}
+			}
+		}
+	}
 }
  
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)

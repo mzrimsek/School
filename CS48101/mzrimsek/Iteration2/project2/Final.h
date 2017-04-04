@@ -1,7 +1,23 @@
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
- 
+#include "OgreManualObject.h"
+#include "btBulletDynamicsCommon.h"
+#include "btHeightfieldTerrainShape.h"
 #include "BaseApplication.h"
+#include <cstdlib>
+#include <random>
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
+#include <vector>
+#include <string>
+#include "collisionStructs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string>
+#include <cstring>
+#include <sstream>
+#include <iostream>
  
 class TutorialApplication : public BaseApplication
 {
@@ -17,12 +33,17 @@ protected:
   virtual void createCamera();
   virtual void createViewports();
   virtual void handleAnimations(const Ogre::FrameEvent& evt);
+  bool frameStarted(const Ogre::FrameEvent &evt);
+  bool frameEnded(const Ogre::FrameEvent & evt);
+  void RemoveObject(ogreObject * object, int index);
  
 private:
   void defineTerrain(long x, long y);
   void initBlendMaps(Ogre::Terrain* terrain);
   void configureTerrainDefaults(Ogre::Light* light);
   bool processUnbufferedInput(const Ogre::FrameEvent& fe);
+  void createBulletSim(void);  
+  void CheckCollisions();
  
   bool mTerrainsImported;
   Ogre::TerrainGroup* mTerrainGroup;
@@ -32,6 +53,16 @@ private:
  
   Ogre::AnimationState*		mAnimationState;
   Ogre::Entity*				mEntity;
+
+  btDefaultCollisionConfiguration* collisionConfiguration;
+  btCollisionDispatcher* dispatcher;
+  btBroadphaseInterface* overlappingPairCache;
+  btSequentialImpulseConstraintSolver* solver;
+  btDiscreteDynamicsWorld* dynamicsWorld;
+  btCollisionShape* groundShape;
+  btAlignedObjectArray<btCollisionShape*> collisionShapes;
+  ogreObject* ptrToOgreObject;
+  std::vector<ogreObject *> ptrToOgreObjects;
 };
  
 

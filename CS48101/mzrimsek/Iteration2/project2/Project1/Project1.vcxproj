@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="..\BaseApplication.h" />
     <ClInclude Include="..\Final.h" />
+    <ClInclude Include="collisionStructs.h" />
     <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>

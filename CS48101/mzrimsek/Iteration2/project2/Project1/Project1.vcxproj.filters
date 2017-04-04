@@ -32,6 +32,9 @@
     <ClInclude Include="..\Final.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="collisionStructs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project11.rc">
