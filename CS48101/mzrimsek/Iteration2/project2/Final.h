@@ -44,6 +44,7 @@ private:
   bool processUnbufferedInput(const Ogre::FrameEvent& fe);
   void createBulletSim(void);  
   void CheckCollisions();
+  ogreObject* getOgreObject(const btCollisionObject * obj);
  
   bool mTerrainsImported;
   Ogre::TerrainGroup* mTerrainGroup;

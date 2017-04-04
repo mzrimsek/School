@@ -24,16 +24,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BaseApplication.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Final.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="collisionStructs.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\collisionStructs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

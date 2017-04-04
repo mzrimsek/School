@@ -228,21 +228,15 @@ void TutorialApplication::destroyScene()
   OGRE_DELETE mTerrainGlobals;
 }
 
-void TutorialApplication::destroyScene()
-{
-	OGRE_DELETE mTerrainGroup;
-	OGRE_DELETE mTerrainGlobals;
-}
-
 bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 {
 	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
-		if (isProjectile(ptrToOgreObjects[i]->objectType)) {
+		/*if (isProjectile(ptrToOgreObjects[i]->objectType)) {
 			ptrToOgreObjects[i]->timeAlive += evt.timeSinceLastFrame;
 			if (ptrToOgreObjects[i]->timeAlive >= 5) {
 				RemoveObject(ptrToOgreObjects[i], i);
 			}
-		}
+		}*/
 	}
 	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
 	CheckCollisions();
@@ -252,7 +246,7 @@ bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
 		ogreObject* currentObject = ptrToOgreObjects[i];
-		if (isProjectile(currentObject->objectType)) {
+		/*if (isProjectile(currentObject->objectType)) {
 			std::vector<ogreObject*> collidedObjects = currentObject->objectCollisions;
 
 			//collision logic
@@ -277,7 +271,7 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 
 		if (currentObject->objectDelete) {
 			RemoveObject(currentObject, i);
-		}
+		}*/
 	}
 	return true;
 }
@@ -336,7 +330,7 @@ void TutorialApplication::CheckCollisions() {
 					continue;
 				}
 
-				if (isProjectile(ogreA->objectType) && isCube(ogreB->objectType)) {
+				/*if (isProjectile(ogreA->objectType) && isCube(ogreB->objectType)) {
 					if (!ogreB->objectDelete) {
 						ogreA->objectCollisions.push_back(ogreB);
 					}
@@ -346,7 +340,7 @@ void TutorialApplication::CheckCollisions() {
 					if (!ogreA->objectDelete) {
 						ogreB->objectCollisions.push_back(ogreA);
 					}
-				}
+				}*/
 			}
 		}
 	}
