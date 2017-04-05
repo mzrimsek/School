@@ -1,6 +1,6 @@
 #include "Final.h"
 
-int forwardFlag = 0;
+
  
 TutorialApplication::TutorialApplication()
   : mTerrainGroup(0),
@@ -9,6 +9,8 @@ TutorialApplication::TutorialApplication()
 	mAnimationState(0),
 	mEntity(0)
 {
+	forwardFlag = 0;
+	points = 0;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -151,6 +153,30 @@ void TutorialApplication::createScene()
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
 	createBulletSim();
+
+	mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+	CEGUI::Font::setDefaultResourceGroup("Fonts");
+	CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+	CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+	CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
+	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+
+	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
+
+	//ui inputs
+	pointsLabel = wmgr.createWindow("TaharezLook/StaticText");
+	std::string pointsText = "Points: " + points;
+	pointsLabel->setText(pointsText);
+	pointsLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+	pointsLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.05, 0)));
+
+	sheet->addChild(pointsLabel);
 }
 
 void TutorialApplication::createNinja() {
@@ -387,12 +413,18 @@ void TutorialApplication::CheckCollisions() {
 				if (isNinja(ogreA->objectType) && isOgre(ogreB->objectType)) {
 					if (!ogreB->objectDelete) {
 						ogreA->objectCollisions.push_back(ogreB);
+						points += 100;
+						std::string pointsText = "Points: " + points;
+						pointsLabel->setText(pointsText);
 					}
 				}
 
 				if (isNinja(ogreB->objectType) && isOgre(ogreA->objectType)) {
 					if (!ogreA->objectDelete) {
 						ogreB->objectCollisions.push_back(ogreA);
+						points += 100;
+						std::string pointsText = "Points: " + points;
+						pointsLabel->setText(pointsText);
 					}
 				}
 			}
@@ -448,7 +480,6 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 		mAnimationState = mEntity->getAnimationState("Idle1");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
-		ptrToNinja->btRigidBodyObject->setLinearVelocity(btVector3(0, 0, 0));
 		//ptrToNinja->btRigidBodyObject->setAngularVelocity(btVector3(0, 0, 0));
 	}
 }

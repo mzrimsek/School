@@ -44,6 +44,7 @@ protected:
   void RemoveObject(ogreObject * object, int index);
  
 private:
+  CEGUI::OgreRenderer* mRenderer;
   void defineTerrain(long x, long y);
   void initBlendMaps(Ogre::Terrain* terrain);
   void configureTerrainDefaults(Ogre::Light* light);
@@ -72,6 +73,10 @@ private:
   ogreObject* ptrToOgreObject;
   ogreObject* ptrToNinja;
   std::vector<ogreObject *> ptrToOgreObjects;
+
+  CEGUI::Window *pointsLabel;
+  int forwardFlag;
+  int points;
 };
  
 
