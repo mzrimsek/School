@@ -29,8 +29,12 @@ protected:
   virtual void createScene();
   void createNinja();
   void assignItems(Ogre::SceneNode * node, Ogre::Entity * entity);
+  void createOgre(std::string name, btScalar mass, btVector3 & Position);
+  void createOgres(int numOgres);
   virtual void createFrameListener();
   virtual void destroyScene();
+  bool isNinja(std::string name);
+  bool isOgre(std::string name);
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
   virtual void createCamera();
   virtual void createViewports();

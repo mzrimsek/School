@@ -50,7 +50,7 @@ void TutorialApplication::createBulletSim(void) {
 	solver = new btSequentialImpulseConstraintSolver;
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-	dynamicsWorld->setGravity(btVector3(0, -100, 0));
+	dynamicsWorld->setGravity(btVector3(0, -980, 0));
 	{
 		///create a few basic rigid bodies
 		// start with ground plane, 1500, 1500
@@ -101,6 +101,7 @@ void TutorialApplication::createBulletSim(void) {
 		collisionShapes.push_back(groundShape);
 	}
 	createNinja();
+	createOgres(20);
 }
  
 void TutorialApplication::createScene()
@@ -148,22 +149,6 @@ void TutorialApplication::createScene()
 	mTerrainGroup->freeTemporaryResources();
 
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-
-	//draw ogre heads
-	int numEnemies = 20;
-	std::vector<Ogre::SceneNode *> ogreEnemies;
-
-	for (int i = 0; i < numEnemies; i++) {
-		Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
-		Ogre::Real enemyX = 1600 + (i * 70);
-
-		Ogre::Entity* ogreEnemy = mSceneMgr->createEntity("ogrehead.mesh");
-		Ogre::SceneNode* ogreEnemyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(enemyName, Ogre::Vector3(enemyX, 70, 1625));
-		ogreEnemy->setCastShadows(true);
-		ogreEnemyNode->attachObject(ogreEnemy);
-
-		ogreEnemies.push_back(ogreEnemyNode);
-	}
 
 	createBulletSim();
 }
@@ -248,6 +233,56 @@ void TutorialApplication::assignItems(Ogre::SceneNode *node, Ogre::Entity *entit
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
 }
+
+void TutorialApplication::createOgre(std::string name, btScalar mass, btVector3 &Position) {
+	Ogre::Vector3 size = Ogre::Vector3::ZERO;
+	// Convert the bullet physics vector to the ogre vector
+	ptrToOgreObject = new ogreObject;
+	ptrToOgreObject->entityObject = mSceneMgr->createEntity("ogrehead.mesh");;
+	ptrToOgreObject->entityObject->setCastShadows(true);
+	try {
+		ptrToOgreObject->sceneNodeObject = mSceneMgr->getSceneNode(name);;
+	}
+	catch (Ogre::Exception& e) {
+		ptrToOgreObject->sceneNodeObject = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
+	}
+	ptrToOgreObject->sceneNodeObject->attachObject(ptrToOgreObject->entityObject);
+
+	Ogre::AxisAlignedBox boundingB = ptrToOgreObject->entityObject->getBoundingBox();
+	size = boundingB.getSize()*0.95f;
+	btTransform Transform;
+	Transform.setIdentity();
+	Transform.setOrigin(Position);
+	ptrToOgreObject->myMotionStateObject = new MyMotionState(Transform, ptrToOgreObject->sceneNodeObject);
+	//Give the rigid body half the size
+	btVector3 HalfExtents(size.x, size.y, size.z);
+	ptrToOgreObject->btCollisionShapeObject = new btBoxShape(HalfExtents);
+	btVector3 LocalInertia = btVector3(0, 0, 0);
+	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(mass, LocalInertia);
+	ptrToOgreObject->btRigidBodyObject = new btRigidBody(mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
+	ptrToOgreObject->btRigidBodyObject->setAngularFactor(btVector3(0, 0, 0));
+	ptrToOgreObject->btRigidBodyObject->setLinearFactor(btVector3(0, 0, 0));
+	// Store a pointer to the Ogre Node so we can update it later
+	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
+
+	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
+	ptrToOgreObject->objectDelete = false;
+	ptrToOgreObject->objectType = name;
+	ptrToOgreObjects.push_back(ptrToOgreObject);
+
+	// Add it to the physics world
+	dynamicsWorld->addRigidBody(ptrToOgreObject->btRigidBodyObject);
+	collisionShapes.push_back(ptrToOgreObject->btCollisionShapeObject);
+}
+
+void TutorialApplication::createOgres(int numOgres) {
+	//draw ogre heads
+
+	for (int i = 0; i < numOgres; i++) {
+		Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
+		createOgre(enemyName, 1.0f, btVector3(1600 + (i * 70), 70, 1625));
+	}
+}
  
 void TutorialApplication::createFrameListener()
 {
@@ -262,16 +297,16 @@ void TutorialApplication::destroyScene()
   OGRE_DELETE mTerrainGlobals;
 }
 
+bool TutorialApplication::isNinja(std::string name) {
+	return name.substr(0, 5) == "ninja";
+}
+
+bool TutorialApplication::isOgre(std::string name) {
+	return name.substr(0, 4) == "ogre";
+}
+
 bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 {
-	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
-		/*if (isProjectile(ptrToOgreObjects[i]->objectType)) {
-			ptrToOgreObjects[i]->timeAlive += evt.timeSinceLastFrame;
-			if (ptrToOgreObjects[i]->timeAlive >= 5) {
-				RemoveObject(ptrToOgreObjects[i], i);
-			}
-		}*/
-	}
 	dynamicsWorld->stepSimulation(evt.timeSinceLastFrame);
 	CheckCollisions();
 	return true;
@@ -280,32 +315,17 @@ bool TutorialApplication::frameStarted(const Ogre::FrameEvent &evt)
 bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
 		ogreObject* currentObject = ptrToOgreObjects[i];
-		/*if (isProjectile(currentObject->objectType)) {
+		if (isNinja(currentObject->objectType)) {
 			std::vector<ogreObject*> collidedObjects = currentObject->objectCollisions;
 
-			//collision logic
-			if (collidedObjects.size() == 1) {
-				collidedObjects[0]->objectDelete = true;
-				currentObject->objectDelete = true;
-			}
-			else {
-				for (int j = 0; j < collidedObjects.size(); j++) {
-					ogreObject* currentCollisionObject = collidedObjects[j];
-					if (currentCollisionObject->isRed) {
-						currentCollisionObject->objectDelete = true;
-					}
-					else {
-						currentCollisionObject->entityObject->setMaterialName("Custom/Red");
-						currentCollisionObject->isRed = true;
-					}
-					currentObject->objectDelete = true;
-				}
+			for (int j = 0; j < collidedObjects.size(); j++) {
+				collidedObjects[j]->objectDelete = true;
 			}
 		}
 
 		if (currentObject->objectDelete) {
 			RemoveObject(currentObject, i);
-		}*/
+		}
 	}
 	return true;
 }
@@ -364,17 +384,17 @@ void TutorialApplication::CheckCollisions() {
 					continue;
 				}
 
-				/*if (isProjectile(ogreA->objectType) && isCube(ogreB->objectType)) {
+				if (isNinja(ogreA->objectType) && isOgre(ogreB->objectType)) {
 					if (!ogreB->objectDelete) {
 						ogreA->objectCollisions.push_back(ogreB);
 					}
 				}
 
-				if (isProjectile(ogreB->objectType) && isCube(ogreA->objectType)) {
+				if (isNinja(ogreB->objectType) && isOgre(ogreA->objectType)) {
 					if (!ogreA->objectDelete) {
 						ogreB->objectCollisions.push_back(ogreA);
 					}
-				}*/
+				}
 			}
 		}
 	}
@@ -428,6 +448,8 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 		mAnimationState = mEntity->getAnimationState("Idle1");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
+		ptrToNinja->btRigidBodyObject->setLinearVelocity(btVector3(0, 0, 0));
+		//ptrToNinja->btRigidBodyObject->setAngularVelocity(btVector3(0, 0, 0));
 	}
 }
 
@@ -441,8 +463,6 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 
 	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
-		ninjaBody->applyCentralForce(btVector3(0, 0, 1000));
-		ninjaBody->setLinearVelocity(btVector3(0, 0, 1000));
 		forwardFlag = 1;
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
@@ -451,17 +471,14 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
+		//ninjaBody->setAngularVelocity(btVector3(0, 5 * rotate, 0));
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
+		//ninjaBody->setAngularVelocity(btVector3(0, -5 * rotate, 0));
 	}
 
-	//ninjaBody->setLinearVelocity(btVector3(0, 0, 0));
-
-	/*Ogre::Vector3 ninjaPos = ptrToNinja->objectPosition;
-	float height = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(ninjaPos);
-	dirVec.y = height - ninjaPos.y;
-	ninjaNode->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);*/
+	ninjaBody->setLinearVelocity(btVector3(0, 0, -1000 * forwardFlag));
 	
 	return true;
 }
