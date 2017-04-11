@@ -2,7 +2,7 @@
 //  KaleidoViewController.swift
 //  KaleidoTab
 //
-//  Created by Mike Zrimsek on 3/22/17.
+//  Created by Mike Zrimsek on 4/11/17.
 //  Copyright © 2017 Mike Zrimsek. All rights reserved.
 //
 
@@ -39,7 +39,9 @@ class KaleidoViewController: UIViewController {
     }
     
     @IBAction func handleDoubleTouch(_ sender: UITapGestureRecognizer) {
-        let configController = ConfigViewController()
-        self.navigationController?.pushViewController(configController, animated: true)
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "ConfigViewController") as! ConfigViewController
+        self.navigationController?.pushViewController(resultViewController, animated: true)
     }
+    
 }
