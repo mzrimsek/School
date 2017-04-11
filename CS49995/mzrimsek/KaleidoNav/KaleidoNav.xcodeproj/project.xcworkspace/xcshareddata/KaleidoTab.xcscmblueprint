@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "979a3d63-56f5-400a-9444-b1cc7aa47cb3++8362",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "979a3d63-56f5-400a-9444-b1cc7aa47cb3++8362" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2FD660FC337847ECC45CD90A6BE3F228BCB0F6C1" : 9223372036854775807,
+    "979a3d63-56f5-400a-9444-b1cc7aa47cb3++8362" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "60F4B09F-4D7F-4299-98B0-33BE397C75B9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2FD660FC337847ECC45CD90A6BE3F228BCB0F6C1" : "..",
+    "979a3d63-56f5-400a-9444-b1cc7aa47cb3++8362" : "mzrimsek\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "KaleidoTab",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "KaleidoNav\/KaleidoTab.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mzrimsek\/school",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2FD660FC337847ECC45CD90A6BE3F228BCB0F6C1"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/svn.cs.kent.edu\/courses\/cs49995\/svn",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "979a3d63-56f5-400a-9444-b1cc7aa47cb3++8362"
+    }
+  ]
+}
