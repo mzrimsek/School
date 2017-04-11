@@ -11,9 +11,14 @@ import UIKit
 class KaleidoViewController: UIViewController {
     
     var isPaused = false
+    var configViewContoller : ConfigViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        configViewContoller = storyBoard.instantiateViewController(withIdentifier: "ConfigViewController") as! ConfigViewController
+        
         let view = self.view as! KaleidoView
         view.startDrawing()
     }
@@ -39,9 +44,7 @@ class KaleidoViewController: UIViewController {
     }
     
     @IBAction func handleDoubleTouch(_ sender: UITapGestureRecognizer) {
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let resultViewController = storyBoard.instantiateViewController(withIdentifier: "ConfigViewController") as! ConfigViewController
-        self.navigationController?.pushViewController(resultViewController, animated: true)
+        self.navigationController?.pushViewController(configViewContoller!, animated: true)
     }
     
 }
