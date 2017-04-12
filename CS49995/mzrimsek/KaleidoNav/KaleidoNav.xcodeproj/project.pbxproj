@@ -14,6 +14,7 @@
 		DA87C3021E835BBF0074042E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA87C3011E835BBF0074042E /* Assets.xcassets */; };
 		DA87C3051E835BBF0074042E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */; };
 		DA87C30D1E835C1C0074042E /* KaleidoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87C30C1E835C1C0074042E /* KaleidoView.swift */; };
+		DAC945341E9DB89300011B41 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAC945331E9DB89300011B41 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,8 +25,8 @@
 		DA87C2FF1E835BBE0074042E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DA87C3011E835BBF0074042E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA87C3041E835BBF0074042E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		DA87C3061E835BBF0074042E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA87C30C1E835C1C0074042E /* KaleidoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KaleidoView.swift; sourceTree = "<group>"; };
+		DAC945331E9DB89300011B41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,17 +59,16 @@
 		DA87C2F71E835BBE0074042E /* KaleidoNav */ = {
 			isa = PBXGroup;
 			children = (
+				DAC945331E9DB89300011B41 /* Info.plist */,
 				DA87C2F81E835BBE0074042E /* AppDelegate.swift */,
 				DA87C2FA1E835BBE0074042E /* KaleidoViewController.swift */,
 				DA87C2FC1E835BBE0074042E /* ConfigViewController.swift */,
 				DA87C2FE1E835BBE0074042E /* Main.storyboard */,
 				DA87C3011E835BBF0074042E /* Assets.xcassets */,
 				DA87C3031E835BBF0074042E /* LaunchScreen.storyboard */,
-				DA87C3061E835BBF0074042E /* Info.plist */,
 				DA87C30C1E835C1C0074042E /* KaleidoView.swift */,
 			);
-			name = KaleidoNav;
-			path = KaleidoTab;
+			path = KaleidoNav;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,6 +130,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAC945341E9DB89300011B41 /* Info.plist in Resources */,
 				DA87C3051E835BBF0074042E /* LaunchScreen.storyboard in Resources */,
 				DA87C3021E835BBF0074042E /* Assets.xcassets in Resources */,
 				DA87C3001E835BBE0074042E /* Main.storyboard in Resources */,
@@ -269,7 +270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = KaleidoTab/Info.plist;
+				INFOPLIST_FILE = KaleidoNav/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zrimsek.KaleidoNav;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -281,7 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = KaleidoTab/Info.plist;
+				INFOPLIST_FILE = KaleidoNav/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zrimsek.KaleidoNav;
 				PRODUCT_NAME = "$(TARGET_NAME)";
