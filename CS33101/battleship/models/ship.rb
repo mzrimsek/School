@@ -1,8 +1,7 @@
-require './location' 
+require_relative 'location' 
 
 class Ship
-    attr_accessor :location
-    attr_accessor :is_sunk
+    attr_accessor :location, :is_sunk
 
     def initialize(location, is_sunk)
         @location = location
