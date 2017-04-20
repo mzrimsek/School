@@ -40,7 +40,7 @@ class Game
         fire_char_coord = gets
         fire_char_coord = fire_char_coord.chomp
 
-        Location.new(fire_num_coord, fire_char_coord)
+        Location.new(fire_num_coord.to_i, fire_char_coord.to_s)
     end
 
     def update_ship(ship)
@@ -54,15 +54,15 @@ class Game
 
     def take_turn
         fire_location = get_fire_location
-
+        
         @fleet.each do |ship|
             if ship.location == fire_location
                 update_ship(ship)
-                break
-            else
-                puts "Sorry, no ship here!"
+                return
             end
         end
+
+        puts "Sorry, no ship here!"
     end
 
     def run
