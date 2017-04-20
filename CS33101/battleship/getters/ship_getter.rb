@@ -3,7 +3,7 @@ require_relative '../models/ship'
 
 class ShipGetter
     private_class_method def self.get_random_location
-        rand_num_coord = rand(0...6)
+        rand_num_coord = rand(0...5)
         rand_char_coord = rand(65...70).chr
 
         Location.new(rand_num_coord, rand_char_coord)
