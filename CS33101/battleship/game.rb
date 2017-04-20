@@ -77,6 +77,7 @@ class Game
 
         while !all_ships_sunk do
             if should_print == "Y"
+                puts                
                 puts @fleet
             end
             take_turn
