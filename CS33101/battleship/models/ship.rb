@@ -7,4 +7,8 @@ class Ship
         @location = location
         @is_sunk = is_sunk
     end
+
+    def to_s
+        "#{@location}\nSunk: #{@is_sunk}"
+    end
 end
