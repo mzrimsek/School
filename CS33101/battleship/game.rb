@@ -10,15 +10,7 @@ class Game
     end
 
     def all_ships_sunk
-        all_sunk = true
-
-        @fleet.each do |ship|
-            if !ship.is_sunk
-                all_sunk = false
-            end
-        end
-
-        all_sunk
+        @fleet.all? { |ship| ship.is_sunk }
     end
 
     def print_intro
