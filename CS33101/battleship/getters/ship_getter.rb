@@ -36,5 +36,3 @@ class ShipGetter
         ships
     end
 end
-
-puts ShipGetter.get_ships(5)
