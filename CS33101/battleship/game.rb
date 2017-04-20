@@ -43,17 +43,21 @@ class Game
         Location.new(fire_num_coord, fire_char_coord)
     end
 
+    def update_ship(ship)
+        if ship.is_sunk
+            puts "You already hit that ship!"
+        else
+            ship.is_sunk = true
+            puts "You hit a ship!"
+        end
+    end
+
     def take_turn
         fire_location = get_fire_location
 
         @fleet.each do |ship|
             if ship.location == fire_location
-                if ship.is_sunk
-                    puts "You already hit that ship!"
-                else
-                    ship.is_sunk = true
-                    puts "You hit a ship!"
-                end
+                update_ship(ship)
                 break
             else
                 puts "Sorry, no ship here!"
