@@ -6,6 +6,7 @@ class Game
     def initialize(num_ships)
         @num_ships = num_ships
         @fleet = ShipGetter.get_ships(num_ships)
+        @sunk_ships = 0
     end
 
     def all_ships_sunk
@@ -32,7 +33,7 @@ class Game
     end
 
     def get_fire_location
-        puts "Enter a location!"
+        puts "\nEnter a location!"
         puts "Choose your first coordinate (integer between 0 and 4):"
         fire_num_coord = gets
         fire_num_coord = fire_num_coord.chomp
@@ -40,15 +41,16 @@ class Game
         fire_char_coord = gets
         fire_char_coord = fire_char_coord.chomp
 
-        Location.new(fire_num_coord.to_i, fire_char_coord.to_s)
+        Location.new(fire_num_coord.to_i, fire_char_coord.to_s.upcase)
     end
 
     def update_ship(ship)
         if ship.is_sunk
-            puts "You already hit that ship!"
+            puts "You already hit that ship!\n"
         else
             ship.is_sunk = true
-            puts "You hit a ship!"
+            @sunk_ships += 1
+            puts "You hit a ship! (#{@sunk_ships}/#{@num_ships})\n"
         end
     end
 
@@ -62,7 +64,7 @@ class Game
             end
         end
 
-        puts "Sorry, no ship here!"
+        puts "Sorry, no ship here!\n"
     end
 
     def run
