@@ -25,7 +25,7 @@ class Game
         puts "Welcome to Battleship. The objective of the game is to sink all the ships in the ocean."
         puts "There are #{@num_ships} ships total. You will be asked to guess locations for the ships."
         puts "The ships locations are made of a number between 0 and 4, followed by a letter between A and E."
-        puts "Good Luck!\n\n"
+        puts "Good Luck!\n"
     end
 
     def print_congrats
@@ -46,11 +46,11 @@ class Game
 
     def update_ship(ship)
         if ship.is_sunk
-            puts "You already hit that ship!\n"
+            puts "\nYou already hit that ship!\n"
         else
             ship.is_sunk = true
             @sunk_ships += 1
-            puts "You hit a ship! (#{@sunk_ships}/#{@num_ships})\n"
+            puts "\nYou hit a ship! (#{@sunk_ships}/#{@num_ships})\n"
         end
     end
 
@@ -64,12 +64,21 @@ class Game
             end
         end
 
-        puts "Sorry, no ship here!\n"
+        puts "\nSorry, no ship here!\n"
     end
 
     def run
         print_intro
+
+        puts "\nDo you want to display the fleet? (Y/N)"
+        should_print = gets
+        should_print = should_print.chomp.to_s.upcase
+        puts
+
         while !all_ships_sunk do
+            if should_print == "Y"
+                puts @fleet
+            end
             take_turn
         end
         print_congrats
