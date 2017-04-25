@@ -171,7 +171,7 @@ void TutorialApplication::createScene()
 
 	//ui inputs
 	pointsLabel = wmgr.createWindow("TaharezLook/StaticText");
-	std::string pointsText = "Points: " + points;
+	std::string pointsText = "Points: " + std::to_string(points);
 	pointsLabel->setText(pointsText);
 	pointsLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 	pointsLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.05, 0)));
@@ -351,6 +351,9 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 
 		if (currentObject->objectDelete) {
 			RemoveObject(currentObject, i);
+			points += 100;
+			std::string pointsText = "Points: " + std::to_string(points);
+			pointsLabel->setText(pointsText);
 		}
 	}
 	return true;
@@ -409,22 +412,16 @@ void TutorialApplication::CheckCollisions() {
 				if (ogreA == NULL || ogreB == NULL) {
 					continue;
 				}
-
+				
 				if (isNinja(ogreA->objectType) && isOgre(ogreB->objectType)) {
 					if (!ogreB->objectDelete) {
 						ogreA->objectCollisions.push_back(ogreB);
-						points += 100;
-						std::string pointsText = "Points: " + points;
-						pointsLabel->setText(pointsText);
 					}
 				}
-
+				
 				if (isNinja(ogreB->objectType) && isOgre(ogreA->objectType)) {
 					if (!ogreA->objectDelete) {
 						ogreB->objectCollisions.push_back(ogreA);
-						points += 100;
-						std::string pointsText = "Points: " + points;
-						pointsLabel->setText(pointsText);
 					}
 				}
 			}
