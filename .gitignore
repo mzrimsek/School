@@ -10,6 +10,7 @@ EVAL
 *.txt
 *.png
 *.doc*
+*.rtf
 
 # C/C++
 *.out
