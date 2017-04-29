@@ -9,9 +9,7 @@ void doPython() {
 }
 
 int main() {
-    std::cout << "test";
-
-    std::thread pythonThread(doPython());
+    std::thread pythonThread(doPython);
     pythonThread.join();
     
     return 0;
