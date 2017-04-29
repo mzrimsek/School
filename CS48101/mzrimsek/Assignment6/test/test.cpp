@@ -39,7 +39,8 @@ int main() {
         std::cout << "Enter y: ";
         std::cin >> y;
 
-        addNumbersWithPython(x, y);
+        std::thread pythonThread(addNumbersWithPython, x, y);
+        pythonThread.detach();		
     }
     return 0;
 }
