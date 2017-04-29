@@ -11,6 +11,7 @@ EVAL
 *.png
 *.doc*
 *.rtf
+*.exe
 
 # C/C++
 *.out
