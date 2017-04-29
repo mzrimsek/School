@@ -23,7 +23,7 @@ int main() {
         pclose(fp);
     #endif
 
-    printf("%s", buf);
+    printf("%d", atoi(buf) * 2);
     
     return 0;
 }
