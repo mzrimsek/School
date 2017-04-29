@@ -4,13 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void doPython() {
-    system("python test.py 1 2");
-}
-
 int main() {
-    std::thread pythonThread(doPython);
-    pythonThread.join();
+    FILE *fp = popen("python test.py 1 2", "rt");
+    char buf[255];
+
+    fgets(buf, 255, fp);
+    fclose(fp);
+
+    printf("%s", buf);
     
     return 0;
 }
