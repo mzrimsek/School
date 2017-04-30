@@ -39,7 +39,7 @@ def server(local_host, local_port):
         request_time = str(datetime.now())
 
         print "[==>] Revieved incomming connection from %s:%d" % (addr[0], addr[1])
-        request = recieve_from(client_socket)
+        request = receive_from(client_socket)
 
         check_cache(request, client_socket, addr)
         print "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )"
@@ -53,7 +53,7 @@ def get_remote_file (request):
     remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     remote_socket.connect((remote_host, remote_port))
     remote_socket.send(request)
-    remote_buffer = recieve_from(remote_socket)
+    remote_buffer = receive_from(remote_socket)
 
     if len(remote_buffer):
         print "[<==] Sending %d bytes to localhost." %len(remote_buffer)
@@ -64,7 +64,7 @@ def get_remote_file (request):
     
     return remote_buffer
 
-def recieve_from(connection):
+def receive_from(connection):
     buffer=""
     connection.settimeout(2)
 
@@ -140,7 +140,7 @@ def write_to_csv(request):
     parsedRequest = request.split(' ')[1].split('/', 3)
     requested_file = parsedRequest[len(parsedRequest)-1]
     info_to_write = request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n"
-    
+
     if not os.path.isfile(os.path.join(log_file_name)):
         file = open(os.path.join(log_file_name), 'a')
         file.write("Requested time, Response Time, CacheHit, RequestedString\n")
