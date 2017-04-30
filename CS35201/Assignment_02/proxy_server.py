@@ -44,7 +44,7 @@ def server(local_host, local_port):
         check_cache(request, client_socket, addr)
         print "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )"
 
-        write_to_csv(request)
+        write_log(request)
 
 def get_remote_file (request):
     remote_host = request.split(' ')[1].split('/')[2]
@@ -91,13 +91,10 @@ def check_cache(request, client_socket, addr):
 
     if request_type == "/proxy_usage?":
         get_response(line_to_print)
-
     elif request_type == "/proxy_usage_reset?":
-        reset_proxy(line_to_print)
-
+        reset_proxy(line_to_print
     elif request_type == "/proxy_log?":
         get_proxy_log(line_to_print)
-
     else:
         parsedRequest = request.split(' ')[1].split('/', 3)
         host = parsedRequest[2]
@@ -111,7 +108,6 @@ def check_cache(request, client_socket, addr):
             total_bytes += len(returned_buffer)
             client_socket.send(returned_buffer)
             response_time = str(datetime.now())
-
         else:
             returned_buffer = get_remote_file(request)
             if not os.path.isdir(host):
@@ -132,7 +128,7 @@ def get_from_cache (host, file):
     file.close()
     return returned_buffer
 
-def write_to_csv(request):
+def write_log(request):
     global total_num_cache
     global request_time
     global response_time
@@ -140,17 +136,15 @@ def write_to_csv(request):
     parsedRequest = request.split(' ')[1].split('/', 3)
     requested_file = parsedRequest[len(parsedRequest)-1]
     info_to_write = request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n"
+    log_file = open(os.path.join(log_file_name), 'a')
 
     if not os.path.isfile(os.path.join(log_file_name)):
-        file = open(os.path.join(log_file_name), 'a')
-        file.write("Requested time, Response Time, CacheHit, RequestedString\n")
-        file.write(info_to_write)
-    
+        log_file.write("Requested time, Response Time, CacheHit, RequestedString\n")
+        log_file.write(info_to_write)
     else:
-        file = open(os.path.join(log_file_name), 'a')
-        file.write(info_to_write)
+        log_file.write(info_to_write)
 
-    file.close()
+    log_file.close()
 
 def reset_proxy(line_to_print):
     num_requests = 0
@@ -165,12 +159,12 @@ def get_proxy_log(line_to_print):
     get_response(line_to_print)
 
 def get_response(line_to_print):
-    http_message = "HTTP/1.1 200 OK\r\n"
-    http_message += "Content-Type: text/plain\r\n"
-    http_message += "Content-Length: " + str(len(line_to_print))
-    http_message += "Connection: close\r\n\r\n"
-    http_message += line_to_print
-    client_socket.send(http_message.encode())
+    message = "HTTP/1.1 200 OK\r\n"
+    message += "Content-Type: text/plain\r\n"
+    message += "Content-Length: " + str(len(line_to_print))
+    message += "Connection: close\r\n\r\n"
+    message += line_to_print
+    client_socket.send(message.encode())
     response_time = str(datetime.now())
 
 def main():
