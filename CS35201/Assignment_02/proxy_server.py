@@ -84,7 +84,6 @@ def recieve_from(connection):
 
     return buffer
 
-
 def check_cache(request, client_socket, addr):
     global num_requests
     global total_bytes
@@ -93,21 +92,16 @@ def check_cache(request, client_socket, addr):
     global response_time
 
     line_to_print = "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )\r\n\r\n"
+    request_type = request.split("\n")[0].split(" ")[1]
 
-    if request.split("\n")[0].split(" ")[1] == "/proxy_usage?":
+    if request_type == "/proxy_usage?":
         get_response(line_to_print)
 
-    elif request.split("\n")[0].split(" ")[1] == "/proxy_usage_reset?":
-        num_requests = 0
-        total_bytes = 0
-        total_num_cache = 0
-        total_cache_bytes = 0
-        get_response(line_to_print)
-    
-    elif request.split("\n")[0].split(" ")[1] == "/proxy_log?":
-        file = open(os.path.join(log_file_name), 'r')
-        line_to_print = file.read()
-        get_response(line_to_print)
+    elif request_type == "/proxy_usage_reset?":
+        reset_proxy(line_to_print)
+
+    elif request_type == "/proxy_log?":
+        get_proxy_log(line_to_print)
 
     else:
         parsedRequest = request.split(' ')[1].split('/', 3)
@@ -143,7 +137,6 @@ def get_from_cache (host, file):
     file.close()
     return returned_buffer
 
-
 def write_to_csv(request):
     global total_num_cache
     global request_time
@@ -161,6 +154,18 @@ def write_to_csv(request):
         file.write(request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n")
 
     file.close()
+
+def reset_proxy(line_to_print):
+    num_requests = 0
+    total_bytes = 0
+    total_num_cache = 0
+    total_cache_bytes = 0
+    get_response(line_to_print)
+
+def get_proxy_log(line_to_print):
+    file = open(os.path.join(log_file_name), 'r')
+    line_to_print = file.read()
+    get_response(line_to_print)
 
 def get_response(line_to_print):
     http_message = "HTTP/1.1 200 OK\r\n"
