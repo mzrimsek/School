@@ -13,7 +13,7 @@ send_requests() {
 cleanup_files() {
     rm -rf www.*
     rm -rf proxy_test*.html*
-    rm log_file.csv
+    rm *.csv
 }
 
 echo "Round 1"
