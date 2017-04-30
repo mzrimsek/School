@@ -38,15 +38,11 @@ def server(local_host, local_port):
         client_socket, addr = myServer.accept()
         request_time = str(datetime.now())
 
-        #print out the local connection information
         print "[==>] Revieved incomming connection from %s:%d" % (addr[0], addr[1])
-        #connect to remote host
         request = recieve_from(client_socket)
 
-        #check if file in cache
         check_cache(request, client_socket, addr)
 
-        #prints optional task - 1
         print "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )"
 
         write_to_csv(request)
@@ -62,26 +58,21 @@ def get_remote_file (request):
     remote_socket.send(request)
     remote_buffer = recieve_from(remote_socket)
 
-
-    #if we have data to send to our local client, send it
     if len(remote_buffer):
         print "[<==] Sending %d bytes to localhost." %len(remote_buffer)
 
-
-    #if no more data on either side, close the connections
     if not len(remote_buffer):
         remote_socket.close()
         print "[*] No more data. Closing connections."
     
     return remote_buffer
 
+
 def recieve_from(connection):
     buffer=""
 
-    #we set 2 sec timeout
     connection.settimeout(2)
     try:
-        #keep reading into buffer until there is no more data or time out
         while True:
             data = connection.recv(4096)
 
@@ -95,7 +86,7 @@ def recieve_from(connection):
 
     return buffer
 
-#check if file exists
+
 def check_cache(request, client_socket, addr):
     global num_requests
     global total_bytes
@@ -103,7 +94,6 @@ def check_cache(request, client_socket, addr):
     global total_cache_bytes
     global response_time
 
-    #optional-task-2
     if request.split("\n")[0].split(" ")[1] == "/proxy_usage?":
         line_to_print = "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )\r\n\r\n"
         http_message = "HTTP/1.1 200 OK\r\n"
@@ -114,7 +104,6 @@ def check_cache(request, client_socket, addr):
         client_socket.send(http_message.encode())
         response_time = str(datetime.now())
 
-    #optional-task-3
     elif request.split("\n")[0].split(" ")[1] == "/proxy_usage_reset?":
         num_requests = 0
         total_bytes = 0
@@ -171,7 +160,6 @@ def check_cache(request, client_socket, addr):
             client_socket.close()
 
 
-#get request from cache
 def get_from_cache (host, file):
     print "Cache Hit!"
     file = open(os.path.join(host, file), 'r')
@@ -180,14 +168,6 @@ def get_from_cache (host, file):
     return returned_buffer
 
 
-#modify requests to remote host
-def request_handler(buffer):
-    #put modifications here
-
-    return buffer
-
-
-#optional-task-4
 def write_to_csv(request):
     global total_num_cache
     global request_time
