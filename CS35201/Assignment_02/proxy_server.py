@@ -31,11 +31,9 @@ def server(local_host, local_port):
         sys.exit(0)
 
     print "[*] Listening on %s:%d" % (local_host, local_port)
-
     server.listen(5)
 
     while num_requests < 100:
-
         num_requests += 1
         client_socket, addr = server.accept()
         request_time = str(datetime.now())
@@ -44,13 +42,11 @@ def server(local_host, local_port):
         request = recieve_from(client_socket)
 
         check_cache(request, client_socket, addr)
-
         print "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )"
 
         write_to_csv(request)
 
 def get_remote_file (request):
-
     remote_host = request.split(' ')[1].split('/')[2]
     remote_port = 80
 
@@ -77,7 +73,6 @@ def recieve_from(connection):
             data = connection.recv(4096)
             if not data:
                 break
-
             buffer += data
     except:
         pass
@@ -144,14 +139,16 @@ def write_to_csv(request):
 
     parsedRequest = request.split(' ')[1].split('/', 3)
     requested_file = parsedRequest[len(parsedRequest)-1]
+    info_to_write = request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n"
+    
     if not os.path.isfile(os.path.join(log_file_name)):
         file = open(os.path.join(log_file_name), 'a')
         file.write("Requested time, Response Time, CacheHit, RequestedString\n")
-        file.write(request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n")
+        file.write(info_to_write)
     
     else:
         file = open(os.path.join(log_file_name), 'a')
-        file.write(request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n")
+        file.write(info_to_write)
 
     file.close()
 
@@ -179,9 +176,7 @@ def get_response(line_to_print):
 def main():
     local_host = "127.0.0.1"
     local_port = 9001
-
     server(local_host, local_port)
 
 if __name__ == '__main__':
     main()
-    
