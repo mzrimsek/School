@@ -41,7 +41,7 @@ def server(local_host, local_port):
         print "[==>] Revieved incomming connection from %s:%d" % (addr[0], addr[1])
         request = receive_from(client_socket)
 
-        check_cache(request, client_socket, addr)
+        get_response(request, client_socket, addr)
         print "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )"
 
         write_log(request)
@@ -79,7 +79,7 @@ def receive_from(connection):
 
     return buffer
 
-def check_cache(request, client_socket, addr):
+def get_response(request, client_socket, addr):
     global num_requests
     global total_bytes
     global total_num_cache
@@ -90,9 +90,9 @@ def check_cache(request, client_socket, addr):
     request_type = request.split("\n")[0].split(" ")[1]
 
     if request_type == "/proxy_usage?":
-        get_response(line_to_print)
+        get_response_text(line_to_print)
     elif request_type == "/proxy_usage_reset?":
-        reset_proxy(line_to_print
+        reset_proxy(line_to_print)
     elif request_type == "/proxy_log?":
         get_proxy_log(line_to_print)
     else:
@@ -151,14 +151,14 @@ def reset_proxy(line_to_print):
     total_bytes = 0
     total_num_cache = 0
     total_cache_bytes = 0
-    get_response(line_to_print)
+    get_response_text(line_to_print)
 
 def get_proxy_log(line_to_print):
     file = open(os.path.join(log_file_name), 'r')
     line_to_print = file.read()
-    get_response(line_to_print)
+    get_response_text(line_to_print)
 
-def get_response(line_to_print):
+def get_response_text(line_to_print):
     message = "HTTP/1.1 200 OK\r\n"
     message += "Content-Type: text/plain\r\n"
     message += "Content-Length: " + str(len(line_to_print))
