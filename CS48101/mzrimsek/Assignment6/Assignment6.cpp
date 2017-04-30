@@ -107,6 +107,10 @@ mSceneMgr->setFog(Ogre::FOG_EXP2, fadeColour, 0.002);
    Ogre::Plane plane;
    plane.d = 1000;
    plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
+
+	// create child process
+   // call python in child process
+   // update stuff with results
 }
  
 void TutorialApplication::createFrameListener()
