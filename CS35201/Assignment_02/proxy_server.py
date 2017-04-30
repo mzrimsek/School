@@ -98,34 +98,30 @@ def get_response(request, client_socket, addr):
     else:
         parsedRequest = request.split(' ')[1].split('/', 3)
         host = parsedRequest[2]
-        file = parsedRequest[3]
+        requested_file = parsedRequest[3]
         remote_port = 80
         
-        if os.path.isdir(host) and os.path.isfile(os.path.join(host,file)):
-            returned_buffer = get_from_cache(host, file)
+        if os.path.isdir(host) and os.path.isfile(os.path.join(host,requested_file)):
+            returned_buffer = get_from_cache(host, requested_file)
             total_num_cache += 1
             total_cache_bytes += len(returned_buffer)
-            total_bytes += len(returned_buffer)
-            client_socket.send(returned_buffer)
-            response_time = str(datetime.now())
+            update_buffer(client_socket, returned_buffer)
         else:
             returned_buffer = get_remote_file(request)
             if not os.path.isdir(host):
                 os.makedirs(host)
-            with open(os.path.join(host, file), 'wb') as temp_file:
+            with open(os.path.join(host, requested_file), 'wb') as temp_file:
                 temp_file.write(returned_buffer)
-            total_bytes += len(returned_buffer)
-            client_socket.send(returned_buffer)
-            response_time = str(datetime.now())
+            update_buffer(client_socket, returned_buffer)
 
         if not len(returned_buffer):
             client_socket.close()
 
-def get_from_cache (host, file):
+def get_from_cache (host, requested_file):
     print "Cache Hit!"
-    file = open(os.path.join(host, file), 'r')
-    returned_buffer = file.read()
-    file.close()
+    requested_file = open(os.path.join(host, requested_file), 'r')
+    returned_buffer = requested_file.read()
+    requested_file.close()
     return returned_buffer
 
 def write_log(request):
@@ -145,6 +141,13 @@ def write_log(request):
         log_file.write(info_to_write)
 
     log_file.close()
+
+def update_buffer(client_socket, returned_buffer):
+    global total_bytes
+
+    total_bytes += len(returned_buffer)
+    client_socket.send(returned_buffer)
+    response_time = str(datetime.now())
 
 def reset_proxy(line_to_print):
     num_requests = 0
