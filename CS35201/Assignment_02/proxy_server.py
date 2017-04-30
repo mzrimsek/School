@@ -42,7 +42,7 @@ def server(local_host, local_port):
         request = receive_from(client_socket)
 
         get_response(request, client_socket, addr)
-        print "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )"
+        print get_proxy_info()
 
         write_log(request)
 
@@ -86,7 +86,7 @@ def get_response(request, client_socket, addr):
     global total_cache_bytes
     global response_time
 
-    line_to_print = "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )\r\n\r\n"
+    line_to_print = get_proxy_info() + "\r\n\r\n"
     request_type = request.split("\n")[0].split(" ")[1]
 
     if request_type == "/proxy_usage?":
@@ -141,6 +141,10 @@ def write_log(request):
         log_file.write(info_to_write)
 
     log_file.close()
+
+def get_proxy_info():
+    info = str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes)
+    return "( " + info + " )"
 
 def update_buffer(client_socket, returned_buffer):
     global total_bytes
