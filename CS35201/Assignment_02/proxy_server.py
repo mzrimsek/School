@@ -4,6 +4,8 @@ import sys
 import socket
 from datetime import datetime
 
+log_file_name = "log.csv"
+
 num_requests = 0
 total_bytes = 0
 total_num_cache = 0
@@ -47,7 +49,6 @@ def server(local_host, local_port):
 
         write_to_csv(request)
 
-
 def get_remote_file (request):
 
     remote_host = request.split(' ')[1].split('/')[2]
@@ -67,20 +68,17 @@ def get_remote_file (request):
     
     return remote_buffer
 
-
 def recieve_from(connection):
     buffer=""
-
     connection.settimeout(2)
+
     try:
         while True:
             data = connection.recv(4096)
-
             if not data:
                 break
 
             buffer += data
-    
     except:
         pass
 
@@ -94,42 +92,22 @@ def check_cache(request, client_socket, addr):
     global total_cache_bytes
     global response_time
 
+    line_to_print = "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )\r\n\r\n"
+
     if request.split("\n")[0].split(" ")[1] == "/proxy_usage?":
-        line_to_print = "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )\r\n\r\n"
-        http_message = "HTTP/1.1 200 OK\r\n"
-        http_message += "Content-Type: text/plain\r\n"
-        http_message += "Content-Length: " + str(len(line_to_print))
-        http_message += "Connection: close\r\n\r\n"
-        http_message += line_to_print
-        client_socket.send(http_message.encode())
-        response_time = str(datetime.now())
+        get_response(line_to_print)
 
     elif request.split("\n")[0].split(" ")[1] == "/proxy_usage_reset?":
         num_requests = 0
         total_bytes = 0
         total_num_cache = 0
         total_cache_bytes = 0
-        line_to_print = "( " + str(num_requests) + " | " + str(total_bytes) + " | " + str(total_num_cache) + " | " + str(total_cache_bytes) + " )\r\n\r\n"
-        http_message = "HTTP/1.1 200 OK\r\n"
-        http_message += "Content-Type: text/plain\r\n"
-        http_message += "Content-Length: " + str(len(line_to_print))
-        http_message += "Connection: close\r\n\r\n"
-        http_message += line_to_print
-        client_socket.send(http_message.encode())
-        response_time = str(datetime.now())
-
+        get_response(line_to_print)
     
     elif request.split("\n")[0].split(" ")[1] == "/proxy_log?":
-        file = open(os.path.join("log_file.csv"), 'r')
+        file = open(os.path.join(log_file_name), 'r')
         line_to_print = file.read()
-        http_message = "HTTP/1.1 200 OK\r\n"
-        http_message += "Content-Type: text/plain\r\n"
-        http_message += "Content-Length: " + str(len(line_to_print))
-        http_message += "Connection: close\r\n\r\n"
-        http_message += line_to_print
-        client_socket.send(http_message.encode())
-        response_time = str(datetime.now())
-
+        get_response(line_to_print)
 
     else:
         parsedRequest = request.split(' ')[1].split('/', 3)
@@ -137,7 +115,6 @@ def check_cache(request, client_socket, addr):
         file = parsedRequest[3]
         remote_port = 80
         
-
         if os.path.isdir(host) and os.path.isfile(os.path.join(host,file)):
             returned_buffer = get_from_cache(host, file)
             total_num_cache += 1
@@ -159,7 +136,6 @@ def check_cache(request, client_socket, addr):
         if not len(returned_buffer):
             client_socket.close()
 
-
 def get_from_cache (host, file):
     print "Cache Hit!"
     file = open(os.path.join(host, file), 'r')
@@ -175,24 +151,31 @@ def write_to_csv(request):
 
     parsedRequest = request.split(' ')[1].split('/', 3)
     requested_file = parsedRequest[len(parsedRequest)-1]
-    if not os.path.isfile(os.path.join("log_file.csv")):
-        file = open(os.path.join("log_file.csv"), 'a')
+    if not os.path.isfile(os.path.join(log_file_name)):
+        file = open(os.path.join(log_file_name), 'a')
         file.write("Requested time, Response Time, CacheHit, RequestedString\n")
         file.write(request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n")
     
     else:
-        file = open(os.path.join("log_file.csv"), 'a')
+        file = open(os.path.join(log_file_name), 'a')
         file.write(request_time + ", " + response_time + ", " + str(total_num_cache) + ", " + str(requested_file) + "\n")
 
     file.close()
 
+def get_response(line_to_print):
+    http_message = "HTTP/1.1 200 OK\r\n"
+    http_message += "Content-Type: text/plain\r\n"
+    http_message += "Content-Length: " + str(len(line_to_print))
+    http_message += "Connection: close\r\n\r\n"
+    http_message += line_to_print
+    client_socket.send(http_message.encode())
+    response_time = str(datetime.now())
 
 def main():
     local_host = "127.0.0.1"
     local_port = 9001
 
     server(local_host, local_port)
-
 
 if __name__ == '__main__':
     main()
