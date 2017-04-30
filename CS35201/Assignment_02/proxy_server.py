@@ -19,10 +19,10 @@ def server(local_host, local_port):
     global request_time
     global response_time
 
-    myServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
-        myServer.bind((local_host, local_port))
+        server.bind((local_host, local_port))
     except:
         print "[!!] Failed to listen on %s:%d" % (local_host, local_port)
         print "[!!] Check for other listening sockets or correct permissions."
@@ -30,12 +30,12 @@ def server(local_host, local_port):
 
     print "[*] Listening on %s:%d" % (local_host, local_port)
 
-    myServer.listen(5)
+    server.listen(5)
 
     while num_requests < 100:
 
         num_requests += 1
-        client_socket, addr = myServer.accept()
+        client_socket, addr = server.accept()
         request_time = str(datetime.now())
 
         print "[==>] Revieved incomming connection from %s:%d" % (addr[0], addr[1])
