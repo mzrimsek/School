@@ -48,8 +48,6 @@ def handle_request(server):
 
 def get_remote_file (request):
     remote_host = request.split(' ')[1].split('/')[2]
-    remote_port = 80
-
     remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     remote_socket.connect((remote_host, remote_port))
     remote_socket.send(request)
