@@ -5,6 +5,7 @@ import socket
 from datetime import datetime
 
 log_file_name = "log.csv"
+remote_port = 80
 
 num_requests = 0
 total_bytes = 0
@@ -91,7 +92,6 @@ def get_response(request, client_socket, addr):
         parsed_request = request.split(' ')[1].split('/', 3)
         host = parsed_request[2]
         requested_file = parsed_request[3]
-        remote_port = 80
         
         if os.path.isdir(host) and os.path.isfile(os.path.join(host,requested_file)):
             buffer = get_from_cache(host, requested_file)
@@ -123,10 +123,8 @@ def write_log(request):
 
     if not os.path.isfile(os.path.join(log_file_name)):
         log_file.write("Requested time, Response Time, CacheHit, RequestedString\n")
-        log_file.write(info_to_write)
-    else:
-        log_file.write(info_to_write)
-
+    
+    log_file.write(info_to_write)
     log_file.close()
 
 def add_to_cache(host, buffer, requested_file):
