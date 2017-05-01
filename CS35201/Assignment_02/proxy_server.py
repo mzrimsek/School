@@ -102,9 +102,9 @@ def process_request(request, client_socket, addr):
         
         if os.path.isdir(host) and os.path.isfile(os.path.join(host,file)):
             data = get_from_cache(host, file)
+            total_bytes += len(data)
             total_num_cache += 1
             total_cache_bytes += len(data)
-            total_bytes += len(data)
             send_response(client_socket, data)
         else:
             data = get_remote_file(request)
