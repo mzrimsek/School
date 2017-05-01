@@ -13,7 +13,7 @@ total_cache_bytes = 0
 request_time = ""
 response_time = ""
 
-def server(local_host, local_port):
+def run_server(local_host, local_port):
     global num_requests
     global total_bytes
     global total_num_cache
@@ -22,7 +22,6 @@ def server(local_host, local_port):
     global response_time
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
     try:
         server.bind((local_host, local_port))
     except:
@@ -35,16 +34,16 @@ def server(local_host, local_port):
 
     while num_requests < 100:
         num_requests += 1
-        client_socket, addr = server.accept()
-        request_time = str(datetime.now())
+        handle_request(server)
 
-        print "[==>] Revieved incomming connection from %s:%d" % (addr[0], addr[1])
-        request = receive_from(client_socket)
-
-        get_response(request, client_socket, addr)
-        print get_proxy_info()
-
-        write_log(request)
+def handle_request(server):
+    client_socket, addr = server.accept()
+    request_time = str(datetime.now())
+    print "[==>] Revieved incomming connection from %s:%d" % (addr[0], addr[1])
+    request = receive_from(client_socket)
+    get_response(request, client_socket, addr)
+    print get_proxy_info()
+    write_log(request)
 
 def get_remote_file (request):
     remote_host = request.split(' ')[1].split('/')[2]
@@ -177,7 +176,7 @@ def get_response_text(line_to_print):
 def main():
     local_host = "127.0.0.1"
     local_port = 9001
-    server(local_host, local_port)
+    run_server(local_host, local_port)
 
 if __name__ == '__main__':
     main()
