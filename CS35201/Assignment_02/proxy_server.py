@@ -80,17 +80,18 @@ def process_request(request, client_socket, addr):
     global total_cache_bytes
 
     line_to_print = get_request_stats() + "\r\n\r\n"
-    if request.split("\n")[0].split(" ")[1] == "/proxy_usage?":
+    request_type = request.split("\n")[0].split(" ")[1]
+    if request_type == "/proxy_usage?":
         http_message = process_request_message(line_to_print)
         send_response(client_socket, http_message.encode())
-    elif request.split("\n")[0].split(" ")[1] == "/proxy_usage_reset?":
+    elif request_type == "/proxy_usage_reset?":
         num_requests = 0
         total_bytes = 0
         total_num_cache = 0
         total_cache_bytes = 0
         http_message = process_request_message(line_to_print)
         send_response(client_socket, http_message.encode())
-    elif request.split("\n")[0].split(" ")[1] == "/proxy_log?":
+    elif request_type == "/proxy_log?":
         file = open(os.path.join(log_file), 'r')
         line_to_print = file.read()
         http_message = process_request_message(line_to_print)
