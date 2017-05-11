@@ -520,6 +520,11 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		sidewayFlag = -1;
 	}
 
+	/*Ogre::Vector3 curPos = ptrToNinja->objectPosition;
+	float curWorldHeight = mTerrainGroup->getHeightAtWorldPosition(curPos);
+	float yDif = curPos.y - curWorldHeight;
+	ninjaBody->translate(btVector3(curPos.x, yDif + curPos.y, curPos.z));*/
+
 	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, 0, -1000 * forwardFlag));
 	
 	return true;
