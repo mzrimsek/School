@@ -77,6 +77,7 @@ private:
   CEGUI::Window *pointsLabel;
   int forwardFlag;
   int points;
+  int sidewayFlag;
 };
  
 

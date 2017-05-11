@@ -10,6 +10,7 @@ TutorialApplication::TutorialApplication()
 	mEntity(0)
 {
 	forwardFlag = 0;
+	sidewayFlag = 0;
 	points = 0;
 }
  
@@ -478,6 +479,20 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
+
+	if (sidewayFlag != 0)
+	{
+		sidewayFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Walk");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+	else
+	{
+		mAnimationState = mEntity->getAnimationState("Idle1");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
 }
 
 bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
@@ -498,20 +513,14 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
-		btTransform src = ninjaBody->getCenterOfMassTransform();
-		btVector3 up = btVector3(Ogre::Vector3::UNIT_Y.x, Ogre::Vector3::UNIT_Y.y, Ogre::Vector3::UNIT_Y.z);
-		btVector3 normDirection = btVector3(0, 5 * rotate, 0).normalized();
-		btScalar angle = acos(up.dot(normDirection));
-		btVector3 axis = up.cross(normDirection);
-		src.setRotation(btQuaternion(axis, angle));
-		ninjaBody->setCenterOfMassTransform(src);
+		sidewayFlag = 1;
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
-		//ninjaBody->setAngularVelocity(btVector3(0, -5 * rotate, 0));
+		sidewayFlag = -1;
 	}
 
-	ninjaBody->setLinearVelocity(btVector3(0, 0, -1000 * forwardFlag));
+	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, 0, -1000 * forwardFlag));
 	
 	return true;
 }
