@@ -399,7 +399,14 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 	curTime = timer.getMilliseconds() / 1000;
 	if (!gameOver) 
 	{
-		timerBox->setText("Time: " + Ogre::StringConverter::toString(60 - curTime));
+		if (60 - curTime <= 15)
+		{
+			timerBox->setText("[colour='FFFF0000']Time: " + Ogre::StringConverter::toString(60 - curTime));
+		}
+		else
+		{
+			timerBox->setText("Time: " + Ogre::StringConverter::toString(60 - curTime));
+		}
 	}
 
 	//Timer up, game over
