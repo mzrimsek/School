@@ -66,7 +66,7 @@ void TutorialApplication::createScene()
 	light->setDiffuseColour(Ogre::ColourValue::White);
 	light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
 
-	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
+	mSceneMgr->setSkyDome(true, "Examples/SpaceSkyBox", 5, 8);
 
 	createBulletSim();
 
@@ -99,7 +99,7 @@ void TutorialApplication::createNinja() {
 	std::string name = "ninjaNode";
 	btVector3 Position = btVector3(2000, 10, 1925);
 	btScalar mass = 1.0f;
-	Ogre::Entity *ninja = mSceneMgr->createEntity("robot.mesh");
+	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
 	Ogre::SceneNode *ninjaNode;
 
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
@@ -171,7 +171,7 @@ void TutorialApplication::assignItems(Ogre::SceneNode *node, Ogre::Entity *entit
 
 	//ninja idle animation
 	mEntity = entity;
-	mAnimationState = mEntity->getAnimationState("Idle");
+	mAnimationState = mEntity->getAnimationState("Idle1");
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
 }
@@ -365,7 +365,7 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 	}
 	else
 	{
-		mAnimationState = mEntity->getAnimationState("Idle");
+		mAnimationState = mEntity->getAnimationState("Idle1");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
@@ -379,7 +379,7 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 	}
 	else
 	{
-		mAnimationState = mEntity->getAnimationState("Idle");
+		mAnimationState = mEntity->getAnimationState("Idle1");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
@@ -409,11 +409,6 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	{
 		sidewayFlag = -1;
 	}
-
-	Ogre::Vector3 curPos = ptrToNinja->sceneNodeObject->getPosition();
-	float curWorldHeight = mTerrainGroup->getTerrain(0, 0)->getHeightAtWorldPosition(curPos);
-	curPos.y = curWorldHeight - curPos.y;
-	ptrToNinja->sceneNodeObject->translate(curPos * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
 	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, 0, -1000 * forwardFlag));
 	
