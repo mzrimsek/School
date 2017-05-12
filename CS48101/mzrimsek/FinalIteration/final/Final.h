@@ -42,6 +42,7 @@ protected:
   bool frameStarted(const Ogre::FrameEvent &evt);
   bool frameEnded(const Ogre::FrameEvent & evt);
   void RemoveObject(ogreObject * object, int index);
+  void resetTargets();
  
 private:
   CEGUI::OgreRenderer* mRenderer;
@@ -76,6 +77,8 @@ private:
 
   int ogresKilled;
   int numOgres;
+
+  bool reset;
 };
  
 

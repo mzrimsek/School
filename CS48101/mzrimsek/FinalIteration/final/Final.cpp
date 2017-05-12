@@ -12,6 +12,7 @@ TutorialApplication::TutorialApplication()
 	points = 0;
 	ogresKilled = 0;
 	numOgres = 50;
+	reset = false;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -53,7 +54,9 @@ void TutorialApplication::createBulletSim(void) {
 	solver = new btSequentialImpulseConstraintSolver;
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-	createNinja();
+	if (!reset) {
+		createNinja();
+	}
 	createOgres(numOgres);
 }
  
@@ -106,9 +109,32 @@ void TutorialApplication::createScene()
 	sheet->addChild(ogreLabel);
 }
 
+void TutorialApplication::resetTargets()
+{
+	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
+		if (isOgre(ptrToOgreObjects[i]->objectType))
+		{
+			ptrToOgreObjects[i]->objectDelete = true;
+		}
+	}
+
+	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
+		if (ptrToOgreObjects[i]->objectDelete)
+		{
+			RemoveObject(ptrToOgreObjects[i], i);
+		}
+	}
+
+	reset = true;
+
+	collisionShapes.clear();
+	delete dynamicsWorld;
+	createBulletSim();
+}
+
 void TutorialApplication::createNinja() {
 	std::string name = "ninjaNode";
-	btVector3 Position = btVector3(2000, 10, 1925);
+	btVector3 Position = btVector3(1500, 10, 2500);
 	btScalar mass = 1.0f;
 	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
 	Ogre::SceneNode *ninjaNode;
@@ -244,7 +270,6 @@ void TutorialApplication::createOgres(int numOgres) {
 		int zPos = rand() % 500 + 1500;
 
 		bool isSpecial = (xPos * yPos * zPos) % 35 == 0;
-
 		createOgre(enemyName, 1.0f, btVector3(xPos, yPos, zPos), isSpecial);
 	}
 }
@@ -454,6 +479,9 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 		{
 			sidewayFlag = -1;
+		}
+		if (mKeyboard->isKeyDown(OIS::KC_Y)) {
+			resetTargets();
 		}
 	}
 
