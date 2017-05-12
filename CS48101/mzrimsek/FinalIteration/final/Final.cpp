@@ -11,7 +11,7 @@ TutorialApplication::TutorialApplication()
 
 	points = 0;
 	ogresKilled = 0;
-	numOgres = 50;
+	numOgres = 100;
 
 	gameOver = false;
 }
@@ -129,7 +129,7 @@ void TutorialApplication::resetTargets()
 
 void TutorialApplication::createNinja() {
 	std::string name = "ninjaNode";
-	btVector3 Position = btVector3(1500, 10, 2500);
+	btVector3 Position = btVector3(0, 0, 2500);
 	btScalar mass = 1.0f;
 	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
 	Ogre::SceneNode *ninjaNode;
@@ -259,9 +259,9 @@ void TutorialApplication::createOgres(int numOgres) {
 	for (int i = 0; i < numOgres; i++) {
 		Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
 
-		int xPos = rand() % 1000 + 1000;
-		int yPos = rand() % 1000 - 500;
-		int zPos = rand() % 500 + 1500;
+		int xPos = rand() % 2500 - 1250;
+		int yPos = rand() % 2500 - 1250;
+		int zPos = rand() % 2500 - 1250;
 
 		bool isSpecial = (xPos * yPos * zPos) % 35 == 0;
 		createOgre(enemyName, 1.0f, btVector3(xPos, yPos, zPos), isSpecial);
