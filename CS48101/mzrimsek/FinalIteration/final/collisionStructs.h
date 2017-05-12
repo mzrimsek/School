@@ -52,6 +52,7 @@ struct ogreObject {
 	Ogre::Vector3 objectPosition;
 	bool objectDelete;
 	std::vector<ogreObject *> objectCollisions;
+	bool isSpecial;
 };
 
 #endif

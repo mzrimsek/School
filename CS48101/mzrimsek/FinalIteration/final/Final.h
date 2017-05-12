@@ -29,7 +29,7 @@ protected:
   virtual void createScene();
   void createNinja();
   void assignItems(Ogre::SceneNode * node, Ogre::Entity * entity);
-  void createOgre(std::string name, btScalar mass, btVector3 & Position);
+  void createOgre(std::string name, btScalar mass, btVector3 & Position, bool isSpecial);
   void createOgres(int numOgres);
   virtual void createFrameListener();
   virtual void destroyScene();

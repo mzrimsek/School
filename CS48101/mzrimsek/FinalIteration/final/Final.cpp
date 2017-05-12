@@ -187,14 +187,14 @@ void TutorialApplication::assignItems(Ogre::SceneNode *node, Ogre::Entity *entit
 	mAnimationState->setEnabled(true);
 }
 
-void TutorialApplication::createOgre(std::string name, btScalar mass, btVector3 &Position) {
+void TutorialApplication::createOgre(std::string name, btScalar mass, btVector3 &Position, bool isSpecial) {
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
 	// Convert the bullet physics vector to the ogre vector
 	ptrToOgreObject = new ogreObject;
-	ptrToOgreObject->entityObject = mSceneMgr->createEntity("ogrehead.mesh");;
+	ptrToOgreObject->entityObject = mSceneMgr->createEntity("ogrehead.mesh");
 	ptrToOgreObject->entityObject->setCastShadows(true);
 	try {
-		ptrToOgreObject->sceneNodeObject = mSceneMgr->getSceneNode(name);;
+		ptrToOgreObject->sceneNodeObject = mSceneMgr->getSceneNode(name);
 	}
 	catch (Ogre::Exception& e) {
 		ptrToOgreObject->sceneNodeObject = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
@@ -213,14 +213,19 @@ void TutorialApplication::createOgre(std::string name, btScalar mass, btVector3 
 	btVector3 LocalInertia = btVector3(0, 0, 0);
 	ptrToOgreObject->btCollisionShapeObject->calculateLocalInertia(mass, LocalInertia);
 	ptrToOgreObject->btRigidBodyObject = new btRigidBody(mass, ptrToOgreObject->myMotionStateObject, ptrToOgreObject->btCollisionShapeObject, LocalInertia);
-	ptrToOgreObject->btRigidBodyObject->setAngularFactor(btVector3(0, 0, 0));
 	ptrToOgreObject->btRigidBodyObject->setLinearFactor(btVector3(0, 0, 0));
 	// Store a pointer to the Ogre Node so we can update it later
 	ptrToOgreObject->btRigidBodyObject->setUserPointer((void *)(ptrToOgreObject));
 
+	if (isSpecial) 
+	{
+		ptrToOgreObject->btRigidBodyObject->setAngularVelocity(btVector3(0, 50, 0));
+	}
+
 	ptrToOgreObject->btCollisionObjectObject = ptrToOgreObject->btRigidBodyObject;
 	ptrToOgreObject->objectDelete = false;
 	ptrToOgreObject->objectType = name;
+	ptrToOgreObject->isSpecial = isSpecial;
 	ptrToOgreObjects.push_back(ptrToOgreObject);
 
 	// Add it to the physics world
@@ -238,7 +243,9 @@ void TutorialApplication::createOgres(int numOgres) {
 		int yPos = rand() % 1000 - 500;
 		int zPos = rand() % 500 + 1500;
 
-		createOgre(enemyName, 1.0f, btVector3(xPos, yPos, zPos));
+		bool isSpecial = (xPos * yPos * zPos) % 35 == 0;
+
+		createOgre(enemyName, 1.0f, btVector3(xPos, yPos, zPos), isSpecial);
 	}
 }
  
@@ -279,13 +286,20 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 		}
 
 		if (currentObject->objectDelete) {
+			bool isSpecial = currentObject->isSpecial;
 			RemoveObject(currentObject, i);
 
 			ogresKilled++;
 			std::string ogreText = "Ogres: " + std::to_string(ogresKilled) + "/" + std::to_string(numOgres);
 			ogreLabel->setText(ogreText);
 
-			points += 100;
+			if (isSpecial)
+			{
+				points += 500;
+			}
+			else {
+				points += 100;
+			}
 			std::string pointsText = "Points: " + std::to_string(points);
 			pointsLabel->setText(pointsText);
 		}
