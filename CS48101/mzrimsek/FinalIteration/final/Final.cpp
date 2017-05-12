@@ -14,6 +14,9 @@ TutorialApplication::TutorialApplication()
 	numOgres = 100;
 
 	gameOver = false;
+	maxTime = 90;
+
+	ninjaSpeed = 1000;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -94,14 +97,12 @@ void TutorialApplication::createScene()
 
 	//ui inputs
 	pointsLabel = wmgr.createWindow("TaharezLook/StaticText");
-	std::string pointsText = "Points: " + std::to_string(points);
-	pointsLabel->setText(pointsText);
+	updatePoints();
 	pointsLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 	pointsLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.05, 0)));
 
 	ogreLabel = wmgr.createWindow("TaharezLook/StaticText");
-	std::string ogreText = "Ogres: " + std::to_string(ogresKilled) + "/" + std::to_string(numOgres);
-	ogreLabel->setText(ogreText);
+	updateKills();
 	ogreLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 	ogreLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
 
@@ -309,8 +310,7 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 			RemoveObject(currentObject, i);
 
 			ogresKilled++;
-			std::string ogreText = "Ogres: " + std::to_string(ogresKilled) + "/" + std::to_string(numOgres);
-			ogreLabel->setText(ogreText);
+			updateKills();
 
 			if (isSpecial)
 			{
@@ -319,8 +319,7 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 			else {
 				points += 100;
 			}
-			std::string pointsText = "Points: " + std::to_string(points);
-			pointsLabel->setText(pointsText);
+			updatePoints();
 		}
 	}
 	return true;
@@ -399,18 +398,11 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 	curTime = timer.getMilliseconds() / 1000;
 	if (!gameOver) 
 	{
-		if (60 - curTime <= 15)
-		{
-			timerBox->setText("[colour='FFFF0000']Time: " + Ogre::StringConverter::toString(60 - curTime));
-		}
-		else
-		{
-			timerBox->setText("Time: " + Ogre::StringConverter::toString(60 - curTime));
-		}
+		updateTime();
 	}
 
 	//Timer up, game over
-	if (curTime >= 60 || ogresKilled == numOgres)
+	if (curTime >= maxTime || ogresKilled == numOgres)
 	{
 		gameOver = true;
 		timerBox->setText("Game Over");
@@ -505,11 +497,60 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 		}
 	}
 
-	
-
-	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, -1000 * upFlag, -1000 * forwardFlag));
+	ninjaBody->setLinearVelocity(btVector3(-ninjaSpeed * sidewayFlag, -ninjaSpeed * upFlag, -ninjaSpeed * forwardFlag));
 	
 	return true;
+}
+
+void TutorialApplication::updatePoints()
+{
+	std::string pointsText = "Points: " + std::to_string(points);
+	pointsLabel->setText(pointsText);
+}
+
+void TutorialApplication::updateKills()
+{
+	std::string ogrePrefix;
+	float killPercentage = (float)ogresKilled / (float)numOgres;
+
+	if (killPercentage >= .75)
+	{
+		ogrePrefix = "[colour='FF0000FF']Ogres: ";
+		ninjaSpeed = 5000;
+	}
+	else if (killPercentage >= .5)
+	{
+		ogrePrefix = "[colour='FF00FF00']Ogres: ";
+		ninjaSpeed = 3000;
+	}
+	else if (killPercentage >= .25)
+	{
+		ogrePrefix = "[colour='FFFF0000']Ogres: ";
+		ninjaSpeed = 2000;
+	}
+	else
+	{
+		ogrePrefix = "Ogres: ";
+		ninjaSpeed = 1000;
+	}
+
+	std::string ogreText = ogrePrefix + std::to_string(ogresKilled) + "/" + std::to_string(numOgres);
+	ogreLabel->setText(ogreText);
+}
+
+void TutorialApplication::updateTime()
+{
+	int timeDif = maxTime - curTime;
+	std::string timePrefix;
+	if (timeDif <= 15)
+	{
+		timePrefix = "[colour='FFFF0000']Time: ";
+	}
+	else
+	{
+		timePrefix = "Time: ";
+	}
+	timerBox->setText(timePrefix + Ogre::StringConverter::toString(timeDif));
 }
  
 #if Ogre_PLATFORM == OGRE_PLATFORM_WIN32

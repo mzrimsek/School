@@ -43,6 +43,9 @@ protected:
   bool frameEnded(const Ogre::FrameEvent & evt);
   void RemoveObject(ogreObject * object, int index);
   void resetTargets();
+  void updatePoints();
+  void updateKills();
+  void updateTime();
  
 private:
   CEGUI::OgreRenderer* mRenderer;
@@ -84,6 +87,9 @@ private:
   bool timerexpired;
   CEGUI::Window *timerBox;
   Ogre::Timer timer;
+  int maxTime;
+
+  int ninjaSpeed;
 };
  
 
