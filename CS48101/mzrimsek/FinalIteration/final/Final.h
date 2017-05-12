@@ -45,17 +45,10 @@ protected:
  
 private:
   CEGUI::OgreRenderer* mRenderer;
-  void defineTerrain(long x, long y);
-  void initBlendMaps(Ogre::Terrain* terrain);
-  void configureTerrainDefaults(Ogre::Light* light);
   bool processUnbufferedInput(const Ogre::FrameEvent& fe);
   void createBulletSim(void);  
   void CheckCollisions();
   ogreObject* getOgreObject(const btCollisionObject * obj);
- 
-  bool mTerrainsImported;
-  Ogre::TerrainGroup* mTerrainGroup;
-  Ogre::TerrainGlobalOptions* mTerrainGlobals;
  
   OgreBites::Label* mInfoLabel;
  
