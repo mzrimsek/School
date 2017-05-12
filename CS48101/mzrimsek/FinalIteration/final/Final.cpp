@@ -109,8 +109,7 @@ void TutorialApplication::createScene()
 
 void TutorialApplication::resetTargets()
 {
-	//ptrToNinja->sceneNodeObject->removeAndDestroyAllChildren();
-	mSceneMgr->getRootSceneNode()->removeAndDestroyAllChildren();
+	ptrToNinja->sceneNodeObject->removeAndDestroyAllChildren();
 	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
 			RemoveObject(ptrToOgreObjects[i], i);
 	}
