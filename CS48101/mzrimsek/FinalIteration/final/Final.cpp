@@ -184,7 +184,7 @@ void TutorialApplication::createNinja() {
 	std::string name = "ninjaNode";
 	btVector3 Position = btVector3(2000, 10, 1925);
 	btScalar mass = 1.0f;
-	Ogre::Entity *ninja = mSceneMgr->createEntity("ninja.mesh");
+	Ogre::Entity *ninja = mSceneMgr->createEntity("robot.mesh");
 	Ogre::SceneNode *ninjaNode;
 
 	Ogre::Vector3 size = Ogre::Vector3::ZERO;
@@ -256,7 +256,7 @@ void TutorialApplication::assignItems(Ogre::SceneNode *node, Ogre::Entity *entit
 
 	//ninja idle animation
 	mEntity = entity;
-	mAnimationState = mEntity->getAnimationState("Idle1");
+	mAnimationState = mEntity->getAnimationState("Idle");
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
 }
@@ -475,7 +475,7 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 	}
 	else
 	{
-		mAnimationState = mEntity->getAnimationState("Idle1");
+		mAnimationState = mEntity->getAnimationState("Idle");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
@@ -489,7 +489,7 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 	}
 	else
 	{
-		mAnimationState = mEntity->getAnimationState("Idle1");
+		mAnimationState = mEntity->getAnimationState("Idle");
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
