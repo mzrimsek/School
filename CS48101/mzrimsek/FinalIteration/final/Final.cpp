@@ -7,6 +7,7 @@ TutorialApplication::TutorialApplication()
 {
 	forwardFlag = 0;
 	sidewayFlag = 0;
+	upFlag = 0;
 	points = 0;
 }
  
@@ -301,7 +302,6 @@ ogreObject* TutorialApplication::getOgreObject(const btCollisionObject * obj) {
 	}
 	ogreObject* ret = new ogreObject;
 	return ret;
-
 }
 
 void TutorialApplication::CheckCollisions() {
@@ -363,13 +363,6 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
-	else
-	{
-		mAnimationState = mEntity->getAnimationState("Idle1");
-		mAnimationState->setLoop(true);
-		mAnimationState->setEnabled(true);
-	}
-
 	if (sidewayFlag != 0)
 	{
 		sidewayFlag = 0;
@@ -377,7 +370,14 @@ void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
 		mAnimationState->setLoop(true);
 		mAnimationState->setEnabled(true);
 	}
-	else
+	if (upFlag != 0)
+	{
+		upFlag = 0;
+		mAnimationState = mEntity->getAnimationState("Walk");
+		mAnimationState->setLoop(true);
+		mAnimationState->setEnabled(true);
+	}
+	if (sidewayFlag == 0 && forwardFlag == 0 && upFlag == 0)
 	{
 		mAnimationState = mEntity->getAnimationState("Idle1");
 		mAnimationState->setLoop(true);
@@ -393,24 +393,38 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	mKeyboard->capture();
 	btRigidBody* ninjaBody = ptrToNinja->btRigidBodyObject;
 
-	if (mKeyboard->isKeyDown(OIS::KC_UP))
+	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
 	{
-		forwardFlag = 1;
+		if (mKeyboard->isKeyDown(OIS::KC_UP))
+		{
+			upFlag = -1;
+		}
+		else if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+		{
+			upFlag = 1;
+		}
 	}
-	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+	else
 	{
-		forwardFlag = -1;
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
-	{
-		sidewayFlag = 1;
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
-	{
-		sidewayFlag = -1;
+		if (mKeyboard->isKeyDown(OIS::KC_UP))
+		{
+			forwardFlag = 1;
+		}
+		if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+		{
+			forwardFlag = -1;
+		}
+		if (mKeyboard->isKeyDown(OIS::KC_LEFT))
+		{
+			sidewayFlag = 1;
+		}
+		if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
+		{
+			sidewayFlag = -1;
+		}
 	}
 
-	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, 0, -1000 * forwardFlag));
+	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, -1000 * upFlag, -1000 * forwardFlag));
 	
 	return true;
 }

@@ -71,6 +71,7 @@ private:
   int forwardFlag;
   int points;
   int sidewayFlag;
+  int upFlag;
 };
  
 
