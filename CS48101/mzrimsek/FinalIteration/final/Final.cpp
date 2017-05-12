@@ -220,10 +220,16 @@ void TutorialApplication::createOgre(std::string name, btScalar mass, btVector3 
 
 void TutorialApplication::createOgres(int numOgres) {
 	//draw ogre heads
+	srand(time(NULL));
 
 	for (int i = 0; i < numOgres; i++) {
 		Ogre::String enemyName = "ogreEnemyNode" + std::to_string(i);
-		createOgre(enemyName, 1.0f, btVector3(1600 + (i * 70), 70, 1625));
+
+		int xPos = rand() % 1000 + 1000;
+		int yPos = rand() % 1000 - 500;
+		int zPos = rand() % 500 + 1500;
+
+		createOgre(enemyName, 1.0f, btVector3(xPos, yPos, zPos));
 	}
 }
  
@@ -305,7 +311,6 @@ ogreObject* TutorialApplication::getOgreObject(const btCollisionObject * obj) {
 }
 
 void TutorialApplication::CheckCollisions() {
-
 	//dynamicsworld->stepsimulation called in frameStarted function
 	int numManifolds = dynamicsWorld->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++) {
