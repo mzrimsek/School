@@ -68,10 +68,14 @@ private:
   std::vector<ogreObject *> ptrToOgreObjects;
 
   CEGUI::Window *pointsLabel;
+  CEGUI::Window *ogreLabel;
   int forwardFlag;
   int points;
   int sidewayFlag;
   int upFlag;
+
+  int ogresKilled;
+  int numOgres;
 };
  
 

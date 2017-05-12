@@ -8,7 +8,10 @@ TutorialApplication::TutorialApplication()
 	forwardFlag = 0;
 	sidewayFlag = 0;
 	upFlag = 0;
+
 	points = 0;
+	ogresKilled = 0;
+	numOgres = 50;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -51,7 +54,7 @@ void TutorialApplication::createBulletSim(void) {
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	createNinja();
-	createOgres(20);
+	createOgres(numOgres);
 }
  
 void TutorialApplication::createScene()
@@ -67,7 +70,7 @@ void TutorialApplication::createScene()
 	light->setDiffuseColour(Ogre::ColourValue::White);
 	light->setSpecularColour(Ogre::ColourValue(.4, .4, .4));
 
-	mSceneMgr->setSkyDome(true, "Examples/SpaceSkyBox", 5, 8);
+	mSceneMgr->setSkyDome(true, "Examples/SpaceSkyBox");
 
 	createBulletSim();
 
@@ -93,7 +96,14 @@ void TutorialApplication::createScene()
 	pointsLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 	pointsLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.05, 0)));
 
+	ogreLabel = wmgr.createWindow("TaharezLook/StaticText");
+	std::string ogreText = "Ogres: " + std::to_string(ogresKilled) + "/" + std::to_string(numOgres);
+	ogreLabel->setText(ogreText);
+	ogreLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+	ogreLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
+
 	sheet->addChild(pointsLabel);
+	sheet->addChild(ogreLabel);
 }
 
 void TutorialApplication::createNinja() {
@@ -219,7 +229,6 @@ void TutorialApplication::createOgre(std::string name, btScalar mass, btVector3 
 }
 
 void TutorialApplication::createOgres(int numOgres) {
-	//draw ogre heads
 	srand(time(NULL));
 
 	for (int i = 0; i < numOgres; i++) {
@@ -271,6 +280,11 @@ bool TutorialApplication::frameEnded(const Ogre::FrameEvent &evt) {
 
 		if (currentObject->objectDelete) {
 			RemoveObject(currentObject, i);
+
+			ogresKilled++;
+			std::string ogreText = "Ogres: " + std::to_string(ogresKilled) + "/" + std::to_string(numOgres);
+			ogreLabel->setText(ogreText);
+
 			points += 100;
 			std::string pointsText = "Points: " + std::to_string(points);
 			pointsLabel->setText(pointsText);
