@@ -413,9 +413,7 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
   handleAnimations(fe);
   mAnimationState->addTime(fe.timeSinceLastFrame);
 
-  bool ret = BaseApplication::frameRenderingQueued(fe);
- 
-  return ret;
+  return BaseApplication::frameRenderingQueued(fe);
 }
 
 void TutorialApplication::handleAnimations(const Ogre::FrameEvent& evt)
