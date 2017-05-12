@@ -77,8 +77,6 @@ private:
 
   int ogresKilled;
   int numOgres;
-
-  bool reset;
 };
  
 

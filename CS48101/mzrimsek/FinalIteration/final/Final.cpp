@@ -12,7 +12,6 @@ TutorialApplication::TutorialApplication()
 	points = 0;
 	ogresKilled = 0;
 	numOgres = 50;
-	reset = false;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -54,9 +53,8 @@ void TutorialApplication::createBulletSim(void) {
 	solver = new btSequentialImpulseConstraintSolver;
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-	if (!reset) {
-		createNinja();
-	}
+	
+	createNinja();
 	createOgres(numOgres);
 }
  
@@ -111,21 +109,11 @@ void TutorialApplication::createScene()
 
 void TutorialApplication::resetTargets()
 {
+	//ptrToNinja->sceneNodeObject->removeAndDestroyAllChildren();
+	mSceneMgr->getRootSceneNode()->removeAndDestroyAllChildren();
 	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
-		if (isOgre(ptrToOgreObjects[i]->objectType))
-		{
-			ptrToOgreObjects[i]->objectDelete = true;
-		}
-	}
-
-	for (int i = 0; i < ptrToOgreObjects.size(); i++) {
-		if (ptrToOgreObjects[i]->objectDelete)
-		{
 			RemoveObject(ptrToOgreObjects[i], i);
-		}
 	}
-
-	reset = true;
 
 	collisionShapes.clear();
 	delete dynamicsWorld;
@@ -150,12 +138,11 @@ void TutorialApplication::createNinja() {
 	ptrToOgreObject->entityObject->setCastShadows(true);
 	try {
 		ninjaNode = mSceneMgr->getSceneNode(name);
-		ptrToOgreObject->sceneNodeObject = ninjaNode;
 	}
 	catch (Ogre::Exception& e) {
 		ninjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(name);
-		ptrToOgreObject->sceneNodeObject = ninjaNode;
 	}
+	ptrToOgreObject->sceneNodeObject = ninjaNode;
 	ptrToOgreObject->sceneNodeObject->attachObject(ptrToOgreObject->entityObject);
 	assignItems(ninjaNode, ninja);
 
