@@ -12,6 +12,8 @@ TutorialApplication::TutorialApplication()
 	points = 0;
 	ogresKilled = 0;
 	numOgres = 50;
+
+	gameOver = false;
 }
  
 TutorialApplication::~TutorialApplication()
@@ -103,8 +105,14 @@ void TutorialApplication::createScene()
 	ogreLabel->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
 	ogreLabel->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.10, 0)));
 
+	timerBox = wmgr.createWindow("TaharezLook/StaticText", "CEGUIDemo/Time");
+	timerBox->setSize(CEGUI::USize(CEGUI::UDim(0.15, 0), CEGUI::UDim(0.05, 0)));
+	timerBox->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0.15, 0)));
+	timerBox->setText("Time Left: ");
+
 	sheet->addChild(pointsLabel);
 	sheet->addChild(ogreLabel);
+	sheet->addChild(timerBox);
 }
 
 void TutorialApplication::resetTargets()
@@ -388,6 +396,19 @@ void TutorialApplication::CheckCollisions() {
  
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
+	curTime = timer.getMilliseconds() / 1000;
+	if (!gameOver) 
+	{
+		timerBox->setText("Time: " + Ogre::StringConverter::toString(60 - curTime));
+	}
+
+	//Timer up, game over
+	if (curTime >= 60 || ogresKilled == numOgres)
+	{
+		gameOver = true;
+		timerBox->setText("Game Over");
+	}
+
   if (!processUnbufferedInput(fe)) return false;
 
   handleAnimations(fe);
@@ -437,39 +458,47 @@ bool TutorialApplication::processUnbufferedInput(const Ogre::FrameEvent & fe)
 	mKeyboard->capture();
 	btRigidBody* ninjaBody = ptrToNinja->btRigidBodyObject;
 
-	if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
+	if (!gameOver)
 	{
-		if (mKeyboard->isKeyDown(OIS::KC_UP))
+		if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
 		{
-			upFlag = -1;
+			if (mKeyboard->isKeyDown(OIS::KC_UP))
+			{
+				upFlag = -1;
+			}
+			else if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+			{
+				upFlag = 1;
+			}
 		}
-		else if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+		else
 		{
-			upFlag = 1;
+			if (mKeyboard->isKeyDown(OIS::KC_UP))
+			{
+				forwardFlag = 1;
+			}
+			if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+			{
+				forwardFlag = -1;
+			}
+			if (mKeyboard->isKeyDown(OIS::KC_LEFT))
+			{
+				sidewayFlag = 1;
+			}
+			if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
+			{
+				sidewayFlag = -1;
+			}
 		}
 	}
 	else
 	{
-		if (mKeyboard->isKeyDown(OIS::KC_UP))
-		{
-			forwardFlag = 1;
-		}
-		if (mKeyboard->isKeyDown(OIS::KC_DOWN))
-		{
-			forwardFlag = -1;
-		}
-		if (mKeyboard->isKeyDown(OIS::KC_LEFT))
-		{
-			sidewayFlag = 1;
-		}
-		if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
-		{
-			sidewayFlag = -1;
-		}
 		if (mKeyboard->isKeyDown(OIS::KC_Y)) {
-			resetTargets();
+			//resetTargets();
 		}
 	}
+
+	
 
 	ninjaBody->setLinearVelocity(btVector3(-1000 * sidewayFlag, -1000 * upFlag, -1000 * forwardFlag));
 	

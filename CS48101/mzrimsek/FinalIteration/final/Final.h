@@ -77,6 +77,13 @@ private:
 
   int ogresKilled;
   int numOgres;
+
+  bool gameOver;
+
+  int curTime;
+  bool timerexpired;
+  CEGUI::Window *timerBox;
+  Ogre::Timer timer;
 };
  
 
